@@ -1,16 +1,27 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+
+import '../components/bottom_navbar.dart';
 
 class Home extends StatefulWidget {
+  static String routeName = '/home';
   @override
   _MyHomePageState createState() => _MyHomePageState();
 }
 
 class _MyHomePageState extends State<Home> {
   int _counter = 0;
+  int _currentNavigationIndex = 0;
 
   void _incrementCounter() {
     setState(() {
       _counter++;
+    });
+  }
+
+  void _setCuttentNavigationIndex(int index) {
+    setState(() {
+      _currentNavigationIndex = index;
     });
   }
 
@@ -38,7 +49,8 @@ class _MyHomePageState extends State<Home> {
         onPressed: _incrementCounter,
         tooltip: 'Increment',
         child: Icon(Icons.add),
-      ), // This trailing comma makes auto-formatting nicer for build methods.
+      ),
+        bottomNavigationBar: BottomNavbar()
     );
   }
 }
