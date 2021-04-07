@@ -1,3 +1,4 @@
+import 'package:customer_app/models/productList.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -11,7 +12,6 @@ class Home extends StatefulWidget {
 
 class _MyHomePageState extends State<Home> {
   int _counter = 0;
-  int _currentNavigationIndex = 0;
 
   void _incrementCounter() {
     setState(() {
@@ -19,14 +19,11 @@ class _MyHomePageState extends State<Home> {
     });
   }
 
-  void _setCuttentNavigationIndex(int index) {
-    setState(() {
-      _currentNavigationIndex = index;
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
+
+    var _fetchProductList = Provider.of<ProductList>(context).fetchListData;
+
     return Scaffold(
       appBar: AppBar(
         title: Text('Home'),
@@ -46,7 +43,7 @@ class _MyHomePageState extends State<Home> {
         ),
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: _incrementCounter,
+        onPressed: () => _fetchProductList({}),
         tooltip: 'Increment',
         child: Icon(Icons.add),
       ),
