@@ -1,6 +1,7 @@
-import 'package:customer_app/models/productList.dart';
+import 'package:customer_app/services/auth_services.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
+import 'package:flutter_signin_button/flutter_signin_button.dart';
 
 import '../components/bottom_navbar.dart';
 
@@ -11,18 +12,8 @@ class Home extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<Home> {
-  int _counter = 0;
-
-  void _incrementCounter() {
-    setState(() {
-      _counter++;
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
-
-    var _fetchProductList = Provider.of<ProductList>(context).fetchListData;
 
     return Scaffold(
       appBar: AppBar(
@@ -32,21 +23,18 @@ class _MyHomePageState extends State<Home> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            Text(
-              'You have pushed the button this many times:',
-            ),
-            Text(
-              '$_counter',
-              style: Theme.of(context).textTheme.headline4,
-            ),
+
           ],
         ),
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () => _fetchProductList({}),
-        tooltip: 'Increment',
-        child: Icon(Icons.add),
-      ),
+        floatingActionButton: FloatingActionButton(
+          onPressed: () {
+            print(FirebaseAuth.instance.currentUser);
+            Navigator.pop(context);
+          },
+          child: Text('click'),
+          backgroundColor: Colors.blue,
+        ),
         bottomNavigationBar: BottomNavbar()
     );
   }
