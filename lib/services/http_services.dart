@@ -8,17 +8,17 @@ class HttpService {
     return http.get(url, headers : headers);
   }
 
-  static Future<http.Response> post(String uri, {Map<String, String> body, Map<String, String> headers}) {
+  static Future<http.Response> post(String uri, {dynamic body, Map<String, String> headers}) {
     var url = Uri.http(baseUrl, uri);
     return http.post(url, body: body, headers: headers);
   }
 
-  static Future<http.Response> put(String uri, {Map<String, String> body, Map<String, String> headers}) {
+  static Future<http.Response> put(String uri, {dynamic body, Map<String, String> headers}) {
     var url = Uri.http(baseUrl, uri);
     return http.put(url, body: body, headers: headers);
   }
 
-  static Future<http.Response> delete(String uri, {Map<String, String> body, Map<String, String> headers}) {
+  static Future<http.Response> delete(String uri, {Map<String, String> headers}) {
     var url = Uri.http(baseUrl, uri);
     return http.delete(url, headers: headers);
   }
