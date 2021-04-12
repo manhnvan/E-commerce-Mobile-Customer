@@ -21,6 +21,7 @@ class ProductList extends ChangeNotifier {
     try {
       Response response = await HttpService.get('/books/v1/volumes');
       print(jsonEncode(response.body));
+      notifyListeners();
     } catch(e) {
       print(e);
     }
