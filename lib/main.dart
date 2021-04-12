@@ -1,5 +1,4 @@
 import 'package:customer_app/abstracts/theme/ez_themes.dart';
-import 'package:customer_app/constants.dart';
 import 'package:customer_app/models/currentBottomNavigationIndex.dart';
 import 'package:customer_app/models/productList.dart';
 import 'package:customer_app/models/user.dart';
@@ -45,7 +44,7 @@ class MyApp extends StatelessWidget {
               debugShowCheckedModeBanner: false,
               theme: EzTheme,
 
-              initialRoute: '/welcome',
+              initialRoute: '/home',
               routes: routes,
             ),
           );
@@ -59,5 +58,3 @@ class MyApp extends StatelessWidget {
     );
   }
 }
-
-
