@@ -1,3 +1,4 @@
+import 'package:customer_app/abstracts/theme/ez_themes.dart';
 import 'package:customer_app/models/currentBottomNavigationIndex.dart';
 import 'package:customer_app/models/productList.dart';
 import 'package:customer_app/routes.dart';
@@ -24,6 +25,7 @@ class MyApp extends StatelessWidget {
       child: MaterialApp(
         initialRoute: '/home',
         routes: routes,
+        theme: EzTheme,
       ),
     );
   }

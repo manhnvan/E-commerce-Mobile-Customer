@@ -88,6 +88,20 @@ packages:
     description: flutter
     source: sdk
     version: "0.0.0"
+  glassmorphism:
+    dependency: "direct main"
+    description:
+      name: glassmorphism
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "1.0.6"
+  gradient_ui_widgets:
+    dependency: "direct main"
+    description:
+      name: gradient_ui_widgets
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "1.0.2-nullsafety"
   http:
     dependency: "direct main"
     description:
