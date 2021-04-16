@@ -74,6 +74,12 @@ flutter:
     - assets/images/fake-data-product/product04.jpg
     - assets/images/fake-data-product/product05.jpg
     - assets/images/fake-data-product/product06.jpg
+    - assets/images/fake-data-product/product08.jpg
+    - assets/images/fake-data-product/product09.jpg
+    - assets/images/fake-data-product/product10.jpg
+    - assets/images/fake-data-product/product11.jpg
+    - assets/images/fake-data-product/product12.jpg
+    - assets/images/fake-data-product/product14.jpg
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.

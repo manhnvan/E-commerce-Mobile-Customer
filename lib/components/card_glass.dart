@@ -8,24 +8,47 @@ import 'package:gradient_ui_widgets/gradient_ui_widgets.dart' as grad;
 
 class GlassCard extends StatelessWidget {
   Widget childWidget;
+  double width;
 
-  GlassCard({this.childWidget});
+  GlassCard({this.childWidget, this.width});
 
   @override
   Widget build(BuildContext context) {
-    return BackdropFilter(
-        filter: ImageFilter.blur(sigmaX: 5.0, sigmaY: 5.0),
-      child: grad.GradientCard(
-          padding: EdgeInsets.all(0),
-          clipBehavior: Clip.antiAlias,
-          gradient: color_gradient_glass,
-          shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.only(
-                  topLeft: Radius.circular(border_radius_small - 1),
-                  topRight: Radius.circular(border_radius_big - 1),
-                  bottomLeft: Radius.circular(border_radius_big - 1),
-                  bottomRight: Radius.circular(border_radius_small -1))),
-          child: this.childWidget),
+    return ClipRRect(
+      clipBehavior: Clip.antiAlias,
+      borderRadius: BorderRadius.only(
+          topLeft: Radius.circular(border_radius_small),
+          topRight: Radius.circular(border_radius_big),
+          bottomRight: Radius.circular(border_radius_small),
+          bottomLeft: Radius.circular(border_radius_big)),
+      child: Container(
+        margin: this.width == MediaQuery.of(context).size.width
+            ? EdgeInsets.only(bottom: space_medium)
+            : EdgeInsets.only(right: space_medium),
+        width: this.width == MediaQuery.of(context).size.width
+            ? MediaQuery.of(context).size.width
+            : MediaQuery.of(context).size.width * 0.4,
+        clipBehavior: Clip.antiAlias,
+        padding: EdgeInsets.all(1),
+        decoration: BoxDecoration(
+          gradient: color_gradient_secondary,
+          boxShadow: [box_shadow_black],
+        ),
+        child: BackdropFilter(
+            filter: ImageFilter.blur(sigmaX: 5.0, sigmaY: 5.0),
+          child: grad.GradientCard(
+              padding: EdgeInsets.all(0),
+              clipBehavior: Clip.antiAlias,
+              gradient: color_gradient_glass,
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.only(
+                      topLeft: Radius.circular(border_radius_small - 1),
+                      topRight: Radius.circular(border_radius_big - 1),
+                      bottomLeft: Radius.circular(border_radius_big - 1),
+                      bottomRight: Radius.circular(border_radius_small -1))),
+              child: this.childWidget),
+        ),
+      ),
     );
     // return Card(
     //   clipBehavior: Clip.antiAlias,

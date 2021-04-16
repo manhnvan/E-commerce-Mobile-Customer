@@ -19,7 +19,7 @@ var fakeProductData = [
     'price': '200000'
   },
   {
-    'thumbnail': 'assets/images/fake-data-product/product04.jpg',
+    'thumbnail': 'assets/images/fake-data-product/product03.jpg',
     'name': 'Surface Laptop Go 12.4',
     'price': '22000000'
   },
@@ -50,6 +50,8 @@ class RecommendSection extends StatelessWidget {
             width: 2000,
             height: MediaQuery.of(context).size.height * 0.23,
             child: ListView.builder(
+                addAutomaticKeepAlives: false,
+                cacheExtent: 100.0,
                 shrinkWrap: true,
                 scrollDirection: Axis.horizontal,
                 itemCount: fakeProductData.length,

@@ -116,7 +116,6 @@ class _HeroSectionState extends State<HeroSection> {
               viewportFraction: 1.0,
               scrollDirection: Axis.horizontal,
               enlargeCenterPage: false,
-              autoPlay: true,
               onPageChanged: (index, reason) {
                 setState(() {
                   _current = index;
