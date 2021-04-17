@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 
-import 'colors.dart';
-
 class Variables extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -16,7 +14,7 @@ const border_radius_huge = 60.0;
 
 // ignore: non_constant_identifier_names
 var box_shadow_black = BoxShadow(
-  color: color_black_opacity_strong,
+  color: Colors.blue,
   blurRadius: 24.0, // soften the shadow
   spreadRadius: -1.0, //extend the shadow
   offset: Offset(
