@@ -45,7 +45,7 @@ class ProductCard extends StatelessWidget {
                 padding: EdgeInsets.all(space_small),
                 child: Column(
                   children: [
-                    Text(data['name'],
+                    Text(data['productName'],
                         style: (Theme.of(context).textTheme.bodyText2)),
                     SizedBox(height: space_small),
                     Text(data['price'],

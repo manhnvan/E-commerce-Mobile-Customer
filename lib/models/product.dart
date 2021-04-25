@@ -10,12 +10,12 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 
 class Product extends ChangeNotifier {
-  int id, inStock, sellerId, price, totalLike, totalViews, sold, commentNum;
-  double averageRate;
-  String productName, description, unit, status, productClass, vendor;
+  double rating, price;
+  List<String> categories, productImages;
+  String id, productName, description, unit, vendor, sellerId, thumbnail;
   bool likedByUser;
   final _debouncer = Debouncer(milliseconds: 500);
-  int productInCart = 0;
+  int like;
   Product(
     this.id, 
     this.productName, 
@@ -23,122 +23,57 @@ class Product extends ChangeNotifier {
     this.vendor, 
     this.description, 
     this.unit,
-    this.status,
-    this.inStock,
-    this.productClass,
-    this.averageRate,
-    this.totalViews,
+    this.categories,
+    this.rating,
     this.sellerId,
-    this.commentNum,
-    this.sold,
-    this.totalLike,
-    this.likedByUser
+    this.like,
+    this.likedByUser,
+    this.productImages,
+    this.thumbnail,
   );
 
   Product.fromJson(json) 
-    : id = json['id'],
-      sellerId = json['seller'],
-      productName = json['product_name'],
+    : id = json['_id'],
+      sellerId = json['sellerId'],
+      productName = json['productName'],
       price = json['price'],
       vendor = json['vendor'],
       description = json['description'],
       unit = json['unit'],
-      status = json['status'],
-      inStock = json['in_stock'],
-      productClass = json['product_class'],
-      averageRate = json['averageRate'],
-      totalViews = json['total_views'],
-      commentNum = json['commentNum'],
-      sold = json['sold'],
-      totalLike = json['total_like'],
-      likedByUser = json['like'];
-
-  Future<Uint8List> fetchProductHeadImage() async {
-    try {
-      Response response = await HttpService.get(
-        '/productImage/getProductImage',
-        queryParams: {
-          'product': this.id.toString(),
-          'type': 'head'
-        }
-        );
-      dynamic responseBody = jsonDecode(response.body);
-      if (response.statusCode == 200 && responseBody['success']) {
-        String imageString = responseBody['image'][0];
-        return Base64Decoder().convert(imageString);
-      }
-      return null;
-    } catch (e) {
-      return null;
-    }
-  }
-
-  Future<List<Uint8List>> fetchListProductImage() async {
-    try {
-      Response response = await HttpService.get(
-        '/productImage/getProductImage',
-        queryParams: {
-          'product': this.id.toString(),
-          'type': 'all'
-        }
-      );
-      dynamic responseBody = jsonDecode(response.body);
-      print(responseBody.toString());
-      if (response.statusCode == 200 && responseBody['success']) {
-        List<String> listBase64String = jsonDecode(responseBody['image']);
-        return listBase64String.map((image) => Base64Decoder().convert(image)).toList();
-      }
-      return [];
-    } catch (e) {
-      return [];
-    }
-  }
-
-  Future<void> addProductToCart(int amount) async {
-    final prefs = await SharedPreferences.getInstance();
-    _debouncer.run(() {
-      HttpService.post(
-        '/cart/productCart/', 
-        body: {
-          "amount": amount,
-          "product": this.id
-        }, headers: {
-          'Authorization': prefs.get('token')
-        }
-      )
-        .then((value) {
-          this.productInCart = jsonDecode(value.body)['amount'];
-          notifyListeners();
-        })
-        .catchError((e) => print(e));
-    });
-  }
+      categories = json['categories'],
+      rating = json['rating'],
+      likedByUser = json['like'],
+      productImages = json['productImages'],
+      thumbnail = json['thumbnail'];
 
   Future<void> favoriteAction() async {
     final prefs = await SharedPreferences.getInstance();
     Response res = await HttpService.post(
-      '/favorite/createDelete/' + this.id.toString(), 
+      '/like/',
+      body: {
+        "product": this.id,
+        "user": prefs.get('userId')
+      }, 
       headers: {
         'Authorization': 'JWT ' + prefs.get('token')
       }
     );
     dynamic responseBody = jsonDecode(res.body);
     if (res.statusCode == 200 && responseBody['success']) {
-      this.likedByUser = responseBody['likedByUser'];
-      this.totalLike = responseBody['totalLike'];
+      this.like = responseBody['totalLikeOfProduct'];
       notifyListeners();
     } else {
       print('fail to like');
     }
   }
 
-  Future<void> createAndUpdateComment(String content, String image) async {
+  Future<void> creatComment(String content, String image) async {
     final prefs = await SharedPreferences.getInstance();
     Response res = await HttpService.post(
-      '/comment/createAndUpdateComment/', 
+      '/comment/', 
       body: {
         "content": content,
-        "image": image,
+        "user": prefs.get('userId'),
         "product": this.id.toString()
       },
       headers: {
@@ -153,13 +88,14 @@ class Product extends ChangeNotifier {
     }
   }
 
-  Future<void> createAndUpdateRating(int rating) async {
+  Future<void> createAndUpdateRating(int star) async {
     final prefs = await SharedPreferences.getInstance();
     Response res = await HttpService.post(
-      '/rating/createAndUpdateRating/', 
+      '/rating/', 
       body: {
-        "rating": rating,
-        "product": this.id.toString()
+        "star": star,
+        "product": this.id.toString(),
+        "user": prefs.get('userId'),
       },
       headers: {
         'Authorization': 'JWT ' + prefs.get('token')

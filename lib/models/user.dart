@@ -24,7 +24,7 @@ class User extends ChangeNotifier {
     if (res.statusCode == 200 && responseBody['success']) {
       prefs.setString('token', responseBody['token']);
       prefs.setString('username', responseBody['username']);
-      prefs.setString('email', responseBody['email']);
+      prefs.setString('userId', responseBody['customerId']);
       prefs.setString('user_type', responseBody['user_type']);
       print(prefs.get('token'));
     } else {

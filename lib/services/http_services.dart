@@ -3,7 +3,7 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 
 class HttpService {
-  static final String baseUrl = '127.0.0.1:8000';
+  static final String baseUrl = '/localhost:6868';
 
   static Future<http.Response> get(String uri, {Map<String, dynamic> queryParams, Map<String, String> headers}) {
     var url = Uri.http(baseUrl, uri, queryParams);

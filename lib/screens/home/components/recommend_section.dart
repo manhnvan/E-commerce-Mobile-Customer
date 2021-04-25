@@ -5,32 +5,32 @@ import 'package:flutter/material.dart';
 var fakeProductData = [
   {
     'thumbnail': 'assets/images/fake-data-product/product01.jpg',
-    'name': 'Giày Nike Air Max 2017',
+    'productName': 'Giày Nike Air Max 2017',
     'price': '700000'
   },
   {
     'thumbnail': 'assets/images/fake-data-product/product02.jpg',
-    'name': 'Nike Zoom Pegasus 33',
+    'productName': 'Nike Zoom Pegasus 33',
     'price': '900000'
   },
   {
     'thumbnail': 'assets/images/fake-data-product/product03.jpg',
-    'name': 'MX MASTER 2S',
+    'productName': 'MX MASTER 2S',
     'price': '200000'
   },
   {
     'thumbnail': 'assets/images/fake-data-product/product04.jpg',
-    'name': 'Surface Laptop Go 12.4',
+    'productName': 'Surface Laptop Go 12.4',
     'price': '22000000'
   },
   {
     'thumbnail': 'assets/images/fake-data-product/product05.jpg',
-    'name': 'Áo phông Coolmate',
+    'productName': 'Áo phông Coolmate',
     'price': '150000'
   },
   {
     'thumbnail': 'assets/images/fake-data-product/product06.jpg',
-    'name': 'Áo Sweater Coolmate',
+    'productName': 'Áo Sweater Coolmate',
     'price': '300000'
   }
 ];
@@ -38,6 +38,9 @@ var fakeProductData = [
 class RecommendSection extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+
+
+
     return Container(
       padding: EdgeInsets.fromLTRB(space_medium, space_big, 0, space_medium),
       child: Column(
