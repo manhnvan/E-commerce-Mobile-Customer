@@ -1,6 +1,5 @@
 import 'package:customer_app/abstracts/variables.dart';
 import 'package:customer_app/components/card_glass.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 // ignore: must_be_immutable

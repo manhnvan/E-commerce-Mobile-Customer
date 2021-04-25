@@ -45,22 +45,32 @@ class NewProductsSection extends StatelessWidget {
         children: [
           Text('Sản phẩm mới', style: (Theme.of(context).textTheme.headline6)),
           SizedBox(height: space_medium),
-          Container(
-            height: 500,
-            child: ListView.builder(
-                addAutomaticKeepAlives: false,
-                cacheExtent: 100.0,
-                shrinkWrap: true,
-                scrollDirection: Axis.vertical,
-                itemCount: fakeProductData.length,
-                itemBuilder: (BuildContext context, int index) {
-                  return ProductCard(
-                      width: MediaQuery.of(context).size.width,
-                      data: fakeProductData[index]);
-                }),
-          ),
+          Column(
+            children: fakeProductData.map((data) {
+              return ProductCard(
+                width: MediaQuery.of(context).size.width,
+                data: data
+              );
+            }).toList()
+          )
         ],
       ),
     );
   }
 }
+
+
+// Container(
+// height: 500,
+// child: ListView.builder(
+// addAutomaticKeepAlives: false,
+// cacheExtent: 100.0,
+// shrinkWrap: true,
+// scrollDirection: Axis.vertical,
+// itemCount: fakeProductData.length,
+// itemBuilder: (context, index) {
+// return ProductCard(
+// width: MediaQuery.of(context).size.width,
+// data: fakeProductData[index]);
+// }),
+// ),
