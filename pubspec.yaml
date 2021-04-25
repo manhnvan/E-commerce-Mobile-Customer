@@ -29,12 +29,6 @@ dependencies:
   gradient_ui_widgets: ^1.0.2-nullsafety
   provider: ^4.3.3
   http: ^0.12.2
-  firebase_core: ^0.7.0
-  flutter_signin_button: ^2.0.0
-  flutter_facebook_login: ^3.0.0
-  google_sign_in: ^4.5.9
-  firebase_auth: ^0.20.1
-  flutter_facebook_auth: "^1.0.0"
 
 
   # The following adds the Cupertino Icons font to your application.
@@ -74,6 +68,12 @@ flutter:
     - assets/images/fake-data-product/product04.jpg
     - assets/images/fake-data-product/product05.jpg
     - assets/images/fake-data-product/product06.jpg
+    - assets/images/fake-data-product/product08.jpg
+    - assets/images/fake-data-product/product09.jpg
+    - assets/images/fake-data-product/product10.jpg
+    - assets/images/fake-data-product/product11.jpg
+    - assets/images/fake-data-product/product12.jpg
+    - assets/images/fake-data-product/product14.jpg
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.
