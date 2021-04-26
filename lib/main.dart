@@ -1,4 +1,5 @@
 import 'package:customer_app/abstracts/theme/ez_themes.dart';
+import 'package:customer_app/models/cart.dart';
 import 'package:customer_app/models/currentBottomNavigationIndex.dart';
 import 'package:customer_app/models/productList.dart';
 import 'package:customer_app/models/user.dart';
@@ -7,7 +8,6 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 void main() async {
-  WidgetsFlutterBinding.ensureInitialized();
   runApp(MyApp());
 }
 
@@ -25,12 +25,14 @@ class MyApp extends StatelessWidget {
         ),
         ChangeNotifierProvider.value(
             value: User()
-        )
+        ),
+        ChangeNotifierProvider.value(
+            value: Cart([])
+        ),
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
         theme: EzTheme,
-
         initialRoute: '/home',
         routes: routes,
       ),

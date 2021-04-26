@@ -27,8 +27,6 @@ class _MyHomePageState extends State<Home> {
 
   @override
   Widget build(BuildContext context) {
-    var _fetchProductList = Provider.of<ProductList>(context).fetchListData;
-
     return Scaffold(
         body: Container(
             decoration: BoxDecoration(gradient: color_gradient_primary),
