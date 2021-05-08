@@ -26,13 +26,14 @@ const List<String> listTagSuggestion = [
   'Thể thao & du lịch',
 ];
 
-List<String> searchResult = [];
-
 class _SearchState extends State<Search> {
+  List<String> searchResult = [];
+  String localQuery = '';
   @override
   Widget build(BuildContext context) {
     final isPortrait =
         MediaQuery.of(context).orientation == Orientation.portrait;
+    final controller = FloatingSearchBarController();
     return Scaffold(
         body: Container(
           decoration: BoxDecoration(
@@ -65,31 +66,41 @@ class _SearchState extends State<Search> {
                     addAutomaticKeepAlives: false,
                     cacheExtent: 100.0,
                     children: [
-                      Wrap(
-                        direction: Axis.horizontal,
-                        alignment: WrapAlignment.start,
-                        children: listTagSuggestion
-                            .map((list) => Container(
-                                  margin: const EdgeInsets.symmetric(
-                                      horizontal: 8),
-                                  decoration:
-                                      BoxDecoration(boxShadow: <BoxShadow>[
-                                    BoxShadow(
-                                        color: Colors.black26,
-                                        blurRadius: 8,
-                                        spreadRadius: -8,
-                                        offset: Offset(4, 4))
-                                  ]),
-                                  child: Chip(
-                                    backgroundColor: Colors.white,
-                                    label: Text('$list',
-                                        style: (Theme.of(context)
-                                            .textTheme
-                                            .subtitle1)),
-                                  ),
-                                ))
-                            .toList(),
-                      ),
+                      localQuery != ""
+                          ? Container()
+                          : Wrap(
+                              direction: Axis.horizontal,
+                              alignment: WrapAlignment.start,
+                              children: listTagSuggestion
+                                  .map((list) => GestureDetector(
+                                        onTap: () {
+                                          print(list);
+                                          controller.query = list;
+                                          setState(() {
+                                            localQuery = list;
+                                          });
+                                        },
+                                        child: Container(
+                                          margin: const EdgeInsets.symmetric(
+                                              horizontal: 8),
+                                          decoration: BoxDecoration(
+                                              boxShadow: <BoxShadow>[
+                                                BoxShadow(
+                                                    color: Colors.black26,
+                                                    blurRadius: 8,
+                                                    spreadRadius: -8,
+                                                    offset: Offset(4, 4))
+                                              ]),
+                                          child: Chip(
+                                            backgroundColor: Colors.white,
+                                            label: Text('$list',
+                                                style: (Theme.of(context)
+                                                    .textTheme
+                                                    .subtitle1)),
+                                          ),
+                                        ),
+                                      ))
+                                  .toList()),
                       Padding(
                         padding: const EdgeInsets.symmetric(vertical: 12.0),
                         child: NewProductsSection(),
@@ -100,7 +111,9 @@ class _SearchState extends State<Search> {
               ),
             ),
             FloatingSearchBar(
+              controller: controller,
               hint: 'Search...',
+              clearQueryOnClose: false,
               scrollPadding: const EdgeInsets.only(top: 5, bottom: 56),
               transitionDuration: const Duration(milliseconds: 800),
               transitionCurve: Curves.easeInOut,
@@ -112,7 +125,11 @@ class _SearchState extends State<Search> {
               onQueryChanged: (query) {
                 print(query);
                 setState(() {
-                  searchResult = listTagSuggestion.where((element) => element.toLowerCase().contains(query.toLowerCase())).toList();
+                  localQuery = query;
+                  searchResult = listTagSuggestion
+                      .where((element) =>
+                          element.toLowerCase().contains(query.toLowerCase()))
+                      .toList();
                 });
                 // Call your model, bloc, controller here.
               },
@@ -120,18 +137,8 @@ class _SearchState extends State<Search> {
               // animating between opened and closed stated.
               transition: CircularFloatingSearchBarTransition(),
               actions: [
-                FloatingSearchBarAction(
-                  showIfOpened: false,
-                  child: CircularButton(
-                    icon: const Icon(Icons.search),
-                    onPressed: () {
-                      print('aaaa');
-                    },
-                  ),
-                ),
                 FloatingSearchBarAction.searchToClear(
-                  showIfClosed: true,
-                ),
+                    showIfClosed: true, duration: Duration(milliseconds: 500)),
               ],
               builder: (context, transition) {
                 return ClipRRect(
@@ -144,11 +151,19 @@ class _SearchState extends State<Search> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: searchResult.map((element) {
-                        return Padding(
-                          padding: const EdgeInsets.fromLTRB(15,12,10,12),
-                          child: Text(element, style: (Theme.of(context)
-                            .textTheme
-                            .subtitle1)),
+                        return GestureDetector(
+                          onTap: () {
+                            controller.close();
+                            controller.query = element;
+                            setState(() {
+                              localQuery = element;
+                            });
+                          },
+                          child: Padding(
+                            padding: const EdgeInsets.fromLTRB(15, 12, 10, 12),
+                            child: Text(element,
+                                style: (Theme.of(context).textTheme.subtitle1)),
+                          ),
                         );
                       }).toList(),
                     ),
