@@ -1,3 +1,5 @@
+import 'package:customer_app/screens/profile/profile_following/profile_following.dart';
+import 'package:customer_app/screens/profile/profile_order/profile_order.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:customer_app/components/bottom_navbar.dart';
@@ -12,7 +14,16 @@ class Profile extends StatefulWidget {
   _ProfileState createState() => _ProfileState();
 }
 
-class _ProfileState extends State<Profile> {
+class _ProfileState extends State<Profile> with SingleTickerProviderStateMixin {
+  TabController _tabController;
+  String screen = "order";
+
+  @override
+  void initState() {
+    _tabController = TabController(length: 2, vsync: this);
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -90,7 +101,8 @@ class _ProfileState extends State<Profile> {
                                                 color: Colors.white,
                                                 borderRadius:
                                                     BorderRadius.horizontal(
-                                                        left: Radius.circular(20))),
+                                                        left: Radius.circular(
+                                                            20))),
                                             child: Container(
                                                 width: 138,
                                                 child: Row(children: [
@@ -116,72 +128,89 @@ class _ProfileState extends State<Profile> {
                             children: [
                               Expanded(
                                   flex: 2,
-                                  child: Column(
-                                    children: [
-                                      Icon(Icons.local_grocery_store_outlined,
-                                          size: 35, color: Colors.black45),
-                                      Padding(
-                                        padding: const EdgeInsets.only(top: 8),
-                                        child: Text(
-                                          "Giỏ hàng",
-                                          textAlign: TextAlign.center,
-                                          style: Theme.of(context)
-                                              .textTheme
-                                              .bodyText1,
+                                  child: GestureDetector(
+                                    onTap: () {
+                                      Navigator.pushNamed(context, '/cart');
+                                    },
+                                    child: Column(
+                                      children: [
+                                        Icon(Icons.local_grocery_store_outlined,
+                                            size: 35, color: Colors.black45),
+                                        Padding(
+                                          padding: const EdgeInsets.only(top: 8),
+                                          child: Text(
+                                            "Giỏ hàng",
+                                            textAlign: TextAlign.center,
+                                            style: Theme.of(context)
+                                                .textTheme
+                                                .bodyText1,
+                                          ),
                                         ),
-                                      ),
-                                    ],
+                                      ],
+                                    ),
                                   )),
                               Expanded(
-                                  flex: 2,
+                                flex: 2,
+                                child: GestureDetector(
+                                  onTap: () {
+                                    setState(() {
+                                      screen = "order";
+                                    });
+                                  },
                                   child: Column(
-                                    children: [
-                                      Icon(Icons.local_mall_outlined,
-                                          size: 35, color: Colors.black),
-                                      Padding(
-                                        padding: const EdgeInsets.only(top: 8),
-                                        child: Text(
-                                          "Đơn hàng",
-                                          textAlign: TextAlign.center,
-                                          style: Theme.of(context)
-                                              .textTheme
-                                              .bodyText1,
+                                      children: [
+                                        Icon(Icons.local_mall_outlined,
+                                            size: 35, color: screen == "order" ? Colors.black : Colors.black45),
+                                        Padding(
+                                          padding: const EdgeInsets.only(top: 8),
+                                          child: Text(
+                                            "Đơn hàng",
+                                            textAlign: TextAlign.center,
+                                            style: Theme.of(context)
+                                                .textTheme
+                                                .bodyText1,
+                                          ),
                                         ),
-                                      ),
-                                    ],
-                                  )),
+                                      ],
+                                    ),
+                                ),
+                              ),
                               Expanded(
-                                  flex: 3,
+                                flex: 3,
+                                child: GestureDetector(
+                                  onTap: () {
+                                    setState(() {
+                                      screen = "following";
+                                    });
+                                  },
                                   child: Column(
-                                    children: [
-                                      Text(
-                                        "69",
-                                        style: TextStyle(
-                                            fontSize: 28,
-                                            color: Colors.black45),
-                                      ),
-                                      Padding(
-                                        padding: const EdgeInsets.only(top: 8),
-                                        child: Text(
-                                          "Đang theo dõi",
-                                          textAlign: TextAlign.center,
-                                          style: Theme.of(context)
-                                              .textTheme
-                                              .bodyText1,
+                                      children: [
+                                        Text(
+                                          "69",
+                                          style: TextStyle(
+                                              fontSize: 28,
+                                              color: screen != "order" ? Colors.black : Colors.black45),
                                         ),
-                                      ),
-                                    ],
-                                  )),
+                                        Padding(
+                                          padding: const EdgeInsets.only(top: 8),
+                                          child: Text(
+                                            "Đang theo dõi",
+                                            textAlign: TextAlign.center,
+                                            style: Theme.of(context)
+                                                .textTheme
+                                                .bodyText1,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                ),
+                              ),
                             ],
                           ),
                         )
                       ],
                     )),
-                Expanded(
-                  child: ListView(
-                    children: [Text('123123')],
-                  ),
-                )
+                screen == "order" ? ProfileOrder() : ProfileFollowing()
               ],
             ),
           ),
