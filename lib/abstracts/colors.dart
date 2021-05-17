@@ -28,6 +28,12 @@ const color_gradient_glass = LinearGradient(
     colors: [const Color(0x66FFFFFF), const Color(0x1AFFFFFF)]);
 
 const color_white = Color(0xFFFFFFFF);
+
+const color_test = LinearGradient(
+    begin: Alignment(-1,0),
+    end: Alignment(1.5,0),
+    colors: <Color>[color_white, color_secondary]);
+
 const color_white_opacity_strong = Color(0x00FFFFFF);
 const color_black = Color(0xFF000000);
 const color_black_opacity_strong = Color(0x1A000000);
