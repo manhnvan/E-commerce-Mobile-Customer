@@ -33,7 +33,16 @@ class _MyHomePageState extends State<Home> {
             child: Column(
               children: <Widget>[
                 Container(
-                    padding: EdgeInsets.all(space_medium), child: TextField()),
+                    padding: EdgeInsets.all(space_medium),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Container(
+                            width: MediaQuery.of(context).size.width * 0.8,
+                            child: TextField()),
+                        SizedBox(height: space_big)
+                      ],
+                    )),
                 Expanded(
                   child: ListView(
                     scrollDirection: Axis.vertical,
@@ -45,7 +54,7 @@ class _MyHomePageState extends State<Home> {
                       NewProductsSection()
                     ],
                   ),
-                )
+                ),
               ],
             )),
         bottomNavigationBar: BottomNavbar());
