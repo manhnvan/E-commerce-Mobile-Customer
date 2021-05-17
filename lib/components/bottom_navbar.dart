@@ -1,6 +1,7 @@
 import 'package:customer_app/abstracts/colors.dart';
 import 'package:customer_app/models/currentBottomNavigationIndex.dart';
 import 'package:customer_app/screens/home/home.dart';
+import 'package:customer_app/screens/profile/profile.dart';
 import 'package:customer_app/screens/search/search.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -19,7 +20,7 @@ class BottomNavbar extends StatelessWidget {
       Home.routeName,
       Search.routeName,
       Search.routeName,
-      Home.routeName
+      Profile.routeName,
     ];
     return BottomNavigationBar(
         currentIndex: currentIndex,
@@ -47,9 +48,9 @@ class BottomNavbar extends StatelessWidget {
               SvgPicture.asset('assets/icons/icon_inbox_active.svg'),
               label: ''),
           BottomNavigationBarItem(
-              icon: SvgPicture.asset('assets/icons/icon_inbox_inactive.svg'),
+              icon: Icon(Icons.account_circle_sharp, size: 40, color: Colors.black45),
               activeIcon:
-              SvgPicture.asset('assets/icons/icon_inbox_active.svg'),
+              Icon(Icons.account_circle_sharp, size: 40, color: Colors.greenAccent),
               label: ''),
         ]);
   }
