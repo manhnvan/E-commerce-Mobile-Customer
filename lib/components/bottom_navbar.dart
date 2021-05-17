@@ -1,41 +1,46 @@
-import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
+import 'package:customer_app/abstracts/colors.dart';
 import 'package:customer_app/models/currentBottomNavigationIndex.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
+import 'package:provider/provider.dart';
 
 class BottomNavbar extends StatelessWidget {
   void _setCurrentIndex(BuildContext context, int index) {
-    Provider.of<CurrentBottomNavigation>(context, listen: false).changeCurrentIndex(index);
+    Provider.of<CurrentBottomNavigation>(context, listen: false)
+        .changeCurrentIndex(index);
   }
+
   @override
   Widget build(BuildContext context) {
-
     var currentIndex = Provider.of<CurrentBottomNavigation>(context).getIndex();
 
     return BottomNavigationBar(
         currentIndex: currentIndex,
         onTap: (index) => _setCurrentIndex(context, index),
-        items: const <BottomNavigationBarItem>[
+        type: BottomNavigationBarType.fixed,
+        showSelectedLabels: false,
+        showUnselectedLabels: false,
+        backgroundColor: color_white,
+        items: [
           BottomNavigationBarItem(
-              icon: Icon(Icons.home),
-              label: 'Home',
-              backgroundColor: Colors.blue
-          ),
+              icon: SvgPicture.asset('assets/icons/icon_home_inactive.svg'),
+              activeIcon: SvgPicture.asset('assets/icons/icon_home_active.svg'),
+              label: ''),
           BottomNavigationBarItem(
-              icon: Icon(Icons.search),
-              label: 'Search',
-              backgroundColor: Colors.blue
-          ),
+              icon: SvgPicture.asset('assets/icons/icon_search_inactive.svg'),
+              activeIcon:
+                  SvgPicture.asset('assets/icons/icon_search_active (1).svg'),
+              label: ''),
           BottomNavigationBarItem(
-              icon: Icon(Icons.message),
-              label: 'Message',
-              backgroundColor: Colors.blue
-          ),
+              icon: SvgPicture.asset('assets/icons/icon_inbox_inactive.svg'),
+              activeIcon:
+                  SvgPicture.asset('assets/icons/icon_inbox_active.svg'),
+              label: ''),
           BottomNavigationBarItem(
-              icon: Icon(Icons.account_circle),
-              label: 'Profile',
-              backgroundColor: Colors.blue
-          )
-        ]
-    );
+              icon: SvgPicture.asset('assets/icons/icon_inbox_inactive.svg'),
+              activeIcon:
+                  SvgPicture.asset('assets/icons/icon_inbox_active.svg'),
+              label: ''),
+        ]);
   }
 }
