@@ -39,7 +39,7 @@ class _SearchState extends State<Search> {
                     child: Container(
                       padding: EdgeInsets.all(1),
                       decoration: BoxDecoration(
-                        gradient: color_test,
+                        gradient: color_gradient_glass,
                         borderRadius: BorderRadius.only(
                             topLeft: Radius.circular((15)),
                             topRight: Radius.circular((15))),

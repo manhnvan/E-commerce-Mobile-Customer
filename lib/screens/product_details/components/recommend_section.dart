@@ -43,12 +43,12 @@ class RecommendSection extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text('Bạn có thể thích',
+          Text('Sản phẩm tương tự',
               style: (Theme.of(context).textTheme.headline6)),
           SizedBox(height: space_medium),
           Container(
             width: 2000,
-            height: MediaQuery.of(context).size.height * 0.23,
+            height: MediaQuery.of(context).size.height * 0.3,
             child: ListView.builder(
                 physics: const AlwaysScrollableScrollPhysics(),
                 addAutomaticKeepAlives: false,
@@ -58,7 +58,7 @@ class RecommendSection extends StatelessWidget {
                 itemCount: fakeProductData.length,
                 itemBuilder: (BuildContext context, int index) {
                   return ProductCard(
-                    backgroundWhite: false,
+                    backgroundWhite: true,
                     width: null,
                     data: fakeProductData[index],
                   );
