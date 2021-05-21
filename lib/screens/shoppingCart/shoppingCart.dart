@@ -1,14 +1,7 @@
 import 'package:customer_app/abstracts/colors.dart';
-import 'package:customer_app/abstracts/variables.dart';
-import 'package:customer_app/components/bottom_navbar.dart';
-import 'package:customer_app/models/productList.dart';
-import 'package:customer_app/screens/home/components/new_products_section.dart';
-import 'package:customer_app/screens/home/components/recommend_section.dart';
-import 'package:customer_app/screens/shoppingCart/components/Item.dart';
 import 'package:customer_app/screens/shoppingCart/components/ItemsOfStore.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-//
+
 var data = [
   {
     'storeImage':'https://brandkey.vn/wp-content/uploads/2019/12/mau-logo-thoi-trang-dep-fendi.png',

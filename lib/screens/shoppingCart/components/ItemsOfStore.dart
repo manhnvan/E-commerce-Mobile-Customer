@@ -1,12 +1,6 @@
 import 'package:customer_app/abstracts/colors.dart';
-import 'package:customer_app/abstracts/variables.dart';
-import 'package:customer_app/components/bottom_navbar.dart';
-import 'package:customer_app/models/productList.dart';
-import 'package:customer_app/screens/home/components/new_products_section.dart';
-import 'package:customer_app/screens/home/components/recommend_section.dart';
 import 'package:customer_app/screens/shoppingCart/components/Item.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 import 'package:roundcheckbox/roundcheckbox.dart';
 
 class ItemsOfStore extends StatelessWidget {
