@@ -1,13 +1,14 @@
 import 'package:customer_app/screens/loading.dart';
 import 'package:customer_app/screens/home/home.dart';
 import 'package:customer_app/screens/login.dart';
+import 'package:customer_app/screens/product_details/product_detail.dart';
 import 'package:customer_app/screens/search.dart';
 import 'package:customer_app/screens/welcome/welcome_screen.dart';
-import 'package:customer_app/screens/home/home.dart';
 import 'package:flutter/widgets.dart';
 
 final Map<String, WidgetBuilder> routes = {
   Home.routeName: (context) => Home(),
+  ProductDetail.routeName: (context) => ProductDetail(),
   Search.routeName: (context) => Search(),
   Loading.routeName: (context) => Loading(),
   Login.routeName: (context) => Login(),

@@ -3,14 +3,15 @@ import 'dart:ui';
 import 'package:customer_app/abstracts/colors.dart';
 import 'package:customer_app/abstracts/variables.dart';
 import 'package:flutter/material.dart';
-import 'package:glassmorphism/glassmorphism.dart';
 import 'package:gradient_ui_widgets/gradient_ui_widgets.dart' as grad;
 
+// ignore: must_be_immutable
 class GlassCard extends StatelessWidget {
   Widget childWidget;
   double width;
+  bool backgroundWhite;
 
-  GlassCard({this.childWidget, this.width});
+  GlassCard({this.childWidget, this.width, this.backgroundWhite});
 
   @override
   Widget build(BuildContext context) {
@@ -32,14 +33,13 @@ class GlassCard extends StatelessWidget {
         padding: EdgeInsets.all(1),
         decoration: BoxDecoration(
           gradient: color_gradient_secondary,
-          boxShadow: [box_shadow_black],
         ),
         child: BackdropFilter(
             filter: ImageFilter.blur(sigmaX: 5.0, sigmaY: 5.0),
           child: grad.GradientCard(
               padding: EdgeInsets.all(0),
               clipBehavior: Clip.antiAlias,
-              gradient: color_gradient_glass,
+              gradient: backgroundWhite ? color_white : color_gradient_glass,
               shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.only(
                       topLeft: Radius.circular(border_radius_small - 1),

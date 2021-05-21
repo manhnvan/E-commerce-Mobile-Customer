@@ -1,6 +1,8 @@
 import 'package:customer_app/abstracts/colors.dart';
+import 'package:customer_app/abstracts/variables.dart';
 import 'package:customer_app/models/currentBottomNavigationIndex.dart';
 import 'package:customer_app/screens/home/home.dart';
+import 'package:customer_app/screens/product_details/product_detail.dart';
 import 'package:customer_app/screens/search.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -18,39 +20,48 @@ class BottomNavbar extends StatelessWidget {
     var listRoute = [
       Home.routeName,
       Search.routeName,
-      Search.routeName,
+      ProductDetail.routeName,
       Home.routeName
     ];
-    return BottomNavigationBar(
-        currentIndex: currentIndex,
-        onTap: (index) {
-          _setCurrentIndex(context, index);
-          Navigator.pushNamed(context, listRoute[index]);
-        },
-        type: BottomNavigationBarType.fixed,
-        showSelectedLabels: false,
-        showUnselectedLabels: false,
-        backgroundColor: color_white,
-        items: [
-          BottomNavigationBarItem(
-              icon: SvgPicture.asset('assets/icons/icon_home_inactive.svg'),
-              activeIcon: SvgPicture.asset('assets/icons/icon_home_active.svg'),
-              label: ''),
-          BottomNavigationBarItem(
-              icon: SvgPicture.asset('assets/icons/icon_search_inactive.svg'),
-              activeIcon:
-              SvgPicture.asset('assets/icons/icon_search_active (1).svg'),
-              label: ''),
-          BottomNavigationBarItem(
-              icon: SvgPicture.asset('assets/icons/icon_inbox_inactive.svg'),
-              activeIcon:
-              SvgPicture.asset('assets/icons/icon_inbox_active.svg'),
-              label: ''),
-          BottomNavigationBarItem(
-              icon: SvgPicture.asset('assets/icons/icon_inbox_inactive.svg'),
-              activeIcon:
-              SvgPicture.asset('assets/icons/icon_inbox_active.svg'),
-              label: ''),
-        ]);
+    return ClipRRect(
+      borderRadius: BorderRadius.only(
+          topRight: Radius.circular(border_radius_big),
+          topLeft: Radius.circular(border_radius_big)),
+      clipBehavior: Clip.antiAlias,
+      child: Container(
+        child: BottomNavigationBar(
+            currentIndex: currentIndex,
+            onTap: (index) {
+              _setCurrentIndex(context, index);
+              Navigator.pushNamed(context, listRoute[index]);
+            },
+            type: BottomNavigationBarType.fixed,
+            showSelectedLabels: false,
+            showUnselectedLabels: false,
+            backgroundColor: color_white,
+            items: [
+              BottomNavigationBarItem(
+                  icon: SvgPicture.asset('assets/icons/icon_home_inactive.svg'),
+                  activeIcon:
+                      SvgPicture.asset('assets/icons/icon_home_active.svg'),
+                  label: ''),
+              BottomNavigationBarItem(
+                  icon: SvgPicture.asset('assets/icons/icon_search_inactive.svg'),
+                  activeIcon:
+                      SvgPicture.asset('assets/icons/icon_search_active (1).svg'),
+                  label: ''),
+              BottomNavigationBarItem(
+                  icon: SvgPicture.asset('assets/icons/icon_inbox_inactive.svg'),
+                  activeIcon:
+                      SvgPicture.asset('assets/icons/icon_inbox_active.svg'),
+                  label: ''),
+              BottomNavigationBarItem(
+                  icon: SvgPicture.asset('assets/icons/icon_inbox_inactive.svg'),
+                  activeIcon:
+                      SvgPicture.asset('assets/icons/icon_inbox_active.svg'),
+                  label: ''),
+            ]),
+      ),
+    );
   }
 }
