@@ -1,11 +1,9 @@
 import 'package:customer_app/abstracts/colors.dart';
 import 'package:customer_app/abstracts/variables.dart';
 import 'package:customer_app/components/bottom_navbar.dart';
-import 'package:customer_app/models/productList.dart';
 import 'package:customer_app/screens/home/components/new_products_section.dart';
 import 'package:customer_app/screens/home/components/recommend_section.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 
 import 'components/hero.dart';
 
@@ -57,6 +55,6 @@ class _MyHomePageState extends State<Home> {
                 ),
               ],
             )),
-        bottomNavigationBar: BottomNavbar());
+        bottomNavigationBar: BottomNavbar(0));
   }
 }

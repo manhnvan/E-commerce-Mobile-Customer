@@ -1,9 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:customer_app/abstracts/colors.dart';
-import 'package:customer_app/abstracts/variables.dart';
 import 'package:customer_app/components/bottom_navbar.dart';
-import 'package:customer_app/components/card_glass.dart';
 
 import 'home/components/new_products_section.dart';
 
@@ -95,6 +93,7 @@ class _SearchState extends State<Search> {
                 )
               ],
             )),
-        bottomNavigationBar: BottomNavbar());
+        bottomNavigationBar: BottomNavbar(1)
+    );
   }
 }
