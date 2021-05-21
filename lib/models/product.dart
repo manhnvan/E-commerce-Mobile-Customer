@@ -1,16 +1,33 @@
-import 'dart:convert';
-
-import 'package:customer_app/models/product.dart';
+import 'package:customer_app/services/debouncer.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
-class Order extends ChangeNotifier {
-  String status;
-  String itemId, orderId, sellerId;
-  Product product;
-  int amount;
 
-  static const Map<String, Object> item = {
+class Product extends ChangeNotifier {
+  int id, inStock, sellerId, price, totalLike, totalViews, sold, commentNum;
+  double averageRate;
+  String productName, description, unit, status, productClass, vendor;
+  bool likedByUser;
+  int productInCart = 0;
+  Product(
+      this.id,
+      this.productName,
+      this.price,
+      this.vendor,
+      this.description,
+      this.unit,
+      this.status,
+      this.inStock,
+      this.productClass,
+      this.averageRate,
+      this.totalViews,
+      this.sellerId,
+      this.commentNum,
+      this.sold,
+      this.totalLike,
+      this.likedByUser
+      );
+
+  static const Map<String, Object> test = {
     "status": "processing",
     "_id": "6093550f8739534294e7b27c",
     "productId": {
@@ -42,11 +59,21 @@ class Order extends ChangeNotifier {
     "__v": 0
   };
 
-  Order.fromJson(json)
-      : itemId = json['_id'],
-        orderId = json['orderId'],
-        sellerId = json['sellerId'],
+  Product.fromJson(json)
+      : id = json['id'],
+        sellerId = json['seller'],
+        productName = json['product_name'],
+        price = json['price'],
+        vendor = json['vendor'],
+        description = json['description'],
+        unit = json['unit'],
         status = json['status'],
-        amount = json['amount'],
-        product = json['productId'];
+        inStock = json['in_stock'],
+        productClass = json['product_class'],
+        averageRate = json['averageRate'],
+        totalViews = json['total_views'],
+        commentNum = json['commentNum'],
+        sold = json['sold'],
+        totalLike = json['total_like'],
+        likedByUser = json['like'];
 }

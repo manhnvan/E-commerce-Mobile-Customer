@@ -1,5 +1,5 @@
 import 'package:customer_app/abstracts/colors.dart';
-import 'package:customer_app/models/currentBottomNavigationIndex.dart';
+import 'package:customer_app/screens/ChatScreen/ChatScreen.dart';
 import 'package:customer_app/screens/home/home.dart';
 import 'package:customer_app/screens/profile/profile.dart';
 import 'package:customer_app/screens/search/search.dart';
@@ -15,7 +15,7 @@ class BottomNavbar extends StatelessWidget {
     Home.routeName,
     Search.routeName,
     ChatScreen.routeName,
-    Search.routeName,
+    Profile.routeName,
   ];
 
   @override
@@ -23,6 +23,7 @@ class BottomNavbar extends StatelessWidget {
 
     return BottomNavigationBar(
         onTap: (index) {
+          print(index);
           if (index == this.currentIndex) {
             return;
           }

@@ -12,11 +12,9 @@ final Map<String, WidgetBuilder> routes = {
   Home.routeName: (context) => Home(),
   Search.routeName: (context) => Search(),
   Profile.routeName: (context) => Profile(),
-  Loading.routeName: (context) => Loading(),
   Login.routeName: (context) => Login(),
   WelcomeScreen.routeName: (context) => WelcomeScreen(),
-  Loading.routeName: (context) => Loading(),
-  ProfileCart.routeName: (context) => ProfileCart()
+  ProfileCart.routeName: (context) => ProfileCart(),
   ChatScreen.routeName: (context) => ChatScreen(),
   ChatBox.routeName: (context) => ChatBox()
 };

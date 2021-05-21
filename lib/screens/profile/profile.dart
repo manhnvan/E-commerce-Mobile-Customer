@@ -215,6 +215,7 @@ class _ProfileState extends State<Profile> with SingleTickerProviderStateMixin {
             ),
           ),
         ),
-        bottomNavigationBar: BottomNavbar());
+        bottomNavigationBar: BottomNavbar(3)
+    );
   }
 }
