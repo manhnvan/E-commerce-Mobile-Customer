@@ -1,11 +1,12 @@
 import 'package:customer_app/abstracts/colors.dart';
-import 'package:customer_app/screens/ChatScreen/ChatScreen.dart';
+import 'package:customer_app/models/currentBottomNavigationIndex.dart';
 import 'package:customer_app/screens/home/home.dart';
-import 'package:customer_app/screens/search.dart';
+import 'package:customer_app/screens/profile/profile.dart';
+import 'package:customer_app/screens/search/search.dart';
 import 'package:flutter/material.dart';
 
 class BottomNavbar extends StatelessWidget {
-  
+
   BottomNavbar(this.currentIndex);
 
   int currentIndex;
@@ -46,9 +47,10 @@ class BottomNavbar extends StatelessWidget {
             label: 'MESSAGE'
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.account_box),
-            label: 'PROFILE'
-          ),
+              icon: Icon(Icons.account_circle_sharp, size: 40, color: Colors.black45),
+              activeIcon:
+              Icon(Icons.account_circle_sharp, size: 40, color: Colors.greenAccent),
+              label: ''),
         ]);
   }
 }
