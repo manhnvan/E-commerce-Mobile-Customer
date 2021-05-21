@@ -33,7 +33,6 @@ class _ProfileState extends State<Profile> with SingleTickerProviderStateMixin {
             child: Column(
               children: [
                 Container(
-                    //Avt
                     padding: EdgeInsets.only(top: 4, bottom: 8),
                     decoration: BoxDecoration(
                         gradient: color_gradient_glass,
@@ -43,13 +42,14 @@ class _ProfileState extends State<Profile> with SingleTickerProviderStateMixin {
                     child: Column(
                       children: [
                         Row(
+                          crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Expanded(
                               flex: 1,
                               child: Padding(
                                 padding: const EdgeInsets.all(4.0),
                                 child: Container(
-                                  padding: EdgeInsets.all(6),
+                                  padding: EdgeInsets.all(5),
                                   decoration: BoxDecoration(
                                       gradient: color_gradient_secondary,
                                       shape: BoxShape.circle,
@@ -58,7 +58,7 @@ class _ProfileState extends State<Profile> with SingleTickerProviderStateMixin {
                                   child: CircleAvatar(
                                     backgroundColor: Colors.brown.shade800,
                                     child: Text('TH'),
-                                    radius: 50,
+                                    radius: 40,
                                   ),
                                 ),
                               ),
@@ -66,14 +66,14 @@ class _ProfileState extends State<Profile> with SingleTickerProviderStateMixin {
                             Expanded(
                               flex: 2,
                               child: Padding(
-                                padding: const EdgeInsets.only(left: 8.0),
+                                padding: const EdgeInsets.only(top: 4.0),
                                 child: Column(
                                   children: [
                                     Row(
                                       mainAxisAlignment:
                                           MainAxisAlignment.spaceBetween,
                                       crossAxisAlignment:
-                                          CrossAxisAlignment.end,
+                                          CrossAxisAlignment.center,
                                       children: [
                                         Text("Xin chào,",
                                             style: TextStyle(fontSize: 25)),
@@ -91,30 +91,30 @@ class _ProfileState extends State<Profile> with SingleTickerProviderStateMixin {
                                         alignment: Alignment.topLeft,
                                         child: Text('Vương Thành',
                                             style: TextStyle(fontSize: 25))),
-                                    Align(
-                                        alignment: Alignment.bottomRight,
-                                        child: Container(
-                                            margin: EdgeInsets.only(top: 8),
-                                            padding: EdgeInsets.fromLTRB(
-                                                15, 4, 4, 4),
-                                            decoration: BoxDecoration(
-                                                color: Colors.white,
-                                                borderRadius:
-                                                    BorderRadius.horizontal(
-                                                        left: Radius.circular(
-                                                            20))),
-                                            child: Container(
-                                                width: 138,
-                                                child: Row(children: [
-                                                  Text("Cửa hàng của tôi",
-                                                      style: Theme.of(context)
-                                                          .textTheme
-                                                          .button),
-                                                  Icon(
-                                                      Icons
-                                                          .keyboard_arrow_right_sharp,
-                                                      size: 30)
-                                                ]))))
+                                    // Align(
+                                    //     alignment: Alignment.bottomRight,
+                                    //     child: Container(
+                                    //         margin: EdgeInsets.only(top: 8),
+                                    //         padding: EdgeInsets.fromLTRB(
+                                    //             15, 4, 4, 4),
+                                    //         decoration: BoxDecoration(
+                                    //             color: Colors.white,
+                                    //             borderRadius:
+                                    //                 BorderRadius.horizontal(
+                                    //                     left: Radius.circular(
+                                    //                         20))),
+                                    //         child: Container(
+                                    //             width: 138,
+                                    //             child: Row(children: [
+                                    //               Text("Cửa hàng của tôi",
+                                    //                   style: Theme.of(context)
+                                    //                       .textTheme
+                                    //                       .button),
+                                    //               Icon(
+                                    //                   Icons
+                                    //                       .keyboard_arrow_right_sharp,
+                                    //                   size: 30)
+                                    //             ]))))
                                   ],
                                 ),
                               ),
@@ -122,7 +122,7 @@ class _ProfileState extends State<Profile> with SingleTickerProviderStateMixin {
                           ],
                         ),
                         Padding(
-                          padding: const EdgeInsets.only(top: 8.0),
+                          padding: const EdgeInsets.only(top: 4.0),
                           child: Row(
                             crossAxisAlignment: CrossAxisAlignment.end,
                             children: [
@@ -210,7 +210,7 @@ class _ProfileState extends State<Profile> with SingleTickerProviderStateMixin {
                         )
                       ],
                     )),
-                screen == "order" ? ProfileOrder() : ProfileFollowing()
+                Expanded(child: screen == "order" ? ProfileOrder() : ProfileFollowing())
               ],
             ),
           ),

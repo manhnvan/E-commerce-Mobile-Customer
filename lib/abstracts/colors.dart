@@ -27,6 +27,11 @@ const color_gradient_glass = LinearGradient(
     end: Alignment(0.5, 0.3),
     colors: [const Color(0x66FFFFFF), const Color(0x1AFFFFFF)]);
 
+const color_gradient_dark = LinearGradient(
+    begin: Alignment(-1.2, -1.0),
+    end: Alignment(2.0, 0.0),
+    colors: <Color>[color_primary, Colors.green]);
+
 const color_white = Color(0xFFFFFFFF);
 
 const color_test = LinearGradient(

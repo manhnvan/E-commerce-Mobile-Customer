@@ -1,15 +1,14 @@
 import 'package:customer_app/screens/profile/profile_order/order_card.dart';
 import 'package:flutter/material.dart';
 
-class PendingOrder extends StatefulWidget {
-  const PendingOrder({Key key}) : super(key: key);
-
+class CanceledOrder extends StatefulWidget {
+  const CanceledOrder({Key key}) : super(key: key);
 
   @override
-  _PendingOrderState createState() => _PendingOrderState();
+  _CanceledOrderState createState() => _CanceledOrderState();
 }
 
-class _PendingOrderState extends State<PendingOrder> {
+class _CanceledOrderState extends State<CanceledOrder> {
   static const List<dynamic> listItem =
   [
     {
@@ -17,7 +16,7 @@ class _PendingOrderState extends State<PendingOrder> {
       "processing": "2021-05-20T15:39:05.600Z",
       "shipping": "2021-05-20T15:46:07.616Z",
       "close": null,
-      "denied": null,
+      "denied": "2021-05-22T11:46:07.616Z",
       "_id": "60a674085f5f1141c0a08056",
       "productId": {
         "categories": [
@@ -36,7 +35,7 @@ class _PendingOrderState extends State<PendingOrder> {
         "like": 0,
         "_id": "60a5faab069b9e1568cbf2be",
         "sellerId": "60a5f6c92d201318682ef8af",
-        "productName": "Áo phông",
+        "productName": "Áo phông Canceled",
         "description": "Hiện nay nếu nói đến xu hướng thời trang được coi là phổ biến nhất đó là áo thun thời trang nói chung, áo thun cổ tròn nói riêng. Bất cứ khi nào và ở đâu, một chiếc áo thun đẹp năng động, cá tính, mạnh mẽ không thể thiếu đối với chúng ta. Và mẫu Áo thun nam cổ tròn New York sau đây sẽ là một điển hình cho sự lựa chọn của các Bạn.",
         "thumbnail": "https://www.google.com/url?sa=i&url=https%3A%2F%2Fkwinshop.com%2Fsan-pham%2Fao-thun-nam-co-tron-rango-in-chu-new-york%2F&psig=AOvVaw1FfE99Dq3v1jSlaGitzlIz&ust=1618812673641000&source=images&cd=vfe&ved=0CAIQjRxqFwoTCNDKiKaRh_ACFQAAAAAdAAAAABAd",
         "price": 150000,
@@ -63,7 +62,7 @@ class _PendingOrderState extends State<PendingOrder> {
       "processing": "2021-05-20T15:39:38.499Z",
       "shipping": null,
       "close": null,
-      "denied": null,
+      "denied": "2021-05-22T15:39:38.499Z",
       "_id": "60a674085f5f1141c0a08057",
       "productId": {
         "categories": [
