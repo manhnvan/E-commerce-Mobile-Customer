@@ -130,7 +130,7 @@ class _ProfileState extends State<Profile> with SingleTickerProviderStateMixin {
                                   flex: 2,
                                   child: GestureDetector(
                                     onTap: () {
-                                      Navigator.pushNamed(context, '/cart');
+                                      Navigator.pushNamed(context, '/shoppingCart');
                                     },
                                     child: Column(
                                       children: [

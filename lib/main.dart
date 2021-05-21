@@ -33,8 +33,7 @@ class MyApp extends StatelessWidget {
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
         theme: EzTheme,
-        initialRoute: '/shoppingCart',
-        // initialRoute: '/home',
+        initialRoute: '/home',
         routes: routes,
       ),
     );
