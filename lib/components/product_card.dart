@@ -32,7 +32,7 @@ class ProductCard extends StatelessWidget {
                     this.width == MediaQuery.of(context).size.width ? 130 : 100,
                 decoration: BoxDecoration(
                   image: DecorationImage(
-                      image: AssetImage(data['thumbnail']), fit: BoxFit.cover),
+                      image: NetworkImage(data['thumbnail']), fit: BoxFit.cover),
                 ),
               ),
               Container(
@@ -65,7 +65,6 @@ class ProductCard extends StatelessWidget {
                   ))
             ],
           ),
-          width: this.width,
           backgroundWhite: this.backgroundWhite),
     );
   }

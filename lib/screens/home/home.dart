@@ -15,46 +15,124 @@ class Home extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<Home> {
-  int _counter = 0;
-
-  void _incrementCounter() {
-    setState(() {
-      _counter++;
-    });
-  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+        appBar: AppBar(
+          backgroundColor: Colors.green,
+          actions: [
+            IconButton(
+              icon: Icon(
+                Icons.search
+              ),
+              onPressed: () {
+                showSearch(
+                  context: context, 
+                  delegate: DataSearch()
+                );
+              },
+            ),
+          ],
+        ),
+        // drawer: Drawer(),
         body: Container(
             decoration: BoxDecoration(gradient: color_gradient_primary),
-            child: Column(
-              children: <Widget>[
-                Container(
-                    padding: EdgeInsets.all(space_medium),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Container(
-                            width: MediaQuery.of(context).size.width * 0.8,
-                            child: TextField()),
-                        SizedBox(height: space_big)
-                      ],
-                    )),
-                Expanded(
-                  child: ListView(
-                    scrollDirection: Axis.vertical,
-                    addAutomaticKeepAlives: false,
-                    cacheExtent: 100.0,
-                    children: [
-                      HeroSection(),
-                      RecommendSection(),
-                      NewProductsSection()
-                    ],
-                  ),
-                ),
-              ],
+            child: SingleChildScrollView(
+              child: Column(
+                children: <Widget>[
+                  HeroSection(),
+                  RecommendSection(),
+                  NewProductsSection()
+                ],
+              ),
             )),
         bottomNavigationBar: BottomNavbar(0));
   }
+}
+
+
+class DataSearch extends SearchDelegate<String> {
+
+  final recommendations = [
+    "Áo thun coolmate",
+    "Áo sơ mi Gucci",
+    "Nước hoa channel",
+    "Giày Adidas",
+    "Mũ bảo hiểm",
+    "Bia Trúc Bạch",
+    "Giày Converse"
+  ];
+
+  final recentRecommendation = [
+    "Áo thun coolmate",
+    "Áo sơ mi Gucci",
+    "Nước hoa channel",
+  ];
+
+  @override
+  List<Widget> buildActions(BuildContext context) {
+      return [
+        IconButton(
+          onPressed: () {
+            query = "";
+          }, 
+          icon: Icon(Icons.clear)
+        )
+      ];
+    }
+  
+    @override
+    Widget buildLeading(BuildContext context) {
+      // return IconButton(
+      //   onPressed: () {
+      //     close(context, null);
+      //   }, 
+      //   icon: AnimatedIcon(
+      //     icon: AnimatedIcons.menu_arrow, 
+      //     progress: transitionAnimation
+      //   )
+      // );
+    }
+  
+    @override
+    Widget buildResults(BuildContext context) {
+      // TODO: implement buildResults
+      throw UnimplementedError();
+    }
+  
+    @override
+    Widget buildSuggestions(BuildContext context) {
+    // TODO: implement buildSuggestions
+    final suggestionList = query.isEmpty ? recentRecommendation : recommendations.where((p) => p.startsWith(query)).toList();
+
+    return ListView.builder(
+      itemCount: suggestionList.length,
+      itemBuilder: (context, index) {
+        return ListTile(
+          onTap: () {
+            showResults(context);
+          },
+          leading: Icon(Icons.search),
+          title: RichText(
+            text: TextSpan(
+              text: suggestionList[index].substring(0, query.length),
+              style: TextStyle(
+                color: Colors.black,
+                fontWeight: FontWeight.bold
+              ),
+              children: [
+                TextSpan(
+                  text: suggestionList[index].substring(query.length),
+                  style: TextStyle(color: Colors.grey)
+                )
+              ]
+            )
+
+          )
+        );
+      } 
+    );
+  }
+  
 }

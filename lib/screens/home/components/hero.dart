@@ -5,22 +5,22 @@ import 'package:flutter/material.dart';
 
 var heroData = [
   {
-    'thumbnail': 'assets/images/image_hero_1-min.jpg',
+    'thumbnail': 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS9JlsfsWUKG1MNdiGULQwYJ1Pr10hS7huhrg&usqp=CAU',
     'headline': 'Thiết kế mái ấm của bạn',
     'category': 'Không gian & nhà ở'
   },
   {
-    'thumbnail': 'assets/images/image_hero_2-min.jpg',
+    'thumbnail': 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS9JlsfsWUKG1MNdiGULQwYJ1Pr10hS7huhrg&usqp=CAU',
     'headline': 'Tự tin khoe cá tính',
     'category': 'Thời trang'
   },
   {
-    'thumbnail': 'assets/images/image_hero_3-min.jpg',
+    'thumbnail': 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS9JlsfsWUKG1MNdiGULQwYJ1Pr10hS7huhrg&usqp=CAU',
     'headline': 'Khám phá những điều không tưởng',
     'category': 'Công nghệ'
   },
   {
-    'thumbnail': 'assets/images/image_hero_4-min.jpg',
+    'thumbnail': 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS9JlsfsWUKG1MNdiGULQwYJ1Pr10hS7huhrg&usqp=CAU',
     'headline': 'Sẵn sàng cho mọi chuyến đi',
     'category': 'Thể thao & du lịch'
   },
@@ -51,7 +51,7 @@ class _HeroSectionState extends State<HeroSection> {
                         width: MediaQuery.of(context).size.width,
                         decoration: BoxDecoration(
                             image: DecorationImage(
-                                image: AssetImage(slide['thumbnail']),
+                                image: NetworkImage(slide['thumbnail']),
                                 fit: BoxFit.cover))),
                     Container(
                         padding: EdgeInsets.all(space_medium),
