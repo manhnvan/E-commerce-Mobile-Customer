@@ -13,7 +13,6 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       theme: EzTheme,
-
       initialRoute: '/home',
       routes: routes,
     );

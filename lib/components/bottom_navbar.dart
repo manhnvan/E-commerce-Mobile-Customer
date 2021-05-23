@@ -48,9 +48,9 @@ class BottomNavbar extends StatelessWidget {
             label: 'MESSAGE'
           ),
           BottomNavigationBarItem(
-              icon: Icon(Icons.account_circle_sharp, size: 40, color: Colors.black45),
+              icon: Icon(Icons.account_circle_sharp, color: Colors.black45),
               activeIcon:
-              Icon(Icons.account_circle_sharp, size: 40, color: Colors.greenAccent),
+              Icon(Icons.account_circle_sharp, color: Colors.greenAccent),
               label: ''),
         ]);
   }
