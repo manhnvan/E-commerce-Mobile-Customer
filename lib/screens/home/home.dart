@@ -113,7 +113,8 @@ class DataSearch extends SearchDelegate<String> {
           onPressed: () {
             query = "";
           },
-          icon: Icon(Icons.clear))
+          icon: Icon(Icons.clear)
+      )
     ];
   }
 

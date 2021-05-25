@@ -1,8 +1,9 @@
 import 'package:customer_app/abstracts/variables.dart';
 import 'package:customer_app/components/product_card.dart';
-import 'package:customer_app/constant.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+
+import '../../../constaint.dart';
 
 class RecommendSection extends StatefulWidget {
   @override

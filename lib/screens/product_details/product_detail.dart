@@ -10,7 +10,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 
 import '../../constaint.dart';
-import '../../constant.dart';
 
 var productData = {
   "categories": ["Trang phục", "Đồ gia dụng", "Thiết bị điện tử", "Trang sức"],

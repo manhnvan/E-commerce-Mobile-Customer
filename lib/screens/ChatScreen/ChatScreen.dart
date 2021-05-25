@@ -17,11 +17,11 @@ class _ChatScreenState extends State<ChatScreen> {
 
   List<dynamic> chatboxes = <dynamic>[];
   var dio = Dio();
-  String currentUserId = "608eb567489da0f52b6ec179";
 
   @override
   void initState() {
-    dio.get('http://${ip}:${chat_port}/${currentUserId}/').then((value) {
+    dio.get('$chat_url/$customerId/').then((value) {
+      print(value.data);
       if (value.data['success']) {
         print(value.data['chatboxes']);
         setState(() {
