@@ -1,26 +1,27 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:customer_app/abstracts/colors.dart';
+import 'package:customer_app/abstracts/image_asset_url.dart';
 import 'package:customer_app/abstracts/variables.dart';
 import 'package:flutter/material.dart';
 
 var heroData = [
   {
-    'thumbnail': 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS9JlsfsWUKG1MNdiGULQwYJ1Pr10hS7huhrg&usqp=CAU',
+    'thumbnail': hero_section_1,
     'headline': 'Thiết kế mái ấm của bạn',
     'category': 'Không gian & nhà ở'
   },
   {
-    'thumbnail': 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS9JlsfsWUKG1MNdiGULQwYJ1Pr10hS7huhrg&usqp=CAU',
+    'thumbnail': hero_section_2,
     'headline': 'Tự tin khoe cá tính',
     'category': 'Thời trang'
   },
   {
-    'thumbnail': 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS9JlsfsWUKG1MNdiGULQwYJ1Pr10hS7huhrg&usqp=CAU',
+    'thumbnail': hero_section_3,
     'headline': 'Khám phá những điều không tưởng',
     'category': 'Công nghệ'
   },
   {
-    'thumbnail': 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS9JlsfsWUKG1MNdiGULQwYJ1Pr10hS7huhrg&usqp=CAU',
+    'thumbnail': hero_section_4,
     'headline': 'Sẵn sàng cho mọi chuyến đi',
     'category': 'Thể thao & du lịch'
   },

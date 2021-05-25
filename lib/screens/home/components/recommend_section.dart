@@ -1,41 +1,34 @@
 import 'package:customer_app/abstracts/variables.dart';
 import 'package:customer_app/components/product_card.dart';
+import 'package:customer_app/constant.dart';
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 
-var fakeProductData = [
-  {
-    'thumbnail': 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSKPHp2PuTqnncp5CdkRi_9fsl_T0Uk0qgUCA&usqp=CAU',
-    'name': 'Giày Nike Air Max 2017',
-    'price': 700000
-  },
-  {
-    'thumbnail': 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSKPHp2PuTqnncp5CdkRi_9fsl_T0Uk0qgUCA&usqp=CAU',
-    'name': 'Nike Zoom Pegasus 33',
-    'price': 900000
-  },
-  {
-    'thumbnail': 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSKPHp2PuTqnncp5CdkRi_9fsl_T0Uk0qgUCA&usqp=CAU',
-    'name': 'MX MASTER 2S',
-    'price': 200000
-  },
-  {
-    'thumbnail': 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSKPHp2PuTqnncp5CdkRi_9fsl_T0Uk0qgUCA&usqp=CAU',
-    'name': 'Surface Laptop Go 12.4',
-    'price': 22000000
-  },
-  {
-    'thumbnail': 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSKPHp2PuTqnncp5CdkRi_9fsl_T0Uk0qgUCA&usqp=CAU',
-    'name': 'Áo phông Coolmate',
-    'price': 150000
-  },
-  {
-    'thumbnail': 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSKPHp2PuTqnncp5CdkRi_9fsl_T0Uk0qgUCA&usqp=CAU',
-    'name': 'Áo Sweater Coolmate',
-    'price': 300000
-  }
-];
+class RecommendSection extends StatefulWidget {
+  @override
+  _RecommendSectionState createState() => _RecommendSectionState();
+}
 
-class RecommendSection extends StatelessWidget {
+class _RecommendSectionState extends State<RecommendSection> {
+  List<dynamic> newProducts = [];
+  var dio = new Dio();
+  int page = 0;
+  int limit = 10;
+
+  @override
+  void initState() {
+    dio
+      .get('$api_url/product/?page=$page&limit=$limit')
+      .then((value) {
+        print(value.data);
+        if (value.data['success']) {
+          setState(() {
+            newProducts = value.data['docs'];
+          });
+        }
+      });
+  }
+
   @override
   Widget build(BuildContext context) {
     print('rerendering');
@@ -56,12 +49,12 @@ class RecommendSection extends StatelessWidget {
                 cacheExtent: 100.0,
                 shrinkWrap: true,
                 scrollDirection: Axis.horizontal,
-                itemCount: fakeProductData.length,
+                itemCount: newProducts.length,
                 itemBuilder: (BuildContext context, int index) {
                   return ProductCard(
                     backgroundWhite: false,
                     width: null,
-                    data: fakeProductData[index],
+                    data: newProducts[index],
                   );
                 }),
           )

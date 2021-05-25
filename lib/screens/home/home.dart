@@ -1,8 +1,13 @@
+import 'dart:async';
+
 import 'package:customer_app/abstracts/colors.dart';
-import 'package:customer_app/abstracts/variables.dart';
 import 'package:customer_app/components/bottom_navbar.dart';
+import 'package:customer_app/constant.dart';
+import 'package:customer_app/helper/deboucer.dart';
 import 'package:customer_app/screens/home/components/new_products_section.dart';
 import 'package:customer_app/screens/home/components/recommend_section.dart';
+import 'package:customer_app/screens/product_details/product_detail.dart';
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 
 import 'components/hero.dart';
@@ -52,23 +57,11 @@ class _MyHomePageState extends State<Home> {
 }
 
 
-class DataSearch extends SearchDelegate<String> {
+class DataSearch extends SearchDelegate<String> with ChangeNotifier {
+  var dio = new Dio();
+  List<dynamic> suggestionList = [];
 
-  final recommendations = [
-    "Áo thun coolmate",
-    "Áo sơ mi Gucci",
-    "Nước hoa channel",
-    "Giày Adidas",
-    "Mũ bảo hiểm",
-    "Bia Trúc Bạch",
-    "Giày Converse"
-  ];
-
-  final recentRecommendation = [
-    "Áo thun coolmate",
-    "Áo sơ mi Gucci",
-    "Nước hoa channel",
-  ];
+  final _debouncer = Debouncer(milliseconds: 500);
 
   @override
   List<Widget> buildActions(BuildContext context) {
@@ -98,13 +91,26 @@ class DataSearch extends SearchDelegate<String> {
     @override
     Widget buildResults(BuildContext context) {
       // TODO: implement buildResults
+      return Container();
       throw UnimplementedError();
     }
-  
+
     @override
     Widget buildSuggestions(BuildContext context) {
     // TODO: implement buildSuggestions
-    final suggestionList = query.isEmpty ? recentRecommendation : recommendations.where((p) => p.startsWith(query)).toList();
+
+    _debouncer.run(() {
+      dio.get('$api_url/product/textQuery', queryParameters: {
+        "q": query
+      }).then((value) {
+        print(value.data);
+        if (value.data['success']) {
+          suggestionList = value.data['docs'].map((data) => data['productName'].toString()).toList();
+          print(suggestionList);
+          notifyListeners();
+        }
+      });
+    });
 
     return ListView.builder(
       itemCount: suggestionList.length,
@@ -128,7 +134,6 @@ class DataSearch extends SearchDelegate<String> {
                 )
               ]
             )
-
           )
         );
       } 
@@ -136,3 +141,4 @@ class DataSearch extends SearchDelegate<String> {
   }
   
 }
+

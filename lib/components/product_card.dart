@@ -21,7 +21,7 @@ class ProductCard extends StatelessWidget {
       onTap: () {
         Navigator.push(
           context,
-          MaterialPageRoute(builder: (context) => ProductDetail())
+          MaterialPageRoute(builder: (context) => ProductDetail(productId: data['_id'].toString()))
         );
       },
       child: GlassCard(
@@ -43,7 +43,7 @@ class ProductCard extends StatelessWidget {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(data['name'],
+                      Text(data['productName'],
                           style: this.width == MediaQuery.of(context).size.width
                               ? (Theme.of(context).textTheme.bodyText1)
                               : (Theme.of(context).textTheme.bodyText2),

@@ -1,6 +1,7 @@
 import 'dart:ui';
 
 import 'package:customer_app/abstracts/colors.dart';
+import 'package:customer_app/abstracts/image_asset_url.dart';
 import 'package:customer_app/abstracts/variables.dart';
 import 'package:flutter/material.dart';
 
@@ -30,15 +31,16 @@ class Menu extends StatelessWidget {
                   Container(
                       width: MediaQuery.of(context).size.width * 0.25,
                       child: TextButton(
-                          onPressed: () {},
-                          child: Container(
-                            decoration: BoxDecoration(
-                                image: DecorationImage(
-                                    image: AssetImage(
-                                        'assets/icons/icon_chat.png'))),
-                          ))),
-
-                  //Cart button here :>
+                        onPressed: () {},
+                        child: Container(
+                          decoration: BoxDecoration(
+                            image: DecorationImage(
+                                image: NetworkImage(icon_chat)
+                            ),
+                          )
+                        )
+                      )
+                  ),
                   Container(
                       width: MediaQuery.of(context).size.width * 0.25,
                       child: TextButton(
@@ -46,8 +48,8 @@ class Menu extends StatelessWidget {
                           child: Container(
                             decoration: BoxDecoration(
                                 image: DecorationImage(
-                                    image: AssetImage(
-                                        'assets/icons/icon_cart.png'))),
+                                    image: NetworkImage(
+                                        icon_cart))),
                           ))),
 
                   //Order button here guys ^^

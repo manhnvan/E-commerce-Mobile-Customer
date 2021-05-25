@@ -1,4 +1,5 @@
 import 'package:customer_app/abstracts/colors.dart';
+import 'package:customer_app/abstracts/image_asset_url.dart';
 import 'package:customer_app/abstracts/variables.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -37,8 +38,10 @@ class ProductBriefInfo extends StatelessWidget {
                         height: space_medium,
                         decoration: BoxDecoration(
                             image: DecorationImage(
-                                image:
-                                    AssetImage('assets/icons/icon_star.png')))),
+                                image: NetworkImage(icon_start)
+                            )
+                          )
+                        ),
                     Text(ratings.toString() + '/5',
                         style: Theme.of(context).textTheme.bodyText2)
                   ],
@@ -51,13 +54,15 @@ class ProductBriefInfo extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Container(
-                        margin: EdgeInsets.only(right: space_tiny),
-                        width: space_medium,
-                        height: space_medium,
-                        decoration: BoxDecoration(
-                            image: DecorationImage(
-                                image: AssetImage(
-                                    'assets/icons/icon_heart.png')))),
+                      margin: EdgeInsets.only(right: space_tiny),
+                      width: space_medium,
+                      height: space_medium,
+                      decoration: BoxDecoration(
+                        image: DecorationImage(
+                          image: NetworkImage(icon_heart)
+                        )
+                      )
+                    ),
                     Text(likes.toString(),
                         style: Theme.of(context).textTheme.bodyText2)
                   ],

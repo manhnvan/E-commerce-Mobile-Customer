@@ -1,3 +1,4 @@
+import 'package:customer_app/abstracts/image_asset_url.dart';
 import 'package:customer_app/abstracts/variables.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -26,7 +27,7 @@ class SellerInfo extends StatelessWidget {
             decoration: BoxDecoration(
                 borderRadius: BorderRadius.all(Radius.circular(1000)),
                 image: DecorationImage(
-                    image: AssetImage("assets/images/image_hero_2-min.jpg"),
+                    image: NetworkImage(hero_section_2),
                     fit: BoxFit.cover)),
           ),
 

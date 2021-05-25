@@ -4,29 +4,6 @@ import 'package:customer_app/abstracts/variables.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-// var heroData = [
-//   {
-//     'thumbnail': 'assets/images/image_hero_1-min.jpg',
-//     'headline': 'Thiết kế mái ấm của bạn',
-//     'category': 'Không gian & nhà ở'
-//   },
-//   {
-//     'thumbnail': 'assets/images/image_hero_2-min.jpg',
-//     'headline': 'Tự tin khoe cá tính',
-//     'category': 'Thời trang'
-//   },
-//   {
-//     'thumbnail': 'assets/images/image_hero_3-min.jpg',
-//     'headline': 'Khám phá những điều không tưởng',
-//     'category': 'Công nghệ'
-//   },
-//   {
-//     'thumbnail': 'assets/images/image_hero_4-min.jpg',
-//     'headline': 'Sẵn sàng cho mọi chuyến đi',
-//     'category': 'Thể thao & du lịch'
-//   },
-// ];
-
 // ignore: must_be_immutable
 class ProductImages extends StatefulWidget {
   var images;
@@ -57,7 +34,7 @@ class _ProductImagesState extends State<ProductImages> {
                         width: MediaQuery.of(context).size.width,
                         decoration: BoxDecoration(
                             image: DecorationImage(
-                                image: AssetImage(slide),
+                                image: NetworkImage(slide),
                                 fit: BoxFit.cover))),
                     Container(
                         padding: EdgeInsets.all(space_medium),
