@@ -18,5 +18,5 @@ final Map<String, WidgetBuilder> routes = {
   WelcomeScreen.routeName: (context) => WelcomeScreen(),
   ChatScreen.routeName: (context) => ChatScreen(),
   ChatBox.routeName: (context) => ChatBox(),
-  shoppingCart.routeName:(context) => shoppingCart()
+  ShoppingCart.routeName:(context) => ShoppingCart()
 };
