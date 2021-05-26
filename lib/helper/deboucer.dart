@@ -10,12 +10,11 @@ class Debouncer extends ChangeNotifier {
   Debouncer({ this.milliseconds });
 
   run(Function action) {
+
     if (_timer != null) {
       _timer.cancel();
     }
 
-    _timer = Timer(Duration(milliseconds: milliseconds), () async {
-      
-    });
+    _timer = Timer(Duration(milliseconds: milliseconds), action);
   }
 }

@@ -36,14 +36,15 @@ class _ChatBoxState extends State<ChatBox> {
     try {
       super.initState();
       final widgetsBinding = WidgetsBinding.instance;
-        widgetsBinding.addPostFrameCallback((callback) {
+      widgetsBinding.addPostFrameCallback((callback) {
+        print('re init');
         if (ModalRoute.of(context).settings.arguments != null) {
           final ScreenArguments args = ModalRoute.of(context).settings.arguments;
           setState(() {
             topic = args.topic;
             chatboxId = args.chatboxId;
           });
-          dio.get('http://${ip}:${chat_port}/message/${chatboxId}/0').then((value) {
+          dio.get('$chat_url/message/$chatboxId/0').then((value) {
             if (value.data['success']) {
               setState(() {
                 messages.addAll(value.data['messages']);
@@ -51,7 +52,7 @@ class _ChatBoxState extends State<ChatBox> {
               _scrollController.jumpTo(_scrollController.position.maxScrollExtent);
             }
           });
-          socket = IO.io('http://${ip}:${chat_port}', <String, dynamic> {
+          socket = IO.io('$chat_url', <String, dynamic> {
             'transports': ['websocket'],
             'autoConnect': false,
           });

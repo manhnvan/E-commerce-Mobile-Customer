@@ -23,7 +23,6 @@ class _ChatScreenState extends State<ChatScreen> {
     dio.get('$chat_url/$customerId/').then((value) {
       print(value.data);
       if (value.data['success']) {
-        print(value.data['chatboxes']);
         setState(() {
           chatboxes.addAll(value.data['chatboxes']);
         });

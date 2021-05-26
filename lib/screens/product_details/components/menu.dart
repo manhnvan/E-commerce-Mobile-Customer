@@ -3,10 +3,18 @@ import 'dart:ui';
 import 'package:customer_app/abstracts/colors.dart';
 import 'package:customer_app/abstracts/image_asset_url.dart';
 import 'package:customer_app/abstracts/variables.dart';
+import 'package:customer_app/constaint.dart';
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 
 class Menu extends StatelessWidget {
-  const Menu({Key key}) : super(key: key);
+  Menu({Key key, this.productId, this.sellerId, this.productName}) : super(key: key);
+
+  final String productId;
+  final String sellerId;
+  final String productName;
+
+  var dio = new Dio();
 
   @override
   Widget build(BuildContext context) {
@@ -31,7 +39,18 @@ class Menu extends StatelessWidget {
                   Container(
                       width: MediaQuery.of(context).size.width * 0.25,
                       child: TextButton(
-                        onPressed: () {},
+                        onPressed: () {
+                          dio.post('$chat_url/createChatbox', data: {
+                            "participants": [customerId, sellerId],
+                            "topic": productName,
+                            "avatar": "https://i.imgur.com/hUD8wd6.jpeg"
+                          }).then((value) {
+                            print(value.data);
+                            if (value.data['success']) {
+
+                            }
+                          });
+                        },
                         child: Container(
                           decoration: BoxDecoration(
                             image: DecorationImage(
@@ -44,7 +63,9 @@ class Menu extends StatelessWidget {
                   Container(
                       width: MediaQuery.of(context).size.width * 0.25,
                       child: TextButton(
-                          onPressed: () {},
+                          onPressed: () {
+
+                          },
                           child: Container(
                             decoration: BoxDecoration(
                                 image: DecorationImage(
