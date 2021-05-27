@@ -5,16 +5,17 @@ import 'package:socket_io_client/socket_io_client.dart' as IO;
 import '../../constaint.dart';
 import 'Message/LeftMessage.dart';
 import 'Message/RightMessage.dart';
-
-
-class ScreenArguments {
-  final String topic;
-  final String chatboxId;
-  ScreenArguments(this.topic, this.chatboxId);
-}
-
 class ChatBox extends StatefulWidget {
   static final routeName = '/chatbox';
+  ChatBox({
+    Key key,
+    this.topic,
+    this.chatboxId
+  });
+
+  final String topic;
+  final String chatboxId;
+
   @override
   _ChatBoxState createState() => _ChatBoxState();
 }
@@ -35,46 +36,61 @@ class _ChatBoxState extends State<ChatBox> {
   void initState() {
     try {
       super.initState();
-      final widgetsBinding = WidgetsBinding.instance;
-        widgetsBinding.addPostFrameCallback((callback) {
-        if (ModalRoute.of(context).settings.arguments != null) {
-          final ScreenArguments args = ModalRoute.of(context).settings.arguments;
+      setState(() {
+        topic = widget.topic;
+        chatboxId = widget.chatboxId;
+      });
+      dio.get('$chat_url/message/$chatboxId/0').then((value) {
+        if (value.data['success']) {
           setState(() {
-            topic = args.topic;
-            chatboxId = args.chatboxId;
+            messages.addAll(value.data['messages']);
           });
-          dio.get('http://${ip}:${chat_port}/message/${chatboxId}/0').then((value) {
-            if (value.data['success']) {
-              setState(() {
-                messages.addAll(value.data['messages']);
-              });
-              _scrollController.jumpTo(_scrollController.position.maxScrollExtent);
-            }
-          });
-          socket = IO.io('http://${ip}:${chat_port}', <String, dynamic> {
-            'transports': ['websocket'],
-            'autoConnect': false,
-          });
-          socket.onConnect((data) {
-            print('connect: ${socket.id}');
-              socket.on('message', (message) {
-              setState(() {
-                messages.add(message);
-              });
-              print(messages.length);
-            });
-          });
-
-          socket.connect();
-          socket.emit('join', chatboxId);
-          
-          socket.on('disconnect', (_) => print('disconnect'));
-          print(socket.connected);
+          _scrollController.jumpTo(_scrollController.position.maxScrollExtent);
+          connectToChatServer();
         }
       });
     } catch (e) {
       print(e.toString());
     }
+  }
+
+  void connectToChatServer() {
+    try {
+      print('re init');
+      setState(() {
+        socket = IO.io('$chat_url', <String, dynamic> {
+          'transports': ['websocket'],
+          'forceNew':true
+        });
+        socket.onConnect((data) {
+          print('connect: ${socket.id}');
+            socket.on('message', (message) {
+              if (mounted) {
+                setState(() {
+                  messages.add(message);
+                });
+              }
+          });
+        });
+
+        socket.connect();
+        socket.emit('join', chatboxId);
+        
+        socket.on('disconnect', (_) => print('disconnect'));
+        print(socket.connected);
+      });
+    } catch (e) {
+      print(e.toString());
+    }
+  }
+
+  @override
+  void onDispose() {
+    super.dispose();
+    socket.emit('disconnect');
+    setState(() {
+      socket = null;
+    });
   }
 
   @override
