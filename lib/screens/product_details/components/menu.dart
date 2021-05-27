@@ -6,6 +6,9 @@ import 'package:customer_app/abstracts/variables.dart';
 import 'package:customer_app/constaint.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:dio/dio.dart';
+
+import '../../../constaint.dart';
 
 class Menu extends StatelessWidget {
   Menu({Key key, this.productId, this.sellerId, this.productName}) : super(key: key);
@@ -18,6 +21,8 @@ class Menu extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    var dio = new Dio();
+
     return Positioned(
         bottom: 0,
         left: 0,
@@ -64,7 +69,14 @@ class Menu extends StatelessWidget {
                       width: MediaQuery.of(context).size.width * 0.25,
                       child: TextButton(
                           onPressed: () {
-
+                            dio.post('$api_url/cart/customer/$customerId/update/${productId}', data: {
+                              "type": 1
+                            })
+                                .then((value) {
+                              if (value.data['success']) {
+                                // print(value);
+                              }
+                            });
                           },
                           child: Container(
                             decoration: BoxDecoration(
@@ -81,7 +93,13 @@ class Menu extends StatelessWidget {
                         gradient: color_gradient_primary
                       ),
                       child: TextButton(
-                          onPressed: () {},
+                          onPressed: () {
+                            dio.post('$api_url/cart/customer/$customerId/buynow/$productId')
+                                .then((value) {
+                              Navigator.pushNamed(context, "/shoppingCart");
+                            });
+
+                          },
                           child: Text("Đặt Mua",
                               style: Theme.of(context).textTheme.headline5.copyWith(
                                 color: color_white,
