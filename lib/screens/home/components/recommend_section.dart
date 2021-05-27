@@ -21,7 +21,6 @@ class _RecommendSectionState extends State<RecommendSection> {
     dio
       .get('$api_url/product/?page=$page&limit=$limit')
       .then((value) {
-        print(value.data);
         if (value.data['success']) {
           setState(() {
             newProducts = value.data['docs'];

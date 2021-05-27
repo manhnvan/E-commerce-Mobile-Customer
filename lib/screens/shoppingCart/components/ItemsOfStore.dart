@@ -1,6 +1,8 @@
 import 'package:customer_app/abstracts/colors.dart';
 import 'package:customer_app/screens/shoppingCart/components/Item.dart';
 import 'package:flutter/material.dart';
+import 'package:dio/dio.dart';
+import '../../../constaint.dart';
 
 class ItemsOfStore extends StatefulWidget {
   final List<dynamic> items;
@@ -22,6 +24,7 @@ class _ItemsOfStoreState extends State<ItemsOfStore> {
   var checkedStore = true;
   var store;
   var index = -1;
+  var dio = new Dio();
 
   void _updateStore(var newStore) {
     // print(newStore);
@@ -67,9 +70,18 @@ class _ItemsOfStoreState extends State<ItemsOfStore> {
                 Spacer(),
                 GestureDetector(
                   onTap: () {
+                    List<String> listProduct = [];
                     for(var i = 0; i< store["products"].length; i++){
                       store["products"][i]["checked"] = !checkedStore;
+                      listProduct.add(store["products"][i]["product"]["_id"]);
                     }
+
+                    dio.post('$api_url/cart/customer/$customerId/updatemulti', data: {
+                      "listProductId": listProduct,
+                      "checked": !checkedStore
+                    })
+                        .then((value) {
+                    });
                     widget.items[widget.storeIndex] = store;
                     widget.update(widget.items);
                   },

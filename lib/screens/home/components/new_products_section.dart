@@ -2,7 +2,6 @@ import 'package:customer_app/abstracts/variables.dart';
 import 'package:customer_app/components/product_card.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
-
 import '../../../constaint.dart';
 
 class NewProductsSection extends StatefulWidget {
@@ -23,7 +22,6 @@ class _NewProductsSectionState extends State<NewProductsSection> {
     dio
       .get('$api_url/product/lastest?page=$page&limit=$limit')
       .then((value) {
-        print(value.data);
         if (value.data['success']) {
           setState(() {
             newProductList = value.data['docs'];

@@ -76,8 +76,6 @@ class _ProductDetailState extends State<ProductDetail> {
       });
   }
 
-
-
   void addedToFav() {
     dio.post('$api_url/like', data: {
       "product": widget.productId,
@@ -91,123 +89,118 @@ class _ProductDetailState extends State<ProductDetail> {
         });
       }
     });
-    
+
   }
 
   @override
   Widget build(BuildContext context) {
     print(widget.productId);
-    return Scaffold(
-      appBar: AppBar(
-        leading: TextButton(
-          onPressed: () {
-            Navigator.pop(context);
-          },
-          child: Container(
-            width: space_big,
-            height: space_big,
-            child: Icon(Icons.arrow_back_ios),
-          )
+    return SafeArea(
+      child: Scaffold(
+          extendBodyBehindAppBar: true,
+          appBar: AppBar(
+            backgroundColor: Colors.black.withOpacity(0.15),
+          leading: TextButton(
+            onPressed: () {
+              Navigator.pop(context);
+            },
+            child: Icon(Icons.arrow_back_ios)
+          ),
         ),
-      ),
-      body: 
-        loading ? Container() : Container(
-        child: Column(
-          children: [
-            Expanded(
-              child: Stack(children: [
-                ListView(
-                  scrollDirection: Axis.vertical,
-                  addAutomaticKeepAlives: false,
-                  cacheExtent: 100.0,
-                  children: [
-                    ProductImages(productData['productImages']),
-                    SizedBox(height: space_medium),
-                    Container(
-                      padding: EdgeInsets.fromLTRB(
-                          space_medium, 0, space_medium, space_huge * 3),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          //Seller's information and heart icon here ^^
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              //Seller Information
-                              SellerInfo(productData['sellerId']),
+        body:
+          loading ? Container() : Container(
+          child: Stack(children: [
+            SingleChildScrollView(
+              child: Column(
+                // scrollDirection: Axis.vertical,
+                // addAutomaticKeepAlives: false,
+                // cacheExtent: 100.0,
+                children: [
+                  ProductImages(productData['productImages']),
+                  SizedBox(height: space_medium),
+                  Container(
+                    padding: EdgeInsets.fromLTRB(
+                        space_medium, 0, space_medium, space_huge * 3),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        //Seller's information and heart icon here ^^
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            //Seller Information
+                            SellerInfo(productData['sellerId']),
 
-                              //Add to Favorite
-                              TextButton(
-                                onPressed: addedToFav,
-                                child: Stack(
-                                  children: [
-                                    Container(
-                                    width: space_huge + space_small,
-                                    height: space_huge + space_small,
-                                    decoration: BoxDecoration(
-                                        image: DecorationImage(
-                                            image: NetworkImage(icon_heart)
-                                        )
-                                    ),
+                            //Add to Favorite
+                            TextButton(
+                              onPressed: addedToFav,
+                              child: Stack(
+                                children: [
+                                  Container(
+                                  width: space_huge + space_small,
+                                  height: space_huge + space_small,
+                                  decoration: BoxDecoration(
+                                      image: DecorationImage(
+                                          image: NetworkImage(icon_heart)
+                                      )
                                   ),
-                                    Visibility(
-                                      visible: _isAddedToFav,
-                                      child: Container(
-                                        width: space_huge + space_small,
-                                        height: space_huge + space_small,
-                                        decoration: BoxDecoration(
-                                            image: DecorationImage(
-                                                image: NetworkImage(icon_heart_active)
-                                            )
-                                        ),
+                                ),
+                                  Visibility(
+                                    visible: _isAddedToFav,
+                                    child: Container(
+                                      width: space_huge + space_small,
+                                      height: space_huge + space_small,
+                                      decoration: BoxDecoration(
+                                          image: DecorationImage(
+                                              image: NetworkImage(icon_heart_active)
+                                          )
                                       ),
                                     ),
-                                  ]
-                                ),
-                              )
-                            ],
-                          ),
+                                  ),
+                                ]
+                              ),
+                            )
+                          ],
+                        ),
 
-                          SizedBox(height: space_medium),
+                        SizedBox(height: space_medium),
 
-                          //Product title here ^^
-                          Text(
-                            productData['productName'],
-                            style: Theme.of(context).textTheme.headline5
-                          ),
+                        //Product title here ^^
+                        Text(
+                          productData['productName'],
+                          style: Theme.of(context).textTheme.headline5
+                        ),
 
-                          //Product brief information here (like price, number of reviews, number of ratings, etc...)
-                          ProductBriefInfo(
-                            productData['rating'],
-                            productData['like'], 
-                            productData['price']
-                          ),
+                        //Product brief information here (like price, number of reviews, number of ratings, etc...)
+                        ProductBriefInfo(
+                          productData['rating'],
+                          productData['like'],
+                          productData['price']
+                        ),
 
-                          SizedBox(height: space_big),
+                        SizedBox(height: space_big),
 
-                          //Product description here :v
-                          Text(
-                            productData['description'],
-                            style: Theme.of(context).textTheme.bodyText1
-                          ),
+                        //Product description here :v
+                        Text(
+                          productData['description'],
+                          style: Theme.of(context).textTheme.bodyText1
+                        ),
 
-                          SizedBox(height: space_huge),
+                        SizedBox(height: space_huge),
 
-                          //Recommend section here :>
-                          RecommendSection()
-                        ],
-                      ),
+                        //Recommend section here :>
+                        RecommendSection()
+                      ],
                     ),
-                  ],
-                ),
-
-                //Our super cool menu's down here ^^
-                Menu()
-              ]),
+                  ),
+                ],
+              ),
             ),
-          ],
+            //Our super cool menu's down here ^^
+            Menu(productId: widget.productId)
+          ])
         )
-      )
+      ),
     );
   }
 }
