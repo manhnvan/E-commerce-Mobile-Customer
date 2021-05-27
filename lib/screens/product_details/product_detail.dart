@@ -94,9 +94,6 @@ class _ProductDetailState extends State<ProductDetail> {
           child: Stack(children: [
             SingleChildScrollView(
               child: Column(
-                // scrollDirection: Axis.vertical,
-                // addAutomaticKeepAlives: false,
-                // cacheExtent: 100.0,
                 children: [
                   ProductImages(productData['productImages']),
                   SizedBox(height: space_medium),
@@ -128,7 +125,7 @@ class _ProductDetailState extends State<ProductDetail> {
                                   ),
                                 ),
                                   Visibility(
-                                    visible: true,
+                                    visible: _isAddedToFav,
                                     child: Container(
                                       width: space_huge + space_small,
                                       height: space_huge + space_small,
