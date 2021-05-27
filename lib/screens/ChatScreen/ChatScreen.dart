@@ -43,13 +43,9 @@ class _ChatScreenState extends State<ChatScreen> {
             itemBuilder: (BuildContext context, int index) {
               return GestureDetector(
                 onTap: () {
-                  Navigator.pushNamed(
+                  Navigator.push(
                     context,
-                    ChatBox.routeName,
-                    arguments: ScreenArguments(
-                      chatboxes[index]['topic'],
-                      chatboxes[index]['_id'],
-                    ),
+                    MaterialPageRoute(builder: (context) => ChatBox(topic: chatboxes[index]['topic'], chatboxId: chatboxes[index]['_id']))
                   );
                 },
                 child: ChatCard(chatCardInfo: chatboxes[index]),
