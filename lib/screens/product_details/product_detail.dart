@@ -58,6 +58,11 @@ class _ProductDetailState extends State<ProductDetail> {
       });
   }
 
+  @override
+  void dispose() {
+    super.dispose();
+  }
+
   void addedToFav() {
     dio.post('$api_url/like', data: {
       "product": widget.productId,
@@ -71,7 +76,6 @@ class _ProductDetailState extends State<ProductDetail> {
         });
       }
     });
-
   }
 
   @override
@@ -87,6 +91,11 @@ class _ProductDetailState extends State<ProductDetail> {
             },
             child: Icon(Icons.arrow_back_ios)
           ),
+            actions: [
+              IconButton(icon: Icon(Icons.shopping_cart_outlined, color: Colors.white), onPressed: () {
+                Navigator.pushNamed(context, "/shoppingCart");
+              })
+            ],
         ),
         body:
           loading ? Container() : Container(

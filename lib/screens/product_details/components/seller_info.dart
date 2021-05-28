@@ -1,4 +1,3 @@
-import 'package:customer_app/abstracts/image_asset_url.dart';
 import 'package:customer_app/abstracts/variables.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -8,6 +7,7 @@ class SellerInfo extends StatelessWidget {
   dynamic seller;
 
   SellerInfo(this.seller);
+
 
   //Right now seller's image and name are hard coded, please use sellerId to get real data
 
@@ -33,7 +33,7 @@ class SellerInfo extends StatelessWidget {
           ),
 
           //Seller's name here :)
-          Text(seller['shopName'],
+          Text(seller["username"],
               style:
                   Theme.of(context).textTheme.bodyText1.copyWith(fontSize: 20))
         ],
