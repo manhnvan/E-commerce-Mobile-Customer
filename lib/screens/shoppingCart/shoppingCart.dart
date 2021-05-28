@@ -54,9 +54,10 @@ class _ShoppingCartState extends State<ShoppingCart> {
       appBar: AppBar(
         leading: new IconButton(
               icon: new Icon(Icons.arrow_back,size: 35),
-          onPressed: () => {
+          onPressed: () {
           // Perform Your action here
-            Navigator.pop(context)
+            Navigator.pop(context);
+            EasyLoading.dismiss();
           },
         ),
         elevation: 0,
@@ -112,7 +113,26 @@ class _ShoppingCartState extends State<ShoppingCart> {
                     flex: 2,
                     child: GestureDetector(
                       onTap: (){
-                        print("OK");
+                        if(totalPrice == 0){
+                          showDialog(
+                              barrierDismissible: false,
+                              barrierColor: Colors.transparent,
+                              context: context,
+                              builder: (BuildContext builderContext) {
+                                Future.delayed(Duration(seconds: 1), () {
+                                  Navigator.of(builderContext).pop();
+                                });
+                                return AlertDialog(
+                                    backgroundColor: Colors.black.withOpacity(0.8),
+                                    // title: Text('Thông báo', style: TextStyle(color: Colors.white)),
+                                    content: Text('Bạn chưa chọn sản phẩm nào', style: TextStyle(color: Colors.white)),
+                                    shape: RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.all(Radius.circular(12.0)))
+                                );
+                              }
+                          );
+                        }
+                        else Navigator.pushNamed(context, '/confirmOrder');
                       },
                       child: Container(
                         decoration: BoxDecoration(

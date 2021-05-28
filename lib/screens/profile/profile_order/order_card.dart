@@ -1,4 +1,5 @@
 import 'package:customer_app/abstracts/variables.dart';
+import 'package:customer_app/screens/product_details/product_detail.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:customer_app/abstracts/colors.dart';
@@ -31,8 +32,6 @@ class _OrderCardState extends State<OrderCard> {
     });
     if(item["denied"] != null) {
       listStatus[3] = "denied";
-      print(item["denied"]);
-      print(listStatus);
     }
       super.initState();
   }
@@ -79,27 +78,35 @@ class _OrderCardState extends State<OrderCard> {
                       Row(
                         children: [
                           CircleAvatar(
-                            child: Text('VT'),
+                            backgroundImage: NetworkImage(item["productId"]["thumbnail"]),
                             radius: 23,
                           ),
                           Expanded(
-                            child: Padding(
-                                padding: const EdgeInsets.symmetric(horizontal:
-                                8, vertical: 8),
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text(item["productId"]["productName"],
-                                        style: Theme.of(context).textTheme.subtitle1,
+                            child: GestureDetector(
+                              onTap: () {
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(builder: (context) => ProductDetail(productId: item["productId"]['_id'].toString()))
+                                );
+                              },
+                              child: Padding(
+                                  padding: const EdgeInsets.symmetric(horizontal:
+                                  8, vertical: 8),
+                                  child: Column(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    children: [
+                                      Text(item["productId"]["productName"],
+                                          style: Theme.of(context).textTheme.subtitle1,
+                                          overflow: TextOverflow.ellipsis,
+                                          maxLines: 1,
+                                          softWrap: true),
+                                      Text(categories, style: Theme.of(context).textTheme.caption,
                                         overflow: TextOverflow.ellipsis,
                                         maxLines: 1,
-                                        softWrap: true),
-                                    Text(categories, style: Theme.of(context).textTheme.caption,
-                                      overflow: TextOverflow.ellipsis,
-                                      maxLines: 1,
-                                      softWrap: true)
-                                  ],
-                                )),
+                                        softWrap: true)
+                                    ],
+                                  )),
+                            ),
                           ),
                           // Spacer(),
                           GestureDetector(
@@ -126,8 +133,7 @@ class _OrderCardState extends State<OrderCard> {
                                     ],
                                     borderRadius:
                                     BorderRadius.horizontal(
-                                        left: Radius.circular(
-                                            20))),
+                                        left: Radius.circular(20))),
                                 child: Container(
                                     child: Row(children: [
                                       Text(item["status"],
@@ -164,13 +170,13 @@ class _OrderCardState extends State<OrderCard> {
                             mainAxisAlignment: MainAxisAlignment.start,
                               crossAxisAlignment: CrossAxisAlignment.stretch,
                             children: [
-                              Text('Tên mặt hàng: ${item["productId"]["productName"]}', style: Theme.of(context).textTheme.bodyText1, overflow: TextOverflow.ellipsis,
+                              Text('Tên mặt hàng: ${item["productId"]["productName"]}', style: Theme.of(context).textTheme.bodyText1.merge(TextStyle(fontSize: 16)), overflow: TextOverflow.ellipsis,
                               maxLines: 2,
                               softWrap: true),
                               Padding(
-                                padding: const EdgeInsets.only(top: 3, bottom: 4),
+                                padding: const EdgeInsets.only(top: 4, bottom: 4),
                                 child: Text('Số lượng: ${item["amount"]}',
-                                    style: Theme.of(context).textTheme.bodyText1,
+                                    style: Theme.of(context).textTheme.bodyText1.merge(TextStyle(fontSize: 16)),
                                     overflow: TextOverflow.ellipsis,
                                     maxLines: 1,
                                     softWrap: true),

@@ -109,7 +109,7 @@ class Item extends StatelessWidget {
                   Container(
                       padding: EdgeInsets.only(left: 10),
                       child: Text(
-                          "${NumberFormat.simpleCurrency(locale: 'vi_VN').format(product["product"]["price"])}",
+                          "Giá:  ${NumberFormat.simpleCurrency(locale: 'vi_VN').format(product["product"]["price"])}",
                         style: Theme.of(context).textTheme.headline6.merge(TextStyle(fontSize: 15)),
                         overflow: TextOverflow.ellipsis,
                       )

@@ -79,7 +79,22 @@ class Menu extends StatelessWidget {
                             })
                                 .then((value) {
                               if (value.data['success']) {
-                                print(value.data);
+                                showDialog(
+                                    barrierDismissible: false,
+                                    barrierColor: Colors.transparent,
+                                    context: context,
+                                    builder: (BuildContext builderContext) {
+                                      Future.delayed(Duration(milliseconds: 1000), () {
+                                        Navigator.of(builderContext).pop();
+                                      });
+                                      return AlertDialog(
+                                          backgroundColor: Colors.black.withOpacity(0.8),
+                                          content: Text('Thêm vào giỏ hàng thành công', style: TextStyle(color: Colors.white)),
+                                          shape: RoundedRectangleBorder(
+                                              borderRadius: BorderRadius.all(Radius.circular(12.0)))
+                                      );
+                                    }
+                                );
                               }
                             });
                           },
