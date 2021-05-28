@@ -82,7 +82,7 @@ class Item extends StatelessWidget {
                   child: Image(
                     width: 100,
                     // height: 75,
-                    image: NetworkImage(product["product"]["productImages"][0]),
+                    image: NetworkImage(product["product"]["thumbnail"]),
                     fit: BoxFit.cover
                   ),
                 ),

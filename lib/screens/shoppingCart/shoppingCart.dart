@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:dio/dio.dart';
 import '../../constaint.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 
 class ShoppingCart extends StatefulWidget {
   static String routeName = '/shoppingCart';
@@ -19,6 +20,7 @@ class _ShoppingCartState extends State<ShoppingCart> {
 
   @override
   void initState() {
+    EasyLoading.show(status: 'loading...');
     dio
         .get('$api_url/cart/customer/$customerId/getCart')
         .then((value) {
@@ -26,6 +28,7 @@ class _ShoppingCartState extends State<ShoppingCart> {
         setState(() {
           items = value.data["data"]['items'];
         });
+        EasyLoading.dismiss();
       }
     });
   }

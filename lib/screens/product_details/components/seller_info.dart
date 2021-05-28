@@ -5,9 +5,9 @@ import 'package:flutter/material.dart';
 
 // ignore: must_be_immutable
 class SellerInfo extends StatelessWidget {
-  var sellerId;
+  final dynamic sellerId;
 
-  SellerInfo(this.sellerId);
+  const SellerInfo({Key key, this.sellerId}) : super(key: key);
 
   //Right now seller's image and name are hard coded, please use sellerId to get real data
 
@@ -27,12 +27,12 @@ class SellerInfo extends StatelessWidget {
             decoration: BoxDecoration(
                 borderRadius: BorderRadius.all(Radius.circular(1000)),
                 image: DecorationImage(
-                    image: NetworkImage(hero_section_2),
+                    image: NetworkImage(sellerId["avatar"]),
                     fit: BoxFit.cover)),
           ),
 
           //Seller's name here :)
-          Text('John Smith',
+          Text(sellerId["username"],
               style:
                   Theme.of(context).textTheme.bodyText1.copyWith(fontSize: 20))
         ],

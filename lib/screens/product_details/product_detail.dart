@@ -88,6 +88,11 @@ class _ProductDetailState extends State<ProductDetail> {
             },
             child: Icon(Icons.arrow_back_ios)
           ),
+            actions: [
+              IconButton(icon: Icon(Icons.shopping_cart_outlined, color: Colors.white), onPressed: () {
+                Navigator.pushNamed(context, "/shoppingCart");
+              })
+            ],
         ),
         body:
           loading ? Container() : Container(
@@ -108,7 +113,7 @@ class _ProductDetailState extends State<ProductDetail> {
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             //Seller Information
-                            SellerInfo(productData['sellerId']),
+                            SellerInfo(sellerId: productData['sellerId']),
 
                             //Add to Favorite
                             TextButton(
@@ -177,7 +182,7 @@ class _ProductDetailState extends State<ProductDetail> {
             //Our super cool menu's down here ^^
             Menu(
               productId: productData['_id'],
-              sellerId: productData['sellerId'],
+              sellerId: productData['sellerId']["_id"],
               productName: productData['productName'],
             )
           ]),

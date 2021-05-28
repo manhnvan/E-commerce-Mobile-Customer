@@ -66,15 +66,14 @@ class _MyHomePageState extends State<Home> {
                                   ],
                                 ))),
                       ),
-                      GestureDetector(
-                          onTap: () {
-                            Navigator.pushNamed(context, "/shoppingCart");
-                          },
-                          child: Padding(
-                            padding: const EdgeInsets.only(right: 16.0),
-                            child: Icon(Icons.shopping_cart_outlined,
-                                color: Colors.white70, size: 30),
-                          ))
+                      Padding(
+                        padding: const EdgeInsets.only(right: 16.0),
+                        child: IconButton(
+                            icon: Icon(Icons.shopping_cart_outlined, color: Colors.white70, size: 30,),
+                            onPressed: () {
+                          Navigator.pushNamed(context, "/shoppingCart");
+                        })
+                      )
                     ],
                   ),
                   Expanded(
