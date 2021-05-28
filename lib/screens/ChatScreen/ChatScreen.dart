@@ -92,7 +92,7 @@ class ChatCard extends StatelessWidget {
                 ),
                 child: CircleAvatar(
                   radius: 35,
-                  backgroundImage: NetworkImage('https://mcdn.coolmate.me/uploads/March2021/DAI041214_60_550x623.jpg')
+                  backgroundImage: NetworkImage(chatCardInfo['avatar'])
                 )
               ),
               Container(

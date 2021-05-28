@@ -19,6 +19,60 @@ class Home extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<Home> {
+
+  ScrollController _scrollController = new ScrollController();
+
+  int page = 0;
+  int limit = 10;
+  bool allowIncreasePageNumber = true;
+  List<dynamic> productList = [];
+  var dio = new Dio();
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    fetchData();
+    _scrollController.addListener(() {
+      if (_scrollController.position.pixels == _scrollController.position.maxScrollExtent) {
+        setState(() {
+          if (allowIncreasePageNumber) {
+            page++;
+          }
+        });
+        print(page);
+        fetchData();
+      }
+    });
+  }
+
+  fetchData() {
+    setAllowIncreasePageNumber(false);
+    dio
+      .get('$api_url/product/lastest?page=$page&limit=$limit')
+      .then((value) {
+        if (value.data['success']) {
+          setState(() {
+            productList.addAll(value.data['docs']);
+            allowIncreasePageNumber = true;
+          });
+        }
+      });
+  }
+
+  bool setAllowIncreasePageNumber(bool value) {
+    setState(() {
+      allowIncreasePageNumber = value;
+    });
+  }
+
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    _scrollController.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -28,65 +82,64 @@ class _MyHomePageState extends State<Home> {
             gradient: color_gradient_primary,
           ),
           child: SafeArea(
-            child: Column(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: [
-                  Row(
-                    children: [
-                      Expanded(
-                        child: GestureDetector(
-                            onTap: () {
-                              showSearch(
-                                  context: context, delegate: DataSearch());
-                            },
-                            child: Container(
-                                padding:
-                                    const EdgeInsets.symmetric(vertical: 8),
-                                margin: const EdgeInsets.symmetric(
-                                    vertical: 8, horizontal: 16),
-                                decoration: BoxDecoration(
-                                    gradient: color_gradient_glass,
-                                    borderRadius: BorderRadius.only(
-                                        bottomLeft: Radius.circular(14),
-                                        topRight: Radius.circular(14)),
-                                    border: Border.all(
-                                        color: Colors.white.withOpacity(0.5))),
-                                child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    Icon(Icons.search,
-                                        color: Colors.black87, size: 23),
-                                    Text("Tìm kiếm",
-                                        style: Theme.of(context)
-                                            .textTheme
-                                            .caption
-                                            .merge(TextStyle(
-                                                fontSize: 16,
-                                                color: Colors.black87))),
-                                  ],
-                                ))),
-                      ),
-                      GestureDetector(
-                          onTap: () {
-                            Navigator.pushNamed(context, "/shoppingCart");
-                          },
-                          child: Padding(
-                            padding: const EdgeInsets.only(right: 16.0),
-                            child: Icon(Icons.shopping_cart_outlined,
-                                color: Colors.white70, size: 30),
-                          ))
-                    ],
-                  ),
-                  Expanded(
-                    child: ListView(
+            child: SingleChildScrollView(
+              controller: _scrollController,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    Row(
                       children: [
-                        HeroSection(),
-                        RecommendSection(),
-                        NewProductsSection()
+                        Expanded(
+                          child: GestureDetector(
+                              onTap: () {
+                                showSearch(
+                                    context: context, delegate: DataSearch());
+                              },
+                              child: Container(
+                                  padding:
+                                      const EdgeInsets.symmetric(vertical: 8),
+                                  margin: const EdgeInsets.symmetric(
+                                      vertical: 8, horizontal: 16),
+                                  decoration: BoxDecoration(
+                                      gradient: color_gradient_glass,
+                                      borderRadius: BorderRadius.only(
+                                          bottomLeft: Radius.circular(14),
+                                          topRight: Radius.circular(14)),
+                                      border: Border.all(
+                                          color: Colors.white.withOpacity(0.5))),
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      Icon(Icons.search,
+                                          color: Colors.black87, size: 23),
+                                      Text("Tìm kiếm",
+                                          style: Theme.of(context)
+                                              .textTheme
+                                              .caption
+                                              .merge(TextStyle(
+                                                  fontSize: 16,
+                                                  color: Colors.black87))),
+                                    ],
+                                  ))),
+                        ),
+                        GestureDetector(
+                            onTap: () {
+                              Navigator.pushNamed(context, "/shoppingCart");
+                            },
+                            child: Padding(
+                              padding: const EdgeInsets.only(right: 16.0),
+                              child: Icon(Icons.shopping_cart_outlined,
+                                  color: Colors.white70, size: 30),
+                            ))
                       ],
                     ),
-                  ),
-                ]),
+                    HeroSection(),
+                    RecommendSection(),
+                    NewProductsSection(
+                      productList: productList,
+                    )
+                  ]),
+            ),
           ),
         ),
         bottomNavigationBar: BottomNavbar(0));
@@ -191,11 +244,6 @@ class _SuggestionListState extends State<SuggestionList> {
                   text: listSuggestion[index]['productName'],
                   style: TextStyle(
                       color: Colors.black),
-                  // children: [
-                  //   TextSpan(
-                  //     text: listSuggestion[index]['productName'].substring(query.length),
-                  //     style: TextStyle(color: Colors.grey))
-                  // ]
                 )
               )
             );

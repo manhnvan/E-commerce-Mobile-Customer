@@ -76,7 +76,6 @@ class _ProductDetailState extends State<ProductDetail> {
 
   @override
   Widget build(BuildContext context) {
-    print(widget.productId);
     return SafeArea(
       child: Scaffold(
           extendBodyBehindAppBar: true,
@@ -177,8 +176,9 @@ class _ProductDetailState extends State<ProductDetail> {
             //Our super cool menu's down here ^^
             Menu(
               productId: productData['_id'],
-              sellerId: productData['sellerId'],
+              sellerId: productData['sellerId']['_id'],
               productName: productData['productName'],
+              thumbnail: productData['thumbnail'],
             )
           ]),
         )

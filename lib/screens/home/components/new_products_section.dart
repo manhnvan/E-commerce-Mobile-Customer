@@ -1,34 +1,15 @@
 import 'package:customer_app/abstracts/variables.dart';
 import 'package:customer_app/components/product_card.dart';
-import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
-import '../../../constaint.dart';
 
-class NewProductsSection extends StatefulWidget {
-  @override
-  _NewProductsSectionState createState() => _NewProductsSectionState();
-}
+class NewProductsSection extends StatelessWidget {
 
-class _NewProductsSectionState extends State<NewProductsSection> {
+  NewProductsSection({
+    Key key,
+    @required this.productList
+  });
 
-  List<dynamic> newProductList = [];
-  var dio = new Dio();
-
-  int page = 0;
-  int limit = 10;
-
-  @override
-  void initState() {
-    dio
-      .get('$api_url/product/lastest?page=$page&limit=$limit')
-      .then((value) {
-        if (value.data['success']) {
-          setState(() {
-            newProductList = value.data['docs'];
-          });
-        }
-      });
-  }
+  final List<dynamic> productList;
 
   @override
   Widget build(BuildContext context) {
@@ -39,16 +20,20 @@ class _NewProductsSectionState extends State<NewProductsSection> {
         children: [
           Text('Sản phẩm mới', style: (Theme.of(context).textTheme.headline6)),
           SizedBox(height: space_medium),
-          Column(
-            children: newProductList.map((product) => ProductCard(
-                  backgroundWhite: false,
-                  width: MediaQuery.of(context).size.width, 
-                  data: product
-                )).toList()
+          SingleChildScrollView(
+            child: Column(
+              children: productList != null ? productList.map((product) => ProductCard(
+                    backgroundWhite: false,
+                    width: MediaQuery.of(context).size.width, 
+                    data: product
+                  )).toList() : []
+            ),
           )
         ],
       ),
     );
   }
 }
+
+
 

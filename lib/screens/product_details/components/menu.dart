@@ -4,6 +4,7 @@ import 'package:customer_app/abstracts/colors.dart';
 import 'package:customer_app/abstracts/image_asset_url.dart';
 import 'package:customer_app/abstracts/variables.dart';
 import 'package:customer_app/constaint.dart';
+import 'package:customer_app/screens/ChatScreen/Chatbox.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:dio/dio.dart';
@@ -11,11 +12,12 @@ import 'package:dio/dio.dart';
 import '../../../constaint.dart';
 
 class Menu extends StatelessWidget {
-  Menu({Key key, this.productId, this.sellerId, this.productName}) : super(key: key);
+  Menu({Key key, this.productId, this.sellerId, this.productName, this.thumbnail}) : super(key: key);
 
   final String productId;
   final String sellerId;
   final String productName;
+  final String thumbnail;
 
   var dio = new Dio();
 
@@ -48,11 +50,14 @@ class Menu extends StatelessWidget {
                           dio.post('$chat_url/createChatbox', data: {
                             "participants": [customerId, sellerId],
                             "topic": productName,
-                            "avatar": "https://i.imgur.com/hUD8wd6.jpeg"
+                            "avatar": thumbnail,
+                            "productId": productId,
                           }).then((value) {
-                            print(value.data);
                             if (value.data['success']) {
-
+                              Navigator.push(
+                                context, 
+                                MaterialPageRoute(builder: (context) => ChatBox(chatboxId: value.data['chatbox']['_id']))
+                              );
                             }
                           });
                         },
@@ -69,12 +74,12 @@ class Menu extends StatelessWidget {
                       width: MediaQuery.of(context).size.width * 0.25,
                       child: TextButton(
                           onPressed: () {
-                            dio.post('$api_url/cart/customer/$customerId/update/${productId}', data: {
+                            dio.post('$api_url/cart/customer/$customerId/update/$productId', data: {
                               "type": 1
                             })
                                 .then((value) {
                               if (value.data['success']) {
-                                // print(value);
+                                print(value.data);
                               }
                             });
                           },
