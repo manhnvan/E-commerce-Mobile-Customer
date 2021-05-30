@@ -50,13 +50,15 @@ String shopName="Cửa hàng quần áo";
 String address = "36 xuân thủy, cầu giấy, hà nội 36 xuân thủy, cầu giấy, hà nội";
 String phoneNumber="0123456789";
 
-class viewShop extends StatelessWidget {
-
+class ViewShop extends StatelessWidget {
   static String routeName = '/viewShop';
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      extendBodyBehindAppBar: true,
       appBar: AppBar(
+        backgroundColor: Colors.transparent,
         title: Text(shopName,style: TextStyle(fontWeight: FontWeight.bold, fontSize: 25, color: Colors.black), ),
         centerTitle: true,
       ),
