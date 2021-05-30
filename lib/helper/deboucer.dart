@@ -1,14 +1,16 @@
-import 'package:flutter/foundation.dart';
 import 'dart:async';
 
-class Debouncer {
+import 'package:flutter/foundation.dart';
+
+class Debouncer extends ChangeNotifier {
   final int milliseconds;
   VoidCallback action;
   Timer _timer;
 
   Debouncer({ this.milliseconds });
 
-  run(VoidCallback action) {
+  run(Function action) {
+
     if (_timer != null) {
       _timer.cancel();
     }

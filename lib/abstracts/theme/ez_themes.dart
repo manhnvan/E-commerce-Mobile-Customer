@@ -10,6 +10,10 @@ ThemeData _buildEzTheme() {
       primaryColor: color_primary,
       buttonTheme: base.buttonTheme.copyWith(),
       inputDecorationTheme: InputDecorationTheme(),
+      appBarTheme: base.appBarTheme.copyWith(
+        color: color_white,
+        shadowColor: Colors.transparent
+      ),
       cardTheme:
           CardTheme(color: Colors.transparent, shadowColor: Colors.transparent),
       textTheme: _buildEzTextTheme(base.textTheme));

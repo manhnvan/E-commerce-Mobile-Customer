@@ -1,42 +1,39 @@
 import 'package:customer_app/abstracts/theme/ez_themes.dart';
-import 'package:customer_app/models/cart.dart';
-import 'package:customer_app/models/currentBottomNavigationIndex.dart';
-import 'package:customer_app/models/productList.dart';
-import 'package:customer_app/models/user.dart';
 import 'package:customer_app/routes.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 
 void main() async {
   runApp(MyApp());
+}
+
+void configLoading() {
+  EasyLoading.instance
+    ..displayDuration = const Duration(milliseconds: 12000)
+    ..indicatorType = EasyLoadingIndicatorType.circle
+    ..loadingStyle = EasyLoadingStyle.dark
+    ..indicatorSize = 45.0
+    ..radius = 10.0
+    ..progressColor = Colors.yellow
+    ..backgroundColor = Colors.green
+    ..indicatorColor = Colors.yellow
+    ..textColor = Colors.yellow
+    ..maskColor = Colors.blue.withOpacity(0.5)
+    ..userInteractions = true
+    ..dismissOnTap = false;
+    // ..customAnimation = CustomAnimation();
 }
 
 class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return MultiProvider(
-      providers: [
-        ChangeNotifierProvider.value(
-            value: CurrentBottomNavigation(0)
-        ),
-        ChangeNotifierProvider.value(
-            value: ProductList([])
-        ),
-        ChangeNotifierProvider.value(
-            value: User()
-        ),
-        ChangeNotifierProvider.value(
-            value: Cart([])
-        ),
-      ],
-      child: MaterialApp(
-        debugShowCheckedModeBanner: false,
-        theme: EzTheme,
-        initialRoute: '/viewShop',
-        // initialRoute: '/home',
-        routes: routes,
-      ),
+    return MaterialApp(
+      debugShowCheckedModeBanner: false,
+      theme: EzTheme,
+      initialRoute: '/home',
+      routes: routes,
+      builder: EasyLoading.init(),
     );
   }
 }

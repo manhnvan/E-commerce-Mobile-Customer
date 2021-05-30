@@ -173,6 +173,7 @@ class _SearchState extends State<Search> {
             )
           ]),
         ),
-        bottomNavigationBar: BottomNavbar());
+        bottomNavigationBar: BottomNavbar(1)
+    );
   }
 }

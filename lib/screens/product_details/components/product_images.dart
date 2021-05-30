@@ -1,38 +1,20 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:customer_app/abstracts/colors.dart';
-import 'package:customer_app/abstracts/image_asset_url.dart';
 import 'package:customer_app/abstracts/variables.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-var heroData = [
-  {
-    'thumbnail': hero_section_1,
-    'headline': 'Thiết kế mái ấm của bạn',
-    'category': 'Không gian & nhà ở'
-  },
-  {
-    'thumbnail': hero_section_2,
-    'headline': 'Tự tin khoe cá tính',
-    'category': 'Thời trang'
-  },
-  {
-    'thumbnail': hero_section_3,
-    'headline': 'Khám phá những điều không tưởng',
-    'category': 'Công nghệ'
-  },
-  {
-    'thumbnail': hero_section_4,
-    'headline': 'Sẵn sàng cho mọi chuyến đi',
-    'category': 'Thể thao & du lịch'
-  },
-];
+// ignore: must_be_immutable
+class ProductImages extends StatefulWidget {
+  var images;
 
-class HeroSection extends StatefulWidget {
+  ProductImages(this.images);
+
   @override
-  _HeroSectionState createState() => _HeroSectionState();
+  _ProductImagesState createState() => _ProductImagesState();
 }
 
-class _HeroSectionState extends State<HeroSection> {
+class _ProductImagesState extends State<ProductImages> {
   int _current = 0;
 
   @override
@@ -40,10 +22,10 @@ class _HeroSectionState extends State<HeroSection> {
     return Container(
       decoration: BoxDecoration(
           borderRadius:
-              BorderRadius.only(topLeft: Radius.circular(border_radius_huge))),
+          BorderRadius.only(topLeft: Radius.circular(border_radius_huge))),
       clipBehavior: Clip.antiAlias,
       child: CarouselSlider(
-          items: heroData.map((slide) {
+          items: widget.images.map<Widget>((slide) {
             return Builder(
               builder: (BuildContext context) {
                 return Stack(
@@ -52,7 +34,7 @@ class _HeroSectionState extends State<HeroSection> {
                         width: MediaQuery.of(context).size.width,
                         decoration: BoxDecoration(
                             image: DecorationImage(
-                                image: NetworkImage(slide['thumbnail']),
+                                image: NetworkImage(slide),
                                 fit: BoxFit.cover))),
                     Container(
                         padding: EdgeInsets.all(space_medium),
@@ -62,36 +44,20 @@ class _HeroSectionState extends State<HeroSection> {
                                 begin: FractionalOffset.topCenter,
                                 end: FractionalOffset.bottomCenter,
                                 colors: [
-                              Colors.black.withOpacity(0),
-                              Colors.black,
-                            ],
+                                  Colors.black.withOpacity(0),
+                                  Colors.black,
+                                ],
                                 stops: [
-                              -1.0,
-                              1.0
-                            ])),
+                                  -1.0,
+                                  1.0
+                                ])),
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.end,
-                          crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Text(
-                              slide['headline'],
-                              style: (Theme.of(context)
-                                  .textTheme
-                                  .headline6
-                                  .copyWith(color: color_white)),
-                            ),
-                            SizedBox(height: space_small),
-                            Text(
-                              slide['category'],
-                              style: (Theme.of(context)
-                                  .textTheme
-                                  .bodyText2
-                                  .copyWith(color: color_white)),
-                            ),
-                            SizedBox(height: space_small),
                             Row(
-                              children: heroData.map((slide) {
-                                int index = heroData.indexOf(slide);
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: widget.images.map<Widget>((slide) {
+                                int index = widget.images.indexOf(slide);
                                 return Container(
                                   width: space_small,
                                   height: space_small,

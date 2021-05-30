@@ -1,3 +1,5 @@
+import 'package:customer_app/screens/profile/profile_following/profile_following.dart';
+import 'package:customer_app/screens/profile/profile_order/profile_order.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:customer_app/components/bottom_navbar.dart';
@@ -12,7 +14,16 @@ class Profile extends StatefulWidget {
   _ProfileState createState() => _ProfileState();
 }
 
-class _ProfileState extends State<Profile> {
+class _ProfileState extends State<Profile> with SingleTickerProviderStateMixin {
+  TabController _tabController;
+  String screen = "order";
+
+  @override
+  void initState() {
+    _tabController = TabController(length: 2, vsync: this);
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -22,7 +33,6 @@ class _ProfileState extends State<Profile> {
             child: Column(
               children: [
                 Container(
-                    //Avt
                     padding: EdgeInsets.only(top: 4, bottom: 8),
                     decoration: BoxDecoration(
                         gradient: color_gradient_glass,
@@ -32,13 +42,14 @@ class _ProfileState extends State<Profile> {
                     child: Column(
                       children: [
                         Row(
+                          crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Expanded(
                               flex: 1,
                               child: Padding(
                                 padding: const EdgeInsets.all(4.0),
                                 child: Container(
-                                  padding: EdgeInsets.all(6),
+                                  padding: EdgeInsets.all(5),
                                   decoration: BoxDecoration(
                                       gradient: color_gradient_secondary,
                                       shape: BoxShape.circle,
@@ -47,7 +58,7 @@ class _ProfileState extends State<Profile> {
                                   child: CircleAvatar(
                                     backgroundColor: Colors.brown.shade800,
                                     child: Text('TH'),
-                                    radius: 50,
+                                    radius: 40,
                                   ),
                                 ),
                               ),
@@ -55,14 +66,14 @@ class _ProfileState extends State<Profile> {
                             Expanded(
                               flex: 2,
                               child: Padding(
-                                padding: const EdgeInsets.only(left: 8.0),
+                                padding: const EdgeInsets.only(top: 4.0),
                                 child: Column(
                                   children: [
                                     Row(
                                       mainAxisAlignment:
                                           MainAxisAlignment.spaceBetween,
                                       crossAxisAlignment:
-                                          CrossAxisAlignment.end,
+                                          CrossAxisAlignment.center,
                                       children: [
                                         Text("Xin chào,",
                                             style: TextStyle(fontSize: 25)),
@@ -80,29 +91,30 @@ class _ProfileState extends State<Profile> {
                                         alignment: Alignment.topLeft,
                                         child: Text('Vương Thành',
                                             style: TextStyle(fontSize: 25))),
-                                    Align(
-                                        alignment: Alignment.bottomRight,
-                                        child: Container(
-                                            margin: EdgeInsets.only(top: 8),
-                                            padding: EdgeInsets.fromLTRB(
-                                                15, 4, 4, 4),
-                                            decoration: BoxDecoration(
-                                                color: Colors.white,
-                                                borderRadius:
-                                                    BorderRadius.horizontal(
-                                                        left: Radius.circular(20))),
-                                            child: Container(
-                                                width: 138,
-                                                child: Row(children: [
-                                                  Text("Cửa hàng của tôi",
-                                                      style: Theme.of(context)
-                                                          .textTheme
-                                                          .button),
-                                                  Icon(
-                                                      Icons
-                                                          .keyboard_arrow_right_sharp,
-                                                      size: 30)
-                                                ]))))
+                                    // Align(
+                                    //     alignment: Alignment.bottomRight,
+                                    //     child: Container(
+                                    //         margin: EdgeInsets.only(top: 8),
+                                    //         padding: EdgeInsets.fromLTRB(
+                                    //             15, 4, 4, 4),
+                                    //         decoration: BoxDecoration(
+                                    //             color: Colors.white,
+                                    //             borderRadius:
+                                    //                 BorderRadius.horizontal(
+                                    //                     left: Radius.circular(
+                                    //                         20))),
+                                    //         child: Container(
+                                    //             width: 138,
+                                    //             child: Row(children: [
+                                    //               Text("Cửa hàng của tôi",
+                                    //                   style: Theme.of(context)
+                                    //                       .textTheme
+                                    //                       .button),
+                                    //               Icon(
+                                    //                   Icons
+                                    //                       .keyboard_arrow_right_sharp,
+                                    //                   size: 30)
+                                    //             ]))))
                                   ],
                                 ),
                               ),
@@ -110,82 +122,100 @@ class _ProfileState extends State<Profile> {
                           ],
                         ),
                         Padding(
-                          padding: const EdgeInsets.only(top: 8.0),
+                          padding: const EdgeInsets.only(top: 4.0),
                           child: Row(
                             crossAxisAlignment: CrossAxisAlignment.end,
                             children: [
                               Expanded(
                                   flex: 2,
-                                  child: Column(
-                                    children: [
-                                      Icon(Icons.local_grocery_store_outlined,
-                                          size: 35, color: Colors.black45),
-                                      Padding(
-                                        padding: const EdgeInsets.only(top: 8),
-                                        child: Text(
-                                          "Giỏ hàng",
-                                          textAlign: TextAlign.center,
-                                          style: Theme.of(context)
-                                              .textTheme
-                                              .bodyText1,
+                                  child: GestureDetector(
+                                    onTap: () {
+                                      Navigator.pushNamed(context, '/shoppingCart');
+                                    },
+                                    child: Column(
+                                      children: [
+                                        Icon(Icons.local_grocery_store_outlined,
+                                            size: 35, color: Colors.black45),
+                                        Padding(
+                                          padding: const EdgeInsets.only(top: 8),
+                                          child: Text(
+                                            "Giỏ hàng",
+                                            textAlign: TextAlign.center,
+                                            style: Theme.of(context)
+                                                .textTheme
+                                                .bodyText1,
+                                          ),
                                         ),
-                                      ),
-                                    ],
+                                      ],
+                                    ),
                                   )),
                               Expanded(
-                                  flex: 2,
+                                flex: 2,
+                                child: GestureDetector(
+                                  onTap: () {
+                                    setState(() {
+                                      screen = "order";
+                                    });
+                                  },
                                   child: Column(
-                                    children: [
-                                      Icon(Icons.local_mall_outlined,
-                                          size: 35, color: Colors.black),
-                                      Padding(
-                                        padding: const EdgeInsets.only(top: 8),
-                                        child: Text(
-                                          "Đơn hàng",
-                                          textAlign: TextAlign.center,
-                                          style: Theme.of(context)
-                                              .textTheme
-                                              .bodyText1,
+                                      children: [
+                                        Icon(Icons.local_mall_outlined,
+                                            size: 35, color: screen == "order" ? Colors.black : Colors.black45),
+                                        Padding(
+                                          padding: const EdgeInsets.only(top: 8),
+                                          child: Text(
+                                            "Đơn hàng",
+                                            textAlign: TextAlign.center,
+                                            style: Theme.of(context)
+                                                .textTheme
+                                                .bodyText1,
+                                          ),
                                         ),
-                                      ),
-                                    ],
-                                  )),
+                                      ],
+                                    ),
+                                ),
+                              ),
                               Expanded(
-                                  flex: 3,
+                                flex: 3,
+                                child: GestureDetector(
+                                  onTap: () {
+                                    setState(() {
+                                      screen = "following";
+                                    });
+                                  },
                                   child: Column(
-                                    children: [
-                                      Text(
-                                        "69",
-                                        style: TextStyle(
-                                            fontSize: 28,
-                                            color: Colors.black45),
-                                      ),
-                                      Padding(
-                                        padding: const EdgeInsets.only(top: 8),
-                                        child: Text(
-                                          "Đang theo dõi",
-                                          textAlign: TextAlign.center,
-                                          style: Theme.of(context)
-                                              .textTheme
-                                              .bodyText1,
+                                      children: [
+                                        Text(
+                                          "69",
+                                          style: TextStyle(
+                                              fontSize: 28,
+                                              color: screen != "order" ? Colors.black : Colors.black45),
                                         ),
-                                      ),
-                                    ],
-                                  )),
+                                        Padding(
+                                          padding: const EdgeInsets.only(top: 8),
+                                          child: Text(
+                                            "Đang theo dõi",
+                                            textAlign: TextAlign.center,
+                                            style: Theme.of(context)
+                                                .textTheme
+                                                .bodyText1,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                ),
+                              ),
                             ],
                           ),
                         )
                       ],
                     )),
-                Expanded(
-                  child: ListView(
-                    children: [Text('123123')],
-                  ),
-                )
+                Expanded(child: screen == "order" ? ProfileOrder() : ProfileFollowing())
               ],
             ),
           ),
         ),
-        bottomNavigationBar: BottomNavbar());
+        bottomNavigationBar: BottomNavbar(3)
+    );
   }
 }

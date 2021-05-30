@@ -2,40 +2,15 @@ import 'package:customer_app/abstracts/variables.dart';
 import 'package:customer_app/components/product_card.dart';
 import 'package:flutter/material.dart';
 
-var fakeProductData = [
-  {
-    'thumbnail': 'assets/images/fake-data-product/product08.jpg',
-    'name': 'Cây dương xỉ trang trí nội thất đủ kích thước',
-    'price': '500000'
-  },
-  {
-    'thumbnail': 'assets/images/fake-data-product/product09.jpg',
-    'name': 'Cây xương rồng nhỏ trang trí bàn học',
-    'price': '200000'
-  },
-  {
-    'thumbnail': 'assets/images/fake-data-product/product10.jpg',
-    'name': 'Phím cơ Logitech G610',
-    'price': '1250000'
-  },
-  {
-    'thumbnail': 'assets/images/fake-data-product/product11.jpg',
-    'name': 'Bestseller Book  - milk and honey',
-    'price': '240000'
-  },
-  {
-    'thumbnail': 'assets/images/fake-data-product/product12.jpg',
-    'name': 'Pass sách cũ',
-    'price': '300000'
-  },
-  {
-    'thumbnail': 'assets/images/fake-data-product/product14.jpg',
-    'name': 'Rubik3x3',
-    'price': '110000'
-  }
-];
-
 class NewProductsSection extends StatelessWidget {
+
+  NewProductsSection({
+    Key key,
+    @required this.productList
+  });
+
+  final List<dynamic> productList;
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -45,13 +20,14 @@ class NewProductsSection extends StatelessWidget {
         children: [
           Text('Sản phẩm mới', style: (Theme.of(context).textTheme.headline6)),
           SizedBox(height: space_medium),
-          Column(
-            children: fakeProductData.map((data) {
-              return ProductCard(
-                width: MediaQuery.of(context).size.width,
-                data: data
-              );
-            }).toList()
+          SingleChildScrollView(
+            child: Column(
+              children: productList != null ? productList.map((product) => ProductCard(
+                    backgroundWhite: false,
+                    width: MediaQuery.of(context).size.width, 
+                    data: product
+                  )).toList() : []
+            ),
           )
         ],
       ),
@@ -60,17 +36,4 @@ class NewProductsSection extends StatelessWidget {
 }
 
 
-// Container(
-// height: 500,
-// child: ListView.builder(
-// addAutomaticKeepAlives: false,
-// cacheExtent: 100.0,
-// shrinkWrap: true,
-// scrollDirection: Axis.vertical,
-// itemCount: fakeProductData.length,
-// itemBuilder: (context, index) {
-// return ProductCard(
-// width: MediaQuery.of(context).size.width,
-// data: fakeProductData[index]);
-// }),
-// ),
+

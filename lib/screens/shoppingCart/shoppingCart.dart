@@ -1,116 +1,166 @@
 import 'package:customer_app/abstracts/colors.dart';
-import 'package:customer_app/abstracts/variables.dart';
-import 'package:customer_app/components/bottom_navbar.dart';
-import 'package:customer_app/models/productList.dart';
-import 'package:customer_app/screens/home/components/new_products_section.dart';
-import 'package:customer_app/screens/home/components/recommend_section.dart';
-import 'package:customer_app/screens/shoppingCart/components/Item.dart';
 import 'package:customer_app/screens/shoppingCart/components/ItemsOfStore.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-//
-var data = [
-  {
-    'storeImage':'https://brandkey.vn/wp-content/uploads/2019/12/mau-logo-thoi-trang-dep-fendi.png',
-    'storeName':'Candy',
-    'items':[
-      {
-        'productName':'Áo thun',
-        'price':300000,
-        'amount':3,
-        'image': "https://product.hstatic.net/1000284478/product/43s_31ts15031_2_fbd792bda27645b28c87e963527ee172_1024x1024.jpg"
-      },
-      {
-        'productName':'Áo thun',
-        'price':300000,
-        'amount':3,
-        'image': "https://product.hstatic.net/1000284478/product/43s_31ts15031_2_fbd792bda27645b28c87e963527ee172_1024x1024.jpg"
-      },
-      {
-        'productName':'Áo thun',
-        'price':300000,
-        'amount':3,
-        'image': "https://product.hstatic.net/1000284478/product/43s_31ts15031_2_fbd792bda27645b28c87e963527ee172_1024x1024.jpg"
-      },
-    ]
-  },
-  {
-    'storeImage':'https://brandkey.vn/wp-content/uploads/2019/12/mau-logo-thoi-trang-dep-fendi.png',
-    'storeName':'Candy',
-    'items':[
-      {
-        'productName':'Áo thun',
-        'price':300000,
-        'amount':3,
-        'image': "https://product.hstatic.net/1000284478/product/43s_31ts15031_2_fbd792bda27645b28c87e963527ee172_1024x1024.jpg"
-      },
-      {
-        'productName':'Áo thun',
-        'price':300000,
-        'amount':3,
-        'image': "https://product.hstatic.net/1000284478/product/43s_31ts15031_2_fbd792bda27645b28c87e963527ee172_1024x1024.jpg"
-      },
-      {
-        'productName':'Áo thun',
-        'price':300000,
-        'amount':3,
-        'image': "https://product.hstatic.net/1000284478/product/43s_31ts15031_2_fbd792bda27645b28c87e963527ee172_1024x1024.jpg"
-      },
-    ]
-  },
-];
+import 'package:intl/intl.dart';
+import 'package:dio/dio.dart';
+import '../../constaint.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 
-String total='1.000.000';
-class shoppingCart extends StatefulWidget {
+class ShoppingCart extends StatefulWidget {
   static String routeName = '/shoppingCart';
-
   @override
-  _shoppingCartState createState() => _shoppingCartState();
+  _ShoppingCartState createState() => _ShoppingCartState();
 }
 
-class _shoppingCartState extends State<shoppingCart> {
+class _ShoppingCartState extends State<ShoppingCart> {
+  List<dynamic> items = [];
+  int index = -1;
+  int totalPrice = 0;
+  var dio = new Dio();
+
+  @override
+  void initState() {
+    EasyLoading.show(status: 'loading...');
+    dio
+        .get('$api_url/cart/customer/$customerId/getCart')
+        .then((value) {
+      if (value.data['success']) {
+        setState(() {
+          items = value.data["data"]['items'];
+        });
+        EasyLoading.dismiss();
+      }
+    });
+  }
+
+  void _update(List<dynamic> newItems) {
+    setState(() {
+      items = newItems;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
-    // _items[0] = _item;
+    index = -1;
+    totalPrice = 0;
+    items.forEach((item) {
+      item["products"].forEach((p) => {
+        totalPrice += p["checked"] ? p["amount"]*p["product"]["price"] : 0
+      });
+    });
+
     return Scaffold(
+      extendBodyBehindAppBar: true,
       appBar: AppBar(
-        title: Text("Giỏ hàng của bạn", style: TextStyle(fontSize: 25, color: Colors.black), ),
+        leading: new IconButton(
+              icon: new Icon(Icons.arrow_back,size: 35),
+          onPressed: () {
+          // Perform Your action here
+            Navigator.pop(context);
+            EasyLoading.dismiss();
+          },
+        ),
+        elevation: 0,
+        backgroundColor: Colors.transparent,
+        title: Text("Giỏ hàng của bạn",
+            style: Theme.of(context).textTheme.headline6.merge(TextStyle(fontSize: 25, color: Colors.white))),
         centerTitle: true,
       ),
       body: Container(
+        padding: const EdgeInsets.only(top: 80),
         decoration: BoxDecoration(gradient: color_gradient_primary),
-        child: SingleChildScrollView(
-          child: Column(
-            children: data.map((e)=> ItemsOfStore(storeImage: e['storeImage'], storeName: e['storeName'], items: e['items'],)).toList(),
-          ),
+        child: Column(
+          children: [
+            Expanded(child: items.length > 0 ? SingleChildScrollView(
+              child: Column(
+                  children: items.map((e) {
+                      index += 1;
+                      return ItemsOfStore(
+                        items: items,
+                        storeIndex: index,
+                        update: _update); }).toList()),
+            ): Center(child: Text("Bạn chưa có sản phẩm trong giỏ hàng"))),
+            Container(
+              height: 60,
+              decoration: BoxDecoration(
+                  gradient: color_gradient_primary,
+                  borderRadius: BorderRadius.only(
+                      topLeft: Radius.circular(20),
+                      topRight: Radius.circular(20)),
+                  border: Border.all(color: Colors.white, width: 1),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black.withOpacity(0.4),
+                    spreadRadius: 3,
+                    blurRadius: 12,
+                    offset: Offset(0, 2), // changes position of shadow
+                  ),
+                ],
+              ),
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  Expanded(
+                    flex: 3,
+                    child: Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 8) ,
+                        child: Align(
+                        alignment: Alignment.center,
+                            child: Text("Tổng:  ${NumberFormat.simpleCurrency(locale: 'vi_VN').format(totalPrice)}",
+                              style: Theme.of(context).textTheme.headline6.merge(TextStyle(fontSize: 20))))),
+                  ),
+                  Expanded(
+                    flex: 2,
+                    child: GestureDetector(
+                      onTap: (){
+                        if(totalPrice == 0){
+                          showDialog(
+                              barrierDismissible: false,
+                              barrierColor: Colors.transparent,
+                              context: context,
+                              builder: (BuildContext builderContext) {
+                                Future.delayed(Duration(seconds: 1), () {
+                                  Navigator.of(builderContext).pop();
+                                });
+                                return AlertDialog(
+                                    backgroundColor: Colors.black.withOpacity(0.8),
+                                    // title: Text('Thông báo', style: TextStyle(color: Colors.white)),
+                                    content: Text('Bạn chưa chọn sản phẩm nào', style: TextStyle(color: Colors.white)),
+                                    shape: RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.all(Radius.circular(12.0)))
+                                );
+                              }
+                          );
+                        }
+                        else Navigator.pushNamed(context, '/confirmOrder');
+                      },
+                      child: Container(
+                        decoration: BoxDecoration(
+                          gradient: color_gradient_primary,
+                          borderRadius: BorderRadius.only(
+                              topRight: Radius.circular(20)),
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.black.withOpacity(0.3),
+                              spreadRadius: 8,
+                              blurRadius: 12,
+                              offset: Offset(1, 10), // changes position of shadow
+                            ),
+                          ],
+                        ),
+                          child: Align(
+                            alignment: Alignment.center,
+                            child: Text("Thanh toán",
+                              style: Theme.of(context).textTheme.headline6.merge(TextStyle(fontSize: 20, color: Colors.white))),
+                          )),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ]
         )
       ),
-      bottomNavigationBar: Padding(
-        padding: EdgeInsets.all(1.0),
-        child: Container(
-          height: 70,
-          decoration: BoxDecoration(
-              gradient: color_gradient_primary,
-          ),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-            children: [
-              Text(total, style: TextStyle(fontWeight: FontWeight.bold, fontSize: 25, color: Colors.black),),
-              ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                    primary: Colors.white,
-                    elevation:5.0,
-                    padding: EdgeInsets.all(10)
-                ),
-                onPressed: (){
-                  print("OK");
-                },
-                child: Text("Mua ngay", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 25, color: Colors.black),),
-              ),
-            ],
-          ),
-        ),
-        ),
     );
   }
 }
