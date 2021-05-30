@@ -5,7 +5,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 
 class CanceledOrder extends StatefulWidget {
-  const CanceledOrder({Key key}) : super(key: key);
+  const CanceledOrder({
+    Key key,
+    this.currentUserId
+  }) : super(key: key);
+
+  final String currentUserId;
 
   @override
   _CanceledOrderState createState() => _CanceledOrderState();
@@ -14,11 +19,15 @@ class CanceledOrder extends StatefulWidget {
 class _CanceledOrderState extends State<CanceledOrder> {
   List<dynamic> listItem = [];
   var dio = new Dio();
+  String currentUserId;
   @override
   void initState() {
+    setState(() {
+      currentUserId = widget.currentUserId;
+    });
     // TODO: implement initState
     EasyLoading.show(status: 'loading...');
-    dio.get('$api_url/order/item/customer/$customerId/denied').then((value) {
+    dio.get('$api_url/order/item/customer/$currentUserId/denied').then((value) {
       setState(() {
         listItem = value.data["items"];
       });
