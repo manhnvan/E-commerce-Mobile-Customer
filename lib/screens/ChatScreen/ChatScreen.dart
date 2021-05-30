@@ -3,6 +3,7 @@ import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../constaint.dart';
 import 'Chatbox.dart';
@@ -18,15 +19,23 @@ class _ChatScreenState extends State<ChatScreen> {
   List<dynamic> chatboxes = <dynamic>[];
   var dio = Dio();
 
+  SharedPreferences prefs;
+  String currentUserId;
+
   @override
   void initState() {
-    dio.get('$chat_url/$customerId/').then((value) {
-      print(value.data);
-      if (value.data['success']) {
-        setState(() {
-          chatboxes.addAll(value.data['chatboxes']);
-        });
-      }
+    SharedPreferences.getInstance().then((value) {
+      prefs = value;
+      currentUserId = prefs.getString('customerId');
+      print(currentUserId);
+      dio.get('$chat_url/$currentUserId/').then((value) {
+        print(value.data);
+        if (value.data['success']) {
+          setState(() {
+            chatboxes.addAll(value.data['chatboxes']);
+          });
+        }
+      });
     });
   }
 

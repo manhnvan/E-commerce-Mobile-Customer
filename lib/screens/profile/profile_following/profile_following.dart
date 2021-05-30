@@ -1,7 +1,12 @@
 import 'package:flutter/material.dart';
 
 class ProfileFollowing extends StatefulWidget {
-  const ProfileFollowing({Key key}) : super(key: key);
+  const ProfileFollowing({
+    Key key,
+    this.currentUserId
+  }) : super(key: key);
+
+  final String currentUserId;
 
   @override
   _ProfileFollowingState createState() => _ProfileFollowingState();

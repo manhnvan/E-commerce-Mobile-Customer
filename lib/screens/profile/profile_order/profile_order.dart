@@ -5,7 +5,13 @@ import 'package:flutter/material.dart';
 import 'canceled_order.dart';
 
 class ProfileOrder extends StatefulWidget {
-  const ProfileOrder({Key key}) : super(key: key);
+
+  const ProfileOrder({
+    Key key,
+    this.currentUserId
+  }) : super(key: key);
+
+  final String currentUserId;
 
   @override
   _ProfileOrderState createState() => _ProfileOrderState();
@@ -13,6 +19,17 @@ class ProfileOrder extends StatefulWidget {
 
 class _ProfileOrderState extends State<ProfileOrder> {
   String currentScreen = "pending";
+  String currentUserId;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    setState(() {
+      currentUserId = widget.currentUserId;
+    });
+    print('currentId $currentUserId');
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -95,7 +112,9 @@ class _ProfileOrderState extends State<ProfileOrder> {
               ],
             ),
           ),
-          Expanded(child: currentScreen == "pending" ? PendingOrder() : currentScreen == "history" ? OrderHistory() : CanceledOrder())
+          Expanded(child: currentScreen == "pending" ? PendingOrder(
+            currentUserId: currentUserId
+          ) : currentScreen == "history" ? OrderHistory(currentUserId: currentUserId) : CanceledOrder(currentUserId: currentUserId))
         ],
       ),
     );

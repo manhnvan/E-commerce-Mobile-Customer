@@ -8,6 +8,7 @@ import 'package:customer_app/screens/product_details/components/seller_info.dart
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../constaint.dart';
 
@@ -34,28 +35,34 @@ class _ProductDetailState extends State<ProductDetail> {
   int page = 0;
   int limit = 10;
   bool loading = true;
+  SharedPreferences prefs;
+  String currentUserId;
 
   @override
   void initState() {
-    String productId = widget.productId;
-    EasyLoading.show(status: 'loading...');
-    dio
-      .get('$api_url/product/$productId', options: Options(
-        headers: {
-          "authorization": customerId
-        }
-      ))
-      .then((value) {
-        print(value.data['isLiked']);
-        if (value.data['success']) {
-          setState(() {
-            productData = value.data['doc'];
-            _isAddedToFav = value.data['isLiked'];
-            loading = false;
-          });
-        }
-        EasyLoading.dismiss();
-      });
+    SharedPreferences.getInstance().then((value) {
+      prefs = value;
+      currentUserId = prefs.getString('customerId');
+      String productId = widget.productId;
+      EasyLoading.show(status: 'loading...');
+      dio
+        .get('$api_url/product/$productId', options: Options(
+          headers: {
+            "authorization": currentUserId
+          }
+        ))
+        .then((value) {
+          print(value.data['isLiked']);
+          if (value.data['success']) {
+            setState(() {
+              productData = value.data['doc'];
+              _isAddedToFav = value.data['isLiked'];
+              loading = false;
+            });
+          }
+          EasyLoading.dismiss();
+        });
+    });
   }
 
   @override
@@ -66,7 +73,7 @@ class _ProductDetailState extends State<ProductDetail> {
   void addedToFav() {
     dio.post('$api_url/like', data: {
       "product": widget.productId,
-      "user": customerId
+      "user": currentUserId
     }).then((value) {
       print(value);
       if (value.data['success']) {
@@ -188,6 +195,7 @@ class _ProductDetailState extends State<ProductDetail> {
               sellerId: productData['sellerId']['_id'],
               productName: productData['productName'],
               thumbnail: productData['thumbnail'],
+              currentUserId: currentUserId
             )
           ]),
         )

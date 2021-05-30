@@ -4,6 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:customer_app/components/bottom_navbar.dart';
 import 'package:customer_app/abstracts/colors.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class Profile extends StatefulWidget {
   static String routeName = '/profile';
@@ -17,9 +18,17 @@ class Profile extends StatefulWidget {
 class _ProfileState extends State<Profile> with SingleTickerProviderStateMixin {
   TabController _tabController;
   String screen = "order";
+  SharedPreferences prefs;
+  String currentUserId;
 
   @override
   void initState() {
+    SharedPreferences.getInstance().then((value) {
+      prefs = value;
+      setState(() {
+        currentUserId = prefs.getString('customerId');
+      });
+    });
     _tabController = TabController(length: 2, vsync: this);
     super.initState();
   }
@@ -210,7 +219,9 @@ class _ProfileState extends State<Profile> with SingleTickerProviderStateMixin {
                         )
                       ],
                     )),
-                Expanded(child: screen == "order" ? ProfileOrder() : ProfileFollowing())
+                currentUserId != null ? Expanded(child: screen == "order" ? ProfileOrder(
+                  currentUserId: currentUserId
+                ) : ProfileFollowing(currentUserId: currentUserId)) : Container()
               ],
             ),
           ),

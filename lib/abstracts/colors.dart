@@ -45,3 +45,17 @@ const color_white = Color(0xFFFFFFFF);
 const color_white_opacity_strong = Color(0x00FFFFFF);
 const color_black = Color(0xFF000000);
 const color_black_opacity_strong = Color(0x1A000000);
+
+
+const color_primary_darker = Color(0xFF7CD249);
+const color_gradient_tertiary = LinearGradient(
+  begin: Alignment.bottomLeft,
+  end: AlignmentDirectional.topEnd,
+  colors: <Color>[
+    color_primary_darker,
+    color_white,
+    color_primary_opacity_strong,
+    color_primary_opacity_medium,
+    color_secondary
+  ]
+);

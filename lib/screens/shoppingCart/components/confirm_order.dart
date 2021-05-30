@@ -9,7 +9,12 @@ import 'dart:math';
 
 class ConfirmOrder extends StatefulWidget {
   static String routeName = '/confirmOrder';
-  const ConfirmOrder({Key key}) : super(key: key);
+  const ConfirmOrder({
+    Key key,
+    this.currentUserId
+  }) : super(key: key);
+
+  final String currentUserId;
 
   @override
   _ConfirmOrderState createState() => _ConfirmOrderState();
@@ -20,14 +25,16 @@ class _ConfirmOrderState extends State<ConfirmOrder> {
   int totalFee = 0;
   int shipping = 0;
   var dio = new Dio();
+  String currentUserId;
 
   @override
   void initState() {
     // TODO: implement initState
+    currentUserId = widget.currentUserId;
     Random random = new Random();
     EasyLoading.show(status: 'loading...');
     dio
-        .get('$api_url/cart/customer/$customerId/getCart')
+        .get('$api_url/cart/customer/$currentUserId/getCart')
         .then((value) {
       if (value.data['success']) {
         setState(() {
@@ -259,7 +266,7 @@ class _ConfirmOrderState extends State<ConfirmOrder> {
                           });
                         });
                         dio.post("$api_url/order/create", data: {
-                          "customer": customerId,
+                          "customer": currentUserId,
                           "orderItems": dataToSend
                         }).then((value) {
                           Navigator.pushNamed(context, '/profile');

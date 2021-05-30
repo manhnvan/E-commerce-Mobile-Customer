@@ -38,7 +38,7 @@ dependencies:
   carousel_pro: ^1.0.0
   intl: ^0.16.0
   flutter_easyloading: ^3.0.0
-
+  image_picker: ^0.7.5+3
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.0
@@ -66,22 +66,7 @@ flutter:
     - assets/icons/icon_inbox_active.svg
     - assets/icons/icon_search_inactive.svg
     - assets/icons/icon_search_active (1).svg
-    - assets/images/image_hero_1-min.jpg
-    - assets/images/image_hero_2-min.jpg
-    - assets/images/image_hero_3-min.jpg
-    - assets/images/image_hero_4-min.jpg
-    - assets/images/fake-data-product/product01.jpg
-    - assets/images/fake-data-product/product02.jpg
-    - assets/images/fake-data-product/product03.jpg
-    - assets/images/fake-data-product/product04.jpg
-    - assets/images/fake-data-product/product05.jpg
-    - assets/images/fake-data-product/product06.jpg
-    - assets/images/fake-data-product/product08.jpg
-    - assets/images/fake-data-product/product09.jpg
-    - assets/images/fake-data-product/product10.jpg
-    - assets/images/fake-data-product/product11.jpg
-    - assets/images/fake-data-product/product12.jpg
-    - assets/images/fake-data-product/product14.jpg
+    - assets/images/logo.png
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.

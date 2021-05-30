@@ -11,12 +11,14 @@ class Item extends StatelessWidget {
   final List<dynamic> store;
   final int productIndex;
   final Function updateStore;
+  final String currentUserId;
 
   Item({
     Key key,
     this.store,
     this.productIndex,
     this.updateStore,
+    this.currentUserId
   }) : super(key: key);
 
   @override
@@ -45,7 +47,7 @@ class Item extends StatelessWidget {
             icon: Icons.delete,
             onTap: () {
               //remove product
-              dio.post('$api_url/cart/customer/$customerId/deleteAll', data: {
+              dio.post('$api_url/cart/customer/$currentUserId/deleteAll', data: {
                 'listProduct': [product["product"]["_id"]]
               }). then((value) => {});
               store.removeAt(productIndex);
@@ -128,7 +130,7 @@ class Item extends StatelessWidget {
                             color: Colors.white,
                           ),
                           onPressed: () {
-                            dio.post('$api_url/cart/customer/$customerId/update/${product["product"]["_id"]}', data: {
+                            dio.post('$api_url/cart/customer/$currentUserId/update/${product["product"]["_id"]}', data: {
                               "type": -1
                             })
                                 .then((value) {
@@ -152,7 +154,7 @@ class Item extends StatelessWidget {
                             color: Colors.white,
                           ),
                           onPressed: () {
-                            dio.post('$api_url/cart/customer/$customerId/update/${product["product"]["_id"]}', data: {
+                            dio.post('$api_url/cart/customer/$currentUserId/update/${product["product"]["_id"]}', data: {
                               "type": 1
                             })
                                 .then((value) {
@@ -173,7 +175,7 @@ class Item extends StatelessWidget {
             GestureDetector(
               onTap: () {
                 dio
-                    .post('$api_url/cart/customer/$customerId/update/${product["product"]["_id"]}', data: {
+                    .post('$api_url/cart/customer/$currentUserId/update/${product["product"]["_id"]}', data: {
                         "checked": !product["checked"]
                     })
                     .then((value) {

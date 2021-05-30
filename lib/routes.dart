@@ -1,7 +1,8 @@
 import 'package:customer_app/screens/ChatScreen/ChatScreen.dart';
 import 'package:customer_app/screens/ChatScreen/Chatbox.dart';
+import 'package:customer_app/screens/LoginScreen/LoginScreen.dart';
+import 'package:customer_app/screens/RegisterScreen/RegisterScreen.dart';
 import 'package:customer_app/screens/home/home.dart';
-import 'package:customer_app/screens/login.dart';
 import 'package:customer_app/screens/product_details/product_detail.dart';
 import 'package:customer_app/screens/search/search.dart';
 import 'package:customer_app/screens/shoppingCart/components/confirm_order.dart';
@@ -15,10 +16,11 @@ final Map<String, WidgetBuilder> routes = {
   ProductDetail.routeName: (context) => ProductDetail(),
   Search.routeName: (context) => Search(),
   Profile.routeName: (context) => Profile(),
-  Login.routeName: (context) => Login(),
+  LoginScreen.routeName: (context) => LoginScreen(),
   WelcomeScreen.routeName: (context) => WelcomeScreen(),
   ChatScreen.routeName: (context) => ChatScreen(),
   ChatBox.routeName: (context) => ChatBox(),
   ShoppingCart.routeName: (context) => ShoppingCart(),
   ConfirmOrder.routeName: (context) => ConfirmOrder(),
+  RegisterScreen.routeName: (context) => RegisterScreen()
 };

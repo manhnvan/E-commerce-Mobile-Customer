@@ -9,12 +9,14 @@ class ItemsOfStore extends StatefulWidget {
   final List<dynamic> items;
   final int storeIndex;
   final Function update;
+  final String currentUserId;
 
   ItemsOfStore({
     Key key,
     this.items,
     this.storeIndex,
-    this.update
+    this.update,
+    this.currentUserId
   }) : super(key: key);
 
   @override
@@ -26,6 +28,14 @@ class _ItemsOfStoreState extends State<ItemsOfStore> {
   var store;
   var index = -1;
   var dio = new Dio();
+  String currentUserId;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    currentUserId = widget.currentUserId;
+    super.initState();
+  }
 
   void _updateStore(var newStore) {
     // print(newStore);
@@ -74,7 +84,7 @@ class _ItemsOfStoreState extends State<ItemsOfStore> {
                     store["products"].forEach((p) => {
                         listId.add(p["product"]["_id"].toString())
                     });
-                    dio.post('$api_url/cart/customer/$customerId/deleteAll', data: {
+                    dio.post('$api_url/cart/customer/$currentUserId/deleteAll', data: {
                       'listProduct': listId
                     }). then((value) => {});
                     widget.items.removeAt(widget.storeIndex);
@@ -99,7 +109,7 @@ class _ItemsOfStoreState extends State<ItemsOfStore> {
                         listProduct.add(store["products"][i]["product"]["_id"]);
                       }
 
-                      dio.post('$api_url/cart/customer/$customerId/updatemulti', data: {
+                      dio.post('$api_url/cart/customer/$currentUserId/updatemulti', data: {
                         "listProductId": listProduct,
                         "checked": !checkedStore
                       })
@@ -124,6 +134,7 @@ class _ItemsOfStoreState extends State<ItemsOfStore> {
         ] + store["products"].map<Widget>((e) {
           index += 1;
           return Item(
+              currentUserId: currentUserId,
               store: store["products"],
               updateStore: _updateStore,
               productIndex: index);}).toList()

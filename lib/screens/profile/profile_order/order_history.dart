@@ -6,7 +6,12 @@ import 'package:flutter_easyloading/flutter_easyloading.dart';
 import '../../../constaint.dart';
 
 class OrderHistory extends StatefulWidget {
-  const OrderHistory({Key key}) : super(key: key);
+  const OrderHistory({
+    Key key,
+    this.currentUserId
+  }) : super(key: key);
+
+  final String currentUserId;
 
   @override
   _OrderHistoryState createState() => _OrderHistoryState();
@@ -15,11 +20,15 @@ class OrderHistory extends StatefulWidget {
 class _OrderHistoryState extends State<OrderHistory> {
   List<dynamic> listItem = [];
   var dio = new Dio();
+  String currentUserId;
   @override
   void initState() {
+    setState(() {
+      currentUserId = widget.currentUserId;
+    });
     // TODO: implement initState
     EasyLoading.show(status: 'loading...');
-    dio.get('$api_url/order/item/customer/$customerId/close').then((value) {
+    dio.get('$api_url/order/item/customer/$currentUserId/close').then((value) {
       setState(() {
         listItem = value.data["items"];
       });

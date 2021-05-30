@@ -3,6 +3,7 @@ import 'package:customer_app/screens/shoppingCart/components/ItemsOfStore.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:dio/dio.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import '../../constaint.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 
@@ -17,20 +18,29 @@ class _ShoppingCartState extends State<ShoppingCart> {
   int index = -1;
   int totalPrice = 0;
   var dio = new Dio();
+  SharedPreferences prefs;
+  String currentUserId;
 
   @override
   void initState() {
-    EasyLoading.show(status: 'loading...');
-    dio
-        .get('$api_url/cart/customer/$customerId/getCart')
-        .then((value) {
-      if (value.data['success']) {
-        setState(() {
-          items = value.data["data"]['items'];
-        });
-        EasyLoading.dismiss();
-      }
+    SharedPreferences.getInstance().then((value) {
+      prefs = value;
+      setState(() {
+        currentUserId = prefs.getString('customerId');
+      });
+      EasyLoading.show(status: 'loading...');
+      dio
+          .get('$api_url/cart/customer/$currentUserId/getCart')
+          .then((value) {
+        if (value.data['success']) {
+          setState(() {
+            items = value.data["data"]['items'];
+          });
+          EasyLoading.dismiss();
+        }
+      });
     });
+    
   }
 
   void _update(List<dynamic> newItems) {
@@ -76,6 +86,7 @@ class _ShoppingCartState extends State<ShoppingCart> {
                   children: items.map((e) {
                       index += 1;
                       return ItemsOfStore(
+                        currentUserId: currentUserId,
                         items: items,
                         storeIndex: index,
                         update: _update); }).toList()),

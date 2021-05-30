@@ -5,7 +5,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 
 class PendingOrder extends StatefulWidget {
-  const PendingOrder({Key key}) : super(key: key);
+  const PendingOrder({
+    Key key,
+    this.currentUserId
+  }) : super(key: key);
+
+  final String currentUserId;
 
 
   @override
@@ -15,11 +20,14 @@ class PendingOrder extends StatefulWidget {
 class _PendingOrderState extends State<PendingOrder> {
    List<dynamic> listItem = [];
   var dio = new Dio();
+  String currentUserId;
   @override
   void initState() {
+    currentUserId = widget.currentUserId;
     // TODO: implement initState
     EasyLoading.show(status: 'loading...');
-    dio.get('$api_url/order/item/customer/$customerId').then((value) {
+    print(currentUserId);
+    dio.get('$api_url/order/item/customer/$currentUserId').then((value) {
       setState(() {
         listItem = value.data["items"];
       });

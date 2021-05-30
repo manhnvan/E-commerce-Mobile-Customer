@@ -9,14 +9,20 @@ ThemeData _buildEzTheme() {
   return base.copyWith(
       primaryColor: color_primary,
       buttonTheme: base.buttonTheme.copyWith(),
-      inputDecorationTheme: InputDecorationTheme(),
       appBarTheme: base.appBarTheme.copyWith(
         color: color_white,
         shadowColor: Colors.transparent
       ),
       cardTheme:
           CardTheme(color: Colors.transparent, shadowColor: Colors.transparent),
-      textTheme: _buildEzTextTheme(base.textTheme));
+      textTheme: _buildEzTextTheme(base.textTheme),
+      inputDecorationTheme: base.inputDecorationTheme.copyWith(
+          fillColor: color_white,
+          filled: true,
+
+          hintStyle: TextStyle(
+              color: color_green_dark, fontSize: 13.5, fontFamily: 'Montserrat')),
+  );
 }
 
 TextTheme _buildEzTextTheme(TextTheme base) {

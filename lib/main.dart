@@ -1,5 +1,6 @@
 import 'package:customer_app/abstracts/theme/ez_themes.dart';
 import 'package:customer_app/routes.dart';
+import 'package:customer_app/screens/LoginScreen/LoginScreen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 
@@ -31,7 +32,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       theme: EzTheme,
-      initialRoute: '/home',
+      initialRoute: LoginScreen.routeName,
       routes: routes,
       builder: EasyLoading.init(),
     );

@@ -12,12 +12,20 @@ import 'package:dio/dio.dart';
 import '../../../constaint.dart';
 
 class Menu extends StatelessWidget {
-  Menu({Key key, this.productId, this.sellerId, this.productName, this.thumbnail}) : super(key: key);
+  Menu({
+    Key key, 
+    this.productId, 
+    this.sellerId, 
+    this.productName, 
+    this.thumbnail,
+    this.currentUserId
+  }) : super(key: key);
 
   final String productId;
   final String sellerId;
   final String productName;
   final String thumbnail;
+  final String currentUserId;
 
   var dio = new Dio();
 
@@ -48,7 +56,7 @@ class Menu extends StatelessWidget {
                       child: TextButton(
                         onPressed: () {
                           dio.post('$chat_url/createChatbox', data: {
-                            "participants": [customerId, sellerId],
+                            "participants": [currentUserId, sellerId],
                             "topic": productName,
                             "avatar": thumbnail,
                             "productId": productId,
@@ -74,7 +82,7 @@ class Menu extends StatelessWidget {
                       width: MediaQuery.of(context).size.width * 0.25,
                       child: TextButton(
                           onPressed: () {
-                            dio.post('$api_url/cart/customer/$customerId/update/$productId', data: {
+                            dio.post('$api_url/cart/customer/$currentUserId/update/$productId', data: {
                               "type": 1
                             })
                                 .then((value) {
@@ -114,7 +122,7 @@ class Menu extends StatelessWidget {
                       ),
                       child: TextButton(
                           onPressed: () {
-                            dio.post('$api_url/cart/customer/$customerId/buynow/$productId')
+                            dio.post('$api_url/cart/customer/$currentUserId/buynow/$productId')
                                 .then((value) {
                               Navigator.pushNamed(context, "/shoppingCart");
                             });
