@@ -46,7 +46,7 @@ class ProductCard extends StatelessWidget {
                       Text(data['productName'],
                           style: this.width == MediaQuery.of(context).size.width
                               ? (Theme.of(context).textTheme.bodyText1)
-                              : (Theme.of(context).textTheme.bodyText2),
+                              : (Theme.of(context).textTheme.bodyText2.merge(TextStyle(fontSize: 15))),
                           maxLines: 1,
                           overflow: TextOverflow.ellipsis),
                       SizedBox(

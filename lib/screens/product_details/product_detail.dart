@@ -117,7 +117,6 @@ class _ProductDetailState extends State<ProductDetail> {
                           children: [
                             //Seller Information
                             SellerInfo(productData['sellerId']),
-
                             //Add to Favorite
                             TextButton(
                               onPressed: addedToFav,
