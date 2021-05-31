@@ -6,15 +6,13 @@ import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:intl/intl.dart';
 import 'dart:math';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class ConfirmOrder extends StatefulWidget {
   static String routeName = '/confirmOrder';
   const ConfirmOrder({
     Key key,
-    this.currentUserId
   }) : super(key: key);
-
-  final String currentUserId;
 
   @override
   _ConfirmOrderState createState() => _ConfirmOrderState();
@@ -25,30 +23,37 @@ class _ConfirmOrderState extends State<ConfirmOrder> {
   int totalFee = 0;
   int shipping = 0;
   var dio = new Dio();
+  SharedPreferences prefs;
   String currentUserId;
 
   @override
   void initState() {
     // TODO: implement initState
-    currentUserId = widget.currentUserId;
     Random random = new Random();
-    EasyLoading.show(status: 'loading...');
-    dio
-        .get('$api_url/cart/customer/$currentUserId/getCart')
-        .then((value) {
-      if (value.data['success']) {
-        setState(() {
-          items = value.data["data"]['items'];
-          shipping = (random.nextInt(1) + 15) * 1000;
-        });
-        items.forEach((item) {
-          item["products"].forEach((p) => {
-            totalFee += p["checked"] ? p["amount"]*p["product"]["price"] : 0
+    SharedPreferences.getInstance().then((value) {
+      prefs = value;
+      setState(() {
+        currentUserId = prefs.getString('customerId');
+      });
+      EasyLoading.show(status: 'loading...');
+      dio
+          .get('$api_url/cart/customer/$currentUserId/getCart')
+          .then((value) {
+        if (value.data['success']) {
+          setState(() {
+            items = value.data["data"]['items'];
+            shipping = (random.nextInt(1) + 15) * 1000;
           });
-        });
-        totalFee += shipping * items.length;
-        EasyLoading.dismiss();
-      }
+          items.forEach((item) {
+            item["products"].forEach((p) =>
+            {
+              totalFee += p["checked"] ? p["amount"] * p["product"]["price"] : 0
+            });
+          });
+          totalFee += shipping * items.length;
+          EasyLoading.dismiss();
+        }
+      });
     });
     super.initState();
   }
@@ -265,10 +270,12 @@ class _ConfirmOrderState extends State<ConfirmOrder> {
                             }
                           });
                         });
+                        EasyLoading.show(status: 'loading...');
                         dio.post("$api_url/order/create", data: {
                           "customer": currentUserId,
                           "orderItems": dataToSend
                         }).then((value) {
+                          EasyLoading.dismiss();
                           Navigator.pushNamed(context, '/profile');
                         });
                       },

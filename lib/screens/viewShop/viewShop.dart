@@ -1,46 +1,12 @@
 import 'package:customer_app/abstracts/colors.dart';
 import 'package:customer_app/components/product_card.dart';
+import 'package:customer_app/constaint.dart';
+import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-
-
-var fakeProductData = [
-  {
-    'thumbnail': 'https://i.imgur.com/2fa6ukp.jpeg',
-    'productName': 'Cây dương xỉ trang trí nội thất đủ kích thước',
-    'price': 500000
-  },
-  {
-    'thumbnail': 'https://i.imgur.com/2fa6ukp.jpeg',
-    'productName': 'Cây xương rồng nhỏ trang trí bàn học',
-    'price': 200000
-  },
-  {
-    'thumbnail': 'https://i.imgur.com/2fa6ukp.jpeg',
-    'productName': 'Phím cơ Logitech G610',
-    'price': 1250000
-  },
-  {
-    'thumbnail': 'https://i.imgur.com/2fa6ukp.jpeg',
-    'productName': 'Bestseller Book  - milk and honey',
-    'price': 240000
-  },
-  {
-    'thumbnail': 'https://i.imgur.com/2fa6ukp.jpeg',
-    'productName': 'Pass sách cũ',
-    'price': 300000
-  },
-  {
-    'thumbnail': 'https://i.imgur.com/2fa6ukp.jpeg',
-    'productName': 'Rubik3x3',
-    'price': 110000
-  }
-];
-
-int numOfProduct=2000;
-String shopName="Cửa hàng quần áo";
-String address = "36 xuân thủy, cầu giấy, hà nội 36 xuân thủy, cầu giấy, hà nội";
-String phoneNumber="0123456789";
+import 'package:flutter_dash/flutter_dash.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class ViewShop extends StatefulWidget {
   static String routeName = '/viewShop';
@@ -54,9 +20,34 @@ class ViewShop extends StatefulWidget {
 }
 
 class _ViewShopState extends State<ViewShop> {
+
+  var dio = new Dio();
+  SharedPreferences prefs;
+  String currentUserId;
+  dynamic shopInfo;
+  
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    SharedPreferences.getInstance().then((value) {
+      prefs = value;
+      setState(() {
+        currentUserId = prefs.getString('customerId');
+      });
+      EasyLoading.show(status: 'loading...');
+      dio.get("$api_url/seller/${widget.seller["_id"]}/customer/$currentUserId")
+          .then((value) {
+            setState(() {
+              shopInfo= value.data["doc"];
+            });
+        EasyLoading.dismiss();
+      });
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
-    print(widget.seller);
     return SafeArea(
       child: Scaffold(
         extendBodyBehindAppBar: true,
@@ -65,7 +56,8 @@ class _ViewShopState extends State<ViewShop> {
           title: Text("Thông tin cửa hàng",style: Theme.of(context).textTheme.headline6.merge(TextStyle( fontSize: 25, color: Colors.white)), ),
           centerTitle: true,
         ),
-        body: Container(
+        body: shopInfo != null ? Container(
+            height: double.infinity,
           padding: EdgeInsets.only(top: 50),
           decoration: BoxDecoration(
             gradient: color_gradient_primary,
@@ -102,7 +94,7 @@ class _ViewShopState extends State<ViewShop> {
                                   Row(
                                     children: [
                                       Text("Số sản phẩm: ", style: Theme.of(context).textTheme.headline6.merge(TextStyle(fontSize: 14))),
-                                      Text(numOfProduct.toString(), style: Theme.of(context).textTheme.headline6.merge(TextStyle(fontSize: 14, fontWeight: FontWeight.normal))),
+                                      Text(shopInfo["products"].length.toString(), style: Theme.of(context).textTheme.headline6.merge(TextStyle(fontSize: 14, fontWeight: FontWeight.normal))),
                                     ],
                                   ),
                                 ],
@@ -115,16 +107,26 @@ class _ViewShopState extends State<ViewShop> {
                                   height: 30,
                                   child: ElevatedButton(
                                     style: TextButton.styleFrom(
-                                      backgroundColor: Colors.green[300],
+                                      backgroundColor: shopInfo["isFollowed"] ? Colors.green[300] : Colors.deepOrange[300],
                                       padding: EdgeInsets.symmetric(horizontal: 5),
                                       primary: Colors.white,
                                       alignment: Alignment.center,
-                                      // side: BorderSide(
-                                      //     color: Colors.white,
-                                      //     width: 1)
                                     ),
-                                      onPressed: () {},
-                                      child: Text("+ Theo dõi", style: TextStyle(fontSize: 14))
+                                      onPressed: () {
+                                        EasyLoading.show(status: 'loading...');
+                                        dio.post("$api_url/follow/update", data: {
+                                          "sellerId": shopInfo["_id"],
+                                          "customerId": currentUserId
+                                        }).then((value) {
+                                          var newShopInfo = shopInfo;
+                                          newShopInfo["isFollowed"] = !newShopInfo["isFollowed"];
+                                          setState(() {
+                                            shopInfo= newShopInfo;
+                                          });
+                                          EasyLoading.dismiss();
+                                        });
+                                      },
+                                      child: Text(shopInfo["isFollowed"] ? "Đang theo dõi" :"+ Theo dõi", style: TextStyle(fontSize: 14))
                                   ),
                                 ),
                                 SizedBox(height: 5),
@@ -136,9 +138,6 @@ class _ViewShopState extends State<ViewShop> {
                                         padding: EdgeInsets.symmetric(horizontal: 10),
                                         primary: Colors.white,
                                         alignment: Alignment.center,
-                                        // side: BorderSide(
-                                        //     color: Colors.white,
-                                        //     width: 1),
                                       ),
                                       onPressed: () {},
                                       child: Row(
@@ -156,21 +155,34 @@ class _ViewShopState extends State<ViewShop> {
                           ],
                         ),
                         SizedBox(
-                          height: 10,
+                          height: 20,
                         ),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceAround,
                           children: [
                             Column(
+                              mainAxisAlignment: MainAxisAlignment.end,
                               children: [
-                                Text("4.9 / 5.0", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18)),
-                                Text("Đánh giá shop ", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),),
+                                Text("${shopInfo["rating"]} / 5.0 (${shopInfo["rateAmount"]})",
+                                    style: Theme.of(context).textTheme.bodyText1),
+                                SizedBox(height: 10),
+                                Text("Đánh giá shop ",
+                                  style: TextStyle(fontWeight: FontWeight.w600, fontSize: 18),),
                               ],
                             ),
+                            Dash(
+                              direction: Axis.vertical,
+                              dashLength: 30,
+                              dashThickness: 2,
+                              length: 30,
+                              dashColor: Colors.white,
+                            ),
                             Column(
+                              mainAxisAlignment: MainAxisAlignment.end,
                               children: [
-                                Text("584,300", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18)),
-                                Text("Người theo dõi", style: TextStyle(fontWeight: FontWeight.normal, fontSize: 18),),
+                                Text(shopInfo["followCount"].toString(), style: Theme.of(context).textTheme.bodyText1),
+                                SizedBox(height: 10),
+                                Text("Người theo dõi", style: TextStyle(fontWeight: FontWeight.w600, fontSize: 18),),
                               ],
                             ),
                             // Text(address, style: TextStyle(fontWeight: FontWeight.normal, fontSize: 18),  overflow:  TextOverflow.ellipsis,),
@@ -179,7 +191,7 @@ class _ViewShopState extends State<ViewShop> {
                       ],
                     ),
                   ),
-                SizedBox(height: 20,),
+                SizedBox(height: 10),
                 Container(
                   margin: EdgeInsets.symmetric(vertical: 10, horizontal: 1),
                   child: Column(
@@ -190,7 +202,7 @@ class _ViewShopState extends State<ViewShop> {
                 ),
                 Wrap(
                   spacing: 5,
-                  children: fakeProductData.map((data) {
+                  children: shopInfo["products"].map<Widget>((data) {
                     return ProductCard(
                         backgroundWhite: false,
                         // width: MediaQuery.of(context).size.width,
@@ -200,6 +212,11 @@ class _ViewShopState extends State<ViewShop> {
                 ),
               ]
             ),
+          ),
+        ) : Container(
+          padding: EdgeInsets.only(top: 50),
+          decoration: BoxDecoration(
+            gradient: color_gradient_primary,
           ),
         ),
       ),

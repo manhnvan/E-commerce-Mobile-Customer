@@ -26,15 +26,24 @@ class _PendingOrderState extends State<PendingOrder> {
     currentUserId = widget.currentUserId;
     // TODO: implement initState
     EasyLoading.show(status: 'loading...');
-    print(currentUserId);
     dio.get('$api_url/order/item/customer/$currentUserId').then((value) {
-      setState(() {
-        listItem = value.data["items"];
-      });
+      if(this.mounted){
+        setState(() {
+          listItem = value.data["items"];
+        });
+      }
       EasyLoading.dismiss();
     });
     super.initState();
   }
+
+  // @override
+  // void dispose() {
+  //   print('end');
+  //   // TODO: implement dispose
+  //   EasyLoading.dismiss();
+  //   super.dispose();
+  // }
    @override
    Widget build(BuildContext context) {
      return listItem.length > 0 ? ListView(

@@ -1,7 +1,6 @@
 import 'package:customer_app/screens/profile/profile_order/order_history.dart';
 import 'package:customer_app/screens/profile/profile_order/pending_order.dart';
 import 'package:flutter/material.dart';
-
 import 'canceled_order.dart';
 
 class ProfileOrder extends StatefulWidget {
@@ -27,7 +26,6 @@ class _ProfileOrderState extends State<ProfileOrder> {
     setState(() {
       currentUserId = widget.currentUserId;
     });
-    print('currentId $currentUserId');
     super.initState();
   }
 
@@ -55,15 +53,19 @@ class _ProfileOrderState extends State<ProfileOrder> {
                           currentScreen = "pending";
                         });
                       },
-                      child: Center(
-                          child: Text(
-                        'Đang xử lý',
-                        style: Theme.of(context).textTheme.subtitle1.merge(
-                            TextStyle(
-                                color: currentScreen != "pending"
-                                    ? Colors.black54
-                                    : Colors.black)),
-                      )),
+                      child: Container(
+                        padding: const EdgeInsets.all(8),
+                        decoration: BoxDecoration(),
+                        child: Center(
+                            child: Text(
+                          'Đang xử lý',
+                          style: Theme.of(context).textTheme.subtitle1.merge(
+                              TextStyle(
+                                  color: currentScreen != "pending"
+                                      ? Colors.black54
+                                      : Colors.black)),
+                        )),
+                      ),
                     )),
                 Expanded(
                     flex: 1,
@@ -99,15 +101,19 @@ class _ProfileOrderState extends State<ProfileOrder> {
                           currentScreen = "canceled";
                         });
                       },
-                      child: Center(
-                          child: Text(
-                            'Đã huỷ',
-                            style: Theme.of(context).textTheme.subtitle1.merge(
-                                TextStyle(
-                                    color: currentScreen != "canceled"
-                                        ? Colors.black54
-                                        : Colors.black)),
-                          )),
+                      child: Container(
+                        padding: const EdgeInsets.all(8),
+                        decoration: BoxDecoration(),
+                        child: Center(
+                            child: Text(
+                              'Đã huỷ',
+                              style: Theme.of(context).textTheme.subtitle1.merge(
+                                  TextStyle(
+                                      color: currentScreen != "canceled"
+                                          ? Colors.black54
+                                          : Colors.black)),
+                            )),
+                      ),
                     )),
               ],
             ),

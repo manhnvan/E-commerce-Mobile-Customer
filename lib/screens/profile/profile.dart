@@ -1,3 +1,4 @@
+import 'package:customer_app/constaint.dart';
 import 'package:customer_app/screens/profile/profile_following/profile_following.dart';
 import 'package:customer_app/screens/profile/profile_order/profile_order.dart';
 import 'package:flutter/cupertino.dart';
@@ -5,6 +6,8 @@ import 'package:flutter/material.dart';
 import 'package:customer_app/components/bottom_navbar.dart';
 import 'package:customer_app/abstracts/colors.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:dio/dio.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 
 class Profile extends StatefulWidget {
   static String routeName = '/profile';
@@ -16,21 +19,38 @@ class Profile extends StatefulWidget {
 }
 
 class _ProfileState extends State<Profile> with SingleTickerProviderStateMixin {
-  TabController _tabController;
   String screen = "order";
   SharedPreferences prefs;
   String currentUserId;
-
+  dynamic listFollowing;
+  dynamic userInfo;
+  var dio = new Dio();
   @override
   void initState() {
     SharedPreferences.getInstance().then((value) {
       prefs = value;
       setState(() {
         currentUserId = prefs.getString('customerId');
+        EasyLoading.show(status: 'loading...');
+        dio.get("$api_url/customer/$currentUserId/getInfo").then((value) {
+          print(value.data);
+          if(this.mounted) {
+            setState(() {
+              userInfo = value.data;
+              listFollowing = value.data['listFollow'].map((f) => {...f, "isFollow": true}).toList();
+            });
+          }
+          EasyLoading.dismiss();
+        });
       });
     });
-    _tabController = TabController(length: 2, vsync: this);
     super.initState();
+  }
+
+  void _updateListFollow(newList) {
+      setState(() {
+        listFollowing= newList;
+      });
   }
 
   @override
@@ -65,8 +85,8 @@ class _ProfileState extends State<Profile> with SingleTickerProviderStateMixin {
                                       border: Border.all(
                                           width: 1, color: Colors.white)),
                                   child: CircleAvatar(
-                                    backgroundColor: Colors.brown.shade800,
-                                    child: Text('TH'),
+                                    backgroundImage: NetworkImage(userInfo != null ? userInfo["avatar"] : "https://i.pinimg.com/originals/0c/3b/3a/0c3b3adb1a7530892e55ef36d3be6cb8.png"),
+                                    backgroundColor: Colors.transparent,
                                     radius: 40,
                                   ),
                                 ),
@@ -98,32 +118,8 @@ class _ProfileState extends State<Profile> with SingleTickerProviderStateMixin {
                                     ),
                                     Align(
                                         alignment: Alignment.topLeft,
-                                        child: Text('Vương Thành',
+                                        child: Text(userInfo != null ? userInfo["username"] : "username",
                                             style: TextStyle(fontSize: 25))),
-                                    // Align(
-                                    //     alignment: Alignment.bottomRight,
-                                    //     child: Container(
-                                    //         margin: EdgeInsets.only(top: 8),
-                                    //         padding: EdgeInsets.fromLTRB(
-                                    //             15, 4, 4, 4),
-                                    //         decoration: BoxDecoration(
-                                    //             color: Colors.white,
-                                    //             borderRadius:
-                                    //                 BorderRadius.horizontal(
-                                    //                     left: Radius.circular(
-                                    //                         20))),
-                                    //         child: Container(
-                                    //             width: 138,
-                                    //             child: Row(children: [
-                                    //               Text("Cửa hàng của tôi",
-                                    //                   style: Theme.of(context)
-                                    //                       .textTheme
-                                    //                       .button),
-                                    //               Icon(
-                                    //                   Icons
-                                    //                       .keyboard_arrow_right_sharp,
-                                    //                   size: 30)
-                                    //             ]))))
                                   ],
                                 ),
                               ),
@@ -141,21 +137,24 @@ class _ProfileState extends State<Profile> with SingleTickerProviderStateMixin {
                                     onTap: () {
                                       Navigator.pushNamed(context, '/shoppingCart');
                                     },
-                                    child: Column(
-                                      children: [
-                                        Icon(Icons.local_grocery_store_outlined,
-                                            size: 35, color: Colors.black45),
-                                        Padding(
-                                          padding: const EdgeInsets.only(top: 8),
-                                          child: Text(
-                                            "Giỏ hàng",
-                                            textAlign: TextAlign.center,
-                                            style: Theme.of(context)
-                                                .textTheme
-                                                .bodyText1,
+                                    child: Container(
+                                      decoration: BoxDecoration(),
+                                      child: Column(
+                                        children: [
+                                          Icon(Icons.local_grocery_store_outlined,
+                                              size: 35, color: Colors.black45),
+                                          Padding(
+                                            padding: const EdgeInsets.only(top: 8),
+                                            child: Text(
+                                              "Giỏ hàng",
+                                              textAlign: TextAlign.center,
+                                              style: Theme.of(context)
+                                                  .textTheme
+                                                  .bodyText1,
+                                            ),
                                           ),
-                                        ),
-                                      ],
+                                        ],
+                                      ),
                                     ),
                                   )),
                               Expanded(
@@ -166,52 +165,59 @@ class _ProfileState extends State<Profile> with SingleTickerProviderStateMixin {
                                       screen = "order";
                                     });
                                   },
-                                  child: Column(
-                                      children: [
-                                        Icon(Icons.local_mall_outlined,
-                                            size: 35, color: screen == "order" ? Colors.black : Colors.black45),
-                                        Padding(
-                                          padding: const EdgeInsets.only(top: 8),
-                                          child: Text(
-                                            "Đơn hàng",
-                                            textAlign: TextAlign.center,
-                                            style: Theme.of(context)
-                                                .textTheme
-                                                .bodyText1,
+                                  child: Container(
+                                    decoration: BoxDecoration(),
+                                    child: Column(
+                                        children: [
+                                          Icon(Icons.local_mall_outlined,
+                                              size: 35, color: screen == "order" ? Colors.black : Colors.black45),
+                                          Padding(
+                                            padding: const EdgeInsets.only(top: 8),
+                                            child: Text(
+                                              "Đơn hàng",
+                                              textAlign: TextAlign.center,
+                                              style: Theme.of(context)
+                                                  .textTheme
+                                                  .bodyText1,
+                                            ),
                                           ),
-                                        ),
-                                      ],
-                                    ),
+                                        ],
+                                      ),
+                                  ),
                                 ),
                               ),
                               Expanded(
                                 flex: 3,
                                 child: GestureDetector(
                                   onTap: () {
+                                    EasyLoading.dismiss();
                                     setState(() {
                                       screen = "following";
                                     });
                                   },
-                                  child: Column(
-                                      children: [
-                                        Text(
-                                          "69",
-                                          style: TextStyle(
-                                              fontSize: 28,
-                                              color: screen != "order" ? Colors.black : Colors.black45),
-                                        ),
-                                        Padding(
-                                          padding: const EdgeInsets.only(top: 8),
-                                          child: Text(
-                                            "Đang theo dõi",
-                                            textAlign: TextAlign.center,
-                                            style: Theme.of(context)
-                                                .textTheme
-                                                .bodyText1,
+                                  child: Container(
+                                    decoration: BoxDecoration(),
+                                    child: Column(
+                                        children: [
+                                          Text(
+                                            userInfo != null ? userInfo["listFollow"].length.toString() : "N/A",
+                                            style: TextStyle(
+                                                fontSize: 28,
+                                                color: screen != "order" ? Colors.black : Colors.black45),
                                           ),
-                                        ),
-                                      ],
-                                    ),
+                                          Padding(
+                                            padding: const EdgeInsets.only(top: 8),
+                                            child: Text(
+                                              "Đang theo dõi",
+                                              textAlign: TextAlign.center,
+                                              style: Theme.of(context)
+                                                  .textTheme
+                                                  .bodyText1,
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                  ),
                                 ),
                               ),
                             ],
@@ -221,7 +227,11 @@ class _ProfileState extends State<Profile> with SingleTickerProviderStateMixin {
                     )),
                 currentUserId != null ? Expanded(child: screen == "order" ? ProfileOrder(
                   currentUserId: currentUserId
-                ) : ProfileFollowing(currentUserId: currentUserId)) : Container()
+                ) : ProfileFollowing(
+                    currentUserId: currentUserId,
+                    listFollow: listFollowing,
+                    update: _updateListFollow,
+                )) : Container()
               ],
             ),
           ),

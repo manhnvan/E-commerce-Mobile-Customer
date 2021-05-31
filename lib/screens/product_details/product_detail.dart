@@ -54,11 +54,13 @@ class _ProductDetailState extends State<ProductDetail> {
         .then((value) {
           print(value.data['isLiked']);
           if (value.data['success']) {
-            setState(() {
-              productData = value.data['doc'];
-              _isAddedToFav = value.data['isLiked'];
-              loading = false;
-            });
+            if(this.mounted) {
+              setState(() {
+                productData = value.data['doc'];
+                _isAddedToFav = value.data['isLiked'];
+                loading = false;
+              });
+            }
           }
           EasyLoading.dismiss();
         });

@@ -23,19 +23,27 @@ class _OrderHistoryState extends State<OrderHistory> {
   String currentUserId;
   @override
   void initState() {
-    setState(() {
-      currentUserId = widget.currentUserId;
-    });
+    currentUserId = widget.currentUserId;
     // TODO: implement initState
     EasyLoading.show(status: 'loading...');
     dio.get('$api_url/order/item/customer/$currentUserId/close').then((value) {
-      setState(() {
-        listItem = value.data["items"];
-      });
+      if(this.mounted) {
+        setState(() {
+          listItem = value.data["items"];
+        });
+      }
       EasyLoading.dismiss();
     });
     super.initState();
   }
+
+  // @override
+  // void dispose() {
+  //   // TODO: implement dispose
+  //   EasyLoading.dismiss();
+  //   super.dispose();
+  // }
+
   @override
   Widget build(BuildContext context) {
     return listItem.length > 0 ? ListView(

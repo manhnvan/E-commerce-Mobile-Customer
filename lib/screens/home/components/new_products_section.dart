@@ -21,10 +21,10 @@ class NewProductsSection extends StatelessWidget {
           Text('Sản phẩm mới', style: (Theme.of(context).textTheme.headline6)),
           SizedBox(height: space_medium),
           SingleChildScrollView(
-            child: Column(
+            child: Wrap(
               children: productList != null ? productList.map((product) => ProductCard(
                     backgroundWhite: false,
-                    width: MediaQuery.of(context).size.width, 
+                    // width: MediaQuery.of(context).size.width,
                     data: product
                   )).toList() : []
             ),

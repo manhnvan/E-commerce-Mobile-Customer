@@ -32,7 +32,7 @@ class _ShoppingCartState extends State<ShoppingCart> {
       dio
           .get('$api_url/cart/customer/$currentUserId/getCart')
           .then((value) {
-        if (value.data['success']) {
+        if (value.data['success'] && this.mounted) {
           setState(() {
             items = value.data["data"]['items'];
           });

@@ -19,7 +19,6 @@ final Map<String, WidgetBuilder> routes = {
   Profile.routeName: (context) => Profile(),
   LoginScreen.routeName: (context) => LoginScreen(),
   WelcomeScreen.routeName: (context) => WelcomeScreen(),
-  Loading.routeName: (context) => Loading(),
   ViewShop.routeName: (context) => ViewShop(),
   ChatScreen.routeName: (context) => ChatScreen(),
   ChatBox.routeName: (context) => ChatBox(),
