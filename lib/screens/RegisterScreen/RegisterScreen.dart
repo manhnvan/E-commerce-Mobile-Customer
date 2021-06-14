@@ -7,7 +7,7 @@ import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 
-import '../../constaint.dart';
+import '../../constant.dart';
 
 class RegisterScreen extends StatefulWidget {
   static final routeName = '/register';

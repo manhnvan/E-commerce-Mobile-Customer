@@ -3,7 +3,7 @@ import 'package:customer_app/components/product_card.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 
-import '../../../constaint.dart';
+import '../../../constant.dart';
 
 class RecommendSection extends StatefulWidget {
   @override

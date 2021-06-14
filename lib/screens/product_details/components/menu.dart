@@ -3,13 +3,13 @@ import 'dart:ui';
 import 'package:customer_app/abstracts/colors.dart';
 import 'package:customer_app/abstracts/image_asset_url.dart';
 import 'package:customer_app/abstracts/variables.dart';
-import 'package:customer_app/constaint.dart';
+import 'package:customer_app/constant.dart';
 import 'package:customer_app/screens/ChatScreen/Chatbox.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:dio/dio.dart';
 
-import '../../../constaint.dart';
+import '../../../constant.dart';
 
 class Menu extends StatelessWidget {
   Menu({

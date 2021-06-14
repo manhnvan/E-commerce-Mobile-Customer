@@ -1,8 +1,9 @@
 import 'package:customer_app/abstracts/colors.dart';
 import 'package:customer_app/screens/shoppingCart/components/Item.dart';
+import 'package:customer_app/screens/viewShop/viewShop.dart';
 import 'package:flutter/material.dart';
 import 'package:dio/dio.dart';
-import '../../../constaint.dart';
+import '../../../constant.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 
 class ItemsOfStore extends StatefulWidget {
@@ -66,8 +67,10 @@ class _ItemsOfStoreState extends State<ItemsOfStore> {
         children: <Widget>[
           InkWell(
             onTap:(){
-
-              print("go to store");
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => ViewShop(seller: store["products"][0]["product"]["sellerId"]))
+              );
             },
             child: Slidable(
               actionExtentRatio: 0.2,

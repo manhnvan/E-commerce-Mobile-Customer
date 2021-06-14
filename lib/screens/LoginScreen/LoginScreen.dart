@@ -4,9 +4,10 @@ import 'package:customer_app/screens/RegisterScreen/RegisterScreen.dart';
 import 'package:customer_app/screens/home/home.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import '../../constaint.dart';
+import '../../constant.dart';
 
 class LoginScreen extends StatefulWidget {
   static final routeName = '/login';
@@ -32,6 +33,7 @@ class _LoginScreenState extends State<LoginScreen> {
   var dio = new Dio();
 
   Future<void> loginUser() async {
+
     if (_phoneNumber.text == '' || _password.text == '') {
       showDialog(
           context: context,
@@ -41,10 +43,12 @@ class _LoginScreenState extends State<LoginScreen> {
                 // content: Text(""),
               ));
     } else {
+      EasyLoading.show(status: 'loading...');
       dio.post('$api_url/customer/login', data: {
         'phone': _phoneNumber.text,
         'password': _password.text
       }).then((value) {
+        EasyLoading.dismiss();
         if (value.data['success']) {
           prefs.setString('customerId', value.data['_id']);
           prefs.setString('username', value.data['username']);

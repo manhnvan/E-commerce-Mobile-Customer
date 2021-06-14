@@ -1,10 +1,11 @@
 import 'package:customer_app/abstracts/colors.dart';
 import 'package:customer_app/screens/shoppingCart/components/ItemsOfStore.dart';
+import 'package:customer_app/screens/shoppingCart/components/confirm_order.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:dio/dio.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import '../../constaint.dart';
+import '../../constant.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 
 class ShoppingCart extends StatefulWidget {
@@ -21,8 +22,7 @@ class _ShoppingCartState extends State<ShoppingCart> {
   SharedPreferences prefs;
   String currentUserId;
 
-  @override
-  void initState() {
+  void getData () {
     SharedPreferences.getInstance().then((value) {
       prefs = value;
       setState(() {
@@ -40,7 +40,12 @@ class _ShoppingCartState extends State<ShoppingCart> {
         }
       });
     });
-    
+  }
+
+  @override
+  void initState() {
+    getData();
+    super.initState();
   }
 
   void _update(List<dynamic> newItems) {
@@ -62,18 +67,10 @@ class _ShoppingCartState extends State<ShoppingCart> {
     return Scaffold(
       extendBodyBehindAppBar: true,
       appBar: AppBar(
-        leading: new IconButton(
-              icon: new Icon(Icons.arrow_back,size: 35),
-          onPressed: () {
-          // Perform Your action here
-            Navigator.pop(context);
-            EasyLoading.dismiss();
-          },
-        ),
         elevation: 0,
         backgroundColor: Colors.transparent,
         title: Text("Giỏ hàng của bạn",
-            style: Theme.of(context).textTheme.headline6.merge(TextStyle(fontSize: 25, color: Colors.white))),
+            style: Theme.of(context).textTheme.headline6.merge(TextStyle(fontSize: 22, color: Colors.white))),
         centerTitle: true,
       ),
       body: Container(
@@ -135,7 +132,6 @@ class _ShoppingCartState extends State<ShoppingCart> {
                                 });
                                 return AlertDialog(
                                     backgroundColor: Colors.black.withOpacity(0.8),
-                                    // title: Text('Thông báo', style: TextStyle(color: Colors.white)),
                                     content: Text('Bạn chưa chọn sản phẩm nào', style: TextStyle(color: Colors.white)),
                                     shape: RoundedRectangleBorder(
                                         borderRadius: BorderRadius.all(Radius.circular(12.0)))
@@ -143,7 +139,10 @@ class _ShoppingCartState extends State<ShoppingCart> {
                               }
                           );
                         }
-                        else Navigator.pushNamed(context, '/confirmOrder');
+                        else Navigator.push(
+                            context,
+                            MaterialPageRoute(builder: (context) => ConfirmOrder(getData: getData))
+                        );
                       },
                       child: Container(
                         decoration: BoxDecoration(

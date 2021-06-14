@@ -10,7 +10,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import '../../constaint.dart';
+import '../../constant.dart';
 
 class ProductDetail extends StatefulWidget {
   static String routeName = '/productDetail';
@@ -52,7 +52,6 @@ class _ProductDetailState extends State<ProductDetail> {
           }
         ))
         .then((value) {
-          print(value.data['isLiked']);
           if (value.data['success']) {
             if(this.mounted) {
               setState(() {

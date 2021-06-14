@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import '../../constaint.dart';
+import '../../constant.dart';
 import 'Chatbox.dart';
 
 class ChatScreen extends StatefulWidget {

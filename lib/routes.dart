@@ -4,6 +4,7 @@ import 'package:customer_app/screens/LoginScreen/LoginScreen.dart';
 import 'package:customer_app/screens/RegisterScreen/RegisterScreen.dart';
 import 'package:customer_app/screens/home/home.dart';
 import 'package:customer_app/screens/product_details/product_detail.dart';
+import 'package:customer_app/screens/profile/update_profile/update_profile.dart';
 import 'package:customer_app/screens/search/search.dart';
 import 'package:customer_app/screens/shoppingCart/components/confirm_order.dart';
 import 'package:customer_app/screens/shoppingCart/shoppingCart.dart';
@@ -24,5 +25,6 @@ final Map<String, WidgetBuilder> routes = {
   ChatBox.routeName: (context) => ChatBox(),
   ShoppingCart.routeName: (context) => ShoppingCart(),
   ConfirmOrder.routeName: (context) => ConfirmOrder(),
-  RegisterScreen.routeName: (context) => RegisterScreen()
+  RegisterScreen.routeName: (context) => RegisterScreen(),
+  UpdateProfile.routeName: (context) => UpdateProfile()
 };

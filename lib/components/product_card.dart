@@ -26,6 +26,7 @@ class ProductCard extends StatelessWidget {
       },
       child: GlassCard(
           childWidget: Column(
+            mainAxisSize: MainAxisSize.min,
             children: [
               Container(
                 height:

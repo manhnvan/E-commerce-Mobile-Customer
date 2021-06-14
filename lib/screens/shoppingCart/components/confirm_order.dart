@@ -1,17 +1,18 @@
 import 'package:customer_app/abstracts/colors.dart';
-import 'package:customer_app/constaint.dart';
+import 'package:customer_app/constant.dart';
+import 'package:customer_app/screens/shoppingCart/components/delivery_address.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
-import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:intl/intl.dart';
 import 'dart:math';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class ConfirmOrder extends StatefulWidget {
   static String routeName = '/confirmOrder';
+  final Function getData;
   const ConfirmOrder({
-    Key key,
+    Key key, this.getData,
   }) : super(key: key);
 
   @override
@@ -63,18 +64,10 @@ class _ConfirmOrderState extends State<ConfirmOrder> {
     return Scaffold(
       extendBodyBehindAppBar: true,
       appBar: AppBar(
-        leading: new IconButton(
-          icon: new Icon(Icons.arrow_back,size: 35),
-          onPressed: () {
-            // Perform Your action here
-            Navigator.pop(context);
-            EasyLoading.dismiss();
-          },
-        ),
         elevation: 0,
         backgroundColor: Colors.transparent,
         title: Text("Xác nhận thanh toán",
-            style: Theme.of(context).textTheme.headline6.merge(TextStyle(fontSize: 25, color: Colors.white))),
+            style: Theme.of(context).textTheme.headline6.merge(TextStyle(fontSize: 22, color: Colors.white))),
         centerTitle: true,
       ),
       body: Container(
@@ -85,10 +78,11 @@ class _ConfirmOrderState extends State<ConfirmOrder> {
             Expanded(
                 child: SingleChildScrollView(
                   child: totalFee > 0 ?  Container(
-
                     child: Column(
                         crossAxisAlignment: CrossAxisAlignment.stretch,
-                      children: items.map((e) {
+                      children: <Container>[
+                        Container(child: DeliveryAddress(currentUserId: currentUserId))
+                      ] + items.map((e) {
                         var listProduct = e['products'].where((p) => p["checked"] == true).toList();
                         return listProduct.length > 0 ? Container(
                             decoration: BoxDecoration(
@@ -257,11 +251,12 @@ class _ConfirmOrderState extends State<ConfirmOrder> {
                     flex: 2,
                     child: GestureDetector(
                       onTap: (){
-                        print("Xác nhận");
                         var dataToSend = [];
+                        var listIdToDelete = [];
                         items.forEach((e) {
                           e["products"].forEach((p) {
                             if(p["checked"] && (p["amount"] > 0)){
+                              listIdToDelete.add(p["product"]["_id"].toString());
                               dataToSend.add({
                                   "productId": p["product"]["_id"],
                                   "sellerId": p["product"]["sellerId"]["_id"],
@@ -271,6 +266,11 @@ class _ConfirmOrderState extends State<ConfirmOrder> {
                           });
                         });
                         EasyLoading.show(status: 'loading...');
+                        dio.post('$api_url/cart/customer/$currentUserId/deleteAll', data: {
+                          'listProduct': listIdToDelete
+                        }). then((value) => {
+                          // widget.getData();
+                        });
                         dio.post("$api_url/order/create", data: {
                           "customer": currentUserId,
                           "orderItems": dataToSend

@@ -1,4 +1,4 @@
-import 'package:customer_app/constaint.dart';
+import 'package:customer_app/constant.dart';
 import 'package:customer_app/screens/profile/profile_order/order_card.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
@@ -21,10 +21,9 @@ class _PendingOrderState extends State<PendingOrder> {
    List<dynamic> listItem = [];
   var dio = new Dio();
   String currentUserId;
-  @override
-  void initState() {
+
+  void getData () {
     currentUserId = widget.currentUserId;
-    // TODO: implement initState
     EasyLoading.show(status: 'loading...');
     dio.get('$api_url/order/item/customer/$currentUserId').then((value) {
       if(this.mounted){
@@ -34,6 +33,12 @@ class _PendingOrderState extends State<PendingOrder> {
       }
       EasyLoading.dismiss();
     });
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    getData();
     super.initState();
   }
 
@@ -46,9 +51,11 @@ class _PendingOrderState extends State<PendingOrder> {
   // }
    @override
    Widget build(BuildContext context) {
-     return listItem.length > 0 ? ListView(
-         children:
-         listItem.map((i) => OrderCard(item: i)).toList()
+     return listItem.length > 0 ? SingleChildScrollView(
+       child: Column(
+           children:
+           listItem.map((i) => OrderCard(item: i, getData: getData, currentUserId: currentUserId)).toList()
+       ),
      ) : Container(
          child: Center(child: Text("Bạn chưa có đơn hàng nào."))
      );

@@ -39,7 +39,7 @@ class _ProfileOrderState extends State<ProfileOrder> {
         children: [
           Container(
             padding: const EdgeInsets.only(bottom: 4),
-            margin: const EdgeInsets.only(bottom: 8, left: 8, right: 8),
+            margin: const EdgeInsets.only(left: 8, right: 8),
             decoration: BoxDecoration(
               border: Border(bottom: BorderSide(width: 1, color: Colors.black87),)
             ),

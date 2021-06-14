@@ -1,7 +1,7 @@
 import 'package:customer_app/abstracts/colors.dart';
 import 'package:customer_app/abstracts/variables.dart';
 import 'package:customer_app/components/bottom_navbar.dart';
-import 'package:customer_app/constaint.dart';
+import 'package:customer_app/constant.dart';
 import 'package:customer_app/helper/deboucer.dart';
 import 'package:customer_app/screens/home/components/new_products_section.dart';
 import 'package:customer_app/screens/home/components/recommend_section.dart';
@@ -51,7 +51,7 @@ class _MyHomePageState extends State<Home> {
     dio
       .get('$api_url/product/lastest?page=$page&limit=$limit')
       .then((value) {
-        if (value.data['success']) {
+        if (value.data['success'] && this.mounted) {
           setState(() {
             productList.addAll(value.data['docs']);
             allowIncreasePageNumber = true;

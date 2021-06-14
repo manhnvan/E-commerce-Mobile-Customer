@@ -2,7 +2,7 @@ import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:socket_io_client/socket_io_client.dart' as IO;
 
-import '../../constaint.dart';
+import '../../constant.dart';
 import 'Message/LeftMessage.dart';
 import 'Message/RightMessage.dart';
 class ChatBox extends StatefulWidget {
