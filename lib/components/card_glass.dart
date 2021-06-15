@@ -32,7 +32,7 @@ class GlassCard extends StatelessWidget {
         clipBehavior: Clip.antiAlias,
         padding: EdgeInsets.all(1),
         decoration: BoxDecoration(
-          gradient: color_gradient_secondary,
+          gradient: color_gradient_glass,
         ),
         child: BackdropFilter(
             filter: ImageFilter.blur(sigmaX: 5.0, sigmaY: 5.0),

@@ -1,6 +1,7 @@
 import 'package:customer_app/abstracts/colors.dart';
 import 'package:customer_app/abstracts/variables.dart';
 import 'package:customer_app/components/bottom_navbar.dart';
+import 'package:customer_app/components/product_card.dart';
 import 'package:customer_app/constant.dart';
 import 'package:customer_app/helper/deboucer.dart';
 import 'package:customer_app/screens/home/components/new_products_section.dart';
@@ -146,8 +147,6 @@ class _MyHomePageState extends State<Home> {
 }
 
 class DataSearch extends SearchDelegate<String> {
-  
-  
 
   @override
   List<Widget> buildActions(BuildContext context) {
@@ -177,7 +176,8 @@ class DataSearch extends SearchDelegate<String> {
   @override
   Widget buildResults(BuildContext context) {
     // TODO: implement buildResults
-    throw UnimplementedError();
+    // throw UnimplementedError();
+    return ResultList(query: query);
   }
 
   @override
@@ -247,5 +247,71 @@ class _SuggestionListState extends State<SuggestionList> {
               )
             );
         });
+  }
+}
+
+class ResultList extends StatefulWidget {
+  final String query;
+  const ResultList({Key key, this.query}) : super(key: key);
+
+  @override
+  _ResultListState createState() => _ResultListState();
+}
+
+class _ResultListState extends State<ResultList> {
+  List<dynamic> listResult = [];
+
+  // var _debouncer = new Debouncer(milliseconds: 500);
+  var dio = new Dio();
+
+  // @override
+  // void didUpdateWidget(covariant ResultList oldWidget) {
+  //   super.didUpdateWidget(oldWidget);
+  //   _debouncer.run(() {
+  //     String query = widget.query;
+  //     print('$query');
+  //     dio.get('$api_url/product/textQuery?q=$query').then((value) {
+  //       print('$api_url/product/textQuery?q=$query');
+  //       if (value.data['success']) {
+  //         setState(() {
+  //           listResult = value.data['docs'];
+  //         });
+  //       }
+  //     });
+  //   });
+  // }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    String query = widget.query;
+    print('$query');
+    dio.get('$api_url/product/textQuery?q=$query').then((value) {
+      print('$api_url/product/textQuery?q=$query');
+      if (value.data['success']) {
+        setState(() {
+          listResult = value.data['docs'];
+        });
+      }
+    });
+    super.initState();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: MediaQuery.of(context).size.width,
+      height: MediaQuery.of(context).size.height,
+      padding: EdgeInsets.symmetric(vertical: 15, horizontal: 15),
+      decoration: BoxDecoration(
+        gradient: color_gradient_primary
+      ),
+      child: Wrap(
+        alignment: WrapAlignment.start,
+            crossAxisAlignment: WrapCrossAlignment.start,
+            spacing: 12,
+            runSpacing: 15,
+            children: listResult.map((l) => ProductCard(data: l, backgroundWhite: false, width: null)).toList()),
+    );
   }
 }

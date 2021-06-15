@@ -1,11 +1,18 @@
+import 'dart:io';
+
+import 'package:customer_app/components/product_card.dart';
+import 'package:customer_app/constant.dart';
+import 'package:customer_app/screens/home/components/recommend_section.dart';
+import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:customer_app/abstracts/colors.dart';
-import 'package:customer_app/abstracts/variables.dart';
 import 'package:customer_app/components/bottom_navbar.dart';
-import 'package:customer_app/components/card_glass.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:material_floating_search_bar/material_floating_search_bar.dart';
-import '../home/components/new_products_section.dart';
+import "dart:convert";
+import 'package:diacritic/diacritic.dart';
 
 class Search extends StatefulWidget {
   static String routeName = '/search';
@@ -27,13 +34,64 @@ const List<String> listTagSuggestion = [
 ];
 
 class _SearchState extends State<Search> {
-  List<String> searchResult = [];
+  List<String> searchSuggestion = [];
+  dynamic searchResult = [];
+  File image;
   String localQuery = '';
+  var dio = new Dio();
+  final controller = FloatingSearchBarController();
+
+  Future _getThumbnailAsset(type) async {
+    EasyLoading.show(status: 'loading...');
+    final pickedFile = await ImagePicker().getImage(source: type ? ImageSource.camera : ImageSource.gallery);
+    if (!mounted) return;
+
+    if(pickedFile != null) {
+      controller.query = "";
+      setState(() {
+        image = File(pickedFile.path);
+        localQuery = "";
+      });
+      List<int> imageBytes = File(pickedFile.path).readAsBytesSync();
+      String imageString = base64Encode(imageBytes);
+
+      var formData = FormData.fromMap({
+        'image_base64': imageString,
+        "language": "vi",
+        // "threshold": 50,
+        "limit": 5
+      });
+      dio.options.headers["authorization"] = "Basic YWNjXzhiMWQ1OTlmYmFjYWQwZDpjOTUzOTliOTUyNDYyNzBiYTFmNjU1ZTFlYTkzODFkZg==";
+
+      String endpointUrl = "https://api.imagga.com/v2/tags";
+
+      dio.post(endpointUrl, data: formData).then((value) {
+        print(value.data);
+        var queryText = [];
+        value.data["result"]["tags"].forEach((t) {
+          queryText.add("${removeDiacritics(t["tag"]["vi"])}");
+        });
+        print(queryText);
+        dio.post('$api_url/product/imageQuery', data: {
+          "query": queryText,
+        }).then((value2) {
+          if (value2.data['success']) {
+            setState(() {
+              searchResult = value2.data['docs'];
+            });
+            print(value2.data);
+            EasyLoading.dismiss();
+          }
+        });
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final isPortrait =
         MediaQuery.of(context).orientation == Orientation.portrait;
-    final controller = FloatingSearchBarController();
+
     return Scaffold(
         body: Container(
           decoration: BoxDecoration(
@@ -43,32 +101,27 @@ class _SearchState extends State<Search> {
                 topRight: Radius.circular((15))),
           ),
           child: Stack(fit: StackFit.expand, children: [
-            Padding(
-              padding: const EdgeInsets.fromLTRB(5, 85, 5, 0),
+            Container(
+              padding: EdgeInsets.all(1),
+              margin: EdgeInsets.fromLTRB(10, 85, 10, 0),
+              decoration: BoxDecoration(
+                gradient: color_test,
+                borderRadius: BorderRadius.only(
+                    topLeft: Radius.circular((15)),
+                    topRight: Radius.circular((15))),
+              ),
               child: Container(
-                padding: EdgeInsets.all(1),
                 decoration: BoxDecoration(
-                  gradient: color_test,
+                  gradient: color_gradient_primary,
                   borderRadius: BorderRadius.only(
                       topLeft: Radius.circular((15)),
                       topRight: Radius.circular((15))),
                 ),
-                child: Container(
-                  padding: EdgeInsets.all(0),
-                  decoration: BoxDecoration(
-                    gradient: color_gradient_primary,
-                    borderRadius: BorderRadius.only(
-                        topLeft: Radius.circular((15)),
-                        topRight: Radius.circular((15))),
-                  ),
-                  child: ListView(
-                    scrollDirection: Axis.vertical,
-                    addAutomaticKeepAlives: false,
-                    cacheExtent: 100.0,
+                child: SingleChildScrollView(
+                  child: Column(
                     children: [
-                      localQuery != ""
-                          ? Container()
-                          : Wrap(
+                      (localQuery == "" && image == null)
+                          ? Wrap(
                               direction: Axis.horizontal,
                               alignment: WrapAlignment.start,
                               children: listTagSuggestion
@@ -100,17 +153,80 @@ class _SearchState extends State<Search> {
                                           ),
                                         ),
                                       ))
-                                  .toList()),
-                      Padding(
-                        padding: const EdgeInsets.symmetric(vertical: 12.0),
-                        child: NewProductsSection(),
-                      )
+                                  .toList())
+                          : Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 10),
+                            child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                                image != null
+                                    ? Row(
+                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      children: [
+                                        Expanded(
+                                          child: Padding(
+                                            padding: const EdgeInsets.symmetric(vertical: 15),
+                                            child: Text("Tìm kiếm bằng hình ảnh:", style: Theme.of(context).textTheme.headline6.merge(TextStyle(fontSize: 18))),
+                                          )
+                                        ),
+                                        SizedBox(width: 5),
+                                        GestureDetector(
+                                          onTap: () {
+                                            _getThumbnailAsset(false);
+                                          },
+                                          child: Container(
+                                            padding: EdgeInsets.symmetric(vertical: 10),
+                                            alignment: Alignment.topRight,
+                                            width: 100,
+                                            decoration: BoxDecoration(
+                                              borderRadius: BorderRadius.circular(10),
+                                            ),
+                                            child: ClipRRect(
+                                              child: Image.file(image,
+                                                  fit: BoxFit.cover),
+                                              borderRadius: BorderRadius.circular(10),
+                                            )),
+                                        ),
+                                      ],
+                                    )
+                                    : Container(),
+                                SizedBox(height: 20),
+                                searchResult.length != 0
+                                    ? Column(
+                                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                                      children: [
+                                        Text("Kết quả tìm kiếm ", style: Theme.of(context).textTheme.headline6),
+                                        SizedBox(height: 15),
+                                        Wrap(
+                                          crossAxisAlignment: WrapCrossAlignment.start,
+                                        children: searchResult.map<Widget>((s) => ProductCard(backgroundWhite: false, width: null, data: s,)).toList()
+                                ),
+                                      ],
+                                    ) : Container(
+                                  padding: EdgeInsets.symmetric(horizontal: 0),
+                                    child: Text("Không tìm thấy sản phẩm nào",style: Theme.of(context).textTheme.headline6)
+                                ),
+                              ]),
+                          ),
+                      RecommendSection()
                     ],
                   ),
                 ),
               ),
             ),
             FloatingSearchBar(
+              onSubmitted: (query) {
+                controller.close();
+                setState(() {
+                  localQuery = query;
+                });
+                dio.get("$api_url/product/textQuery?q=$query").then((value) {
+                  print(value.data);
+                  setState(() {
+                    searchResult = value.data["docs"];
+                  });
+                });
+              },
               controller: controller,
               hint: 'Search...',
               clearQueryOnClose: false,
@@ -125,8 +241,9 @@ class _SearchState extends State<Search> {
               onQueryChanged: (query) {
                 print(query);
                 setState(() {
+                  image = null;
                   localQuery = query;
-                  searchResult = listTagSuggestion
+                  searchSuggestion = listTagSuggestion
                       .where((element) =>
                           element.toLowerCase().contains(query.toLowerCase()))
                       .toList();
@@ -139,7 +256,11 @@ class _SearchState extends State<Search> {
               actions: [
                 FloatingSearchBarAction.searchToClear(
                     showIfClosed: true, duration: Duration(milliseconds: 500)),
+                FloatingSearchBarAction.icon(icon: Icon(Icons.image), onTap: (){
+                  _getThumbnailAsset(false);
+                })
               ],
+              leadingActions: [],
               builder: (context, transition) {
                 return ClipRRect(
                   borderRadius: BorderRadius.circular(8),
@@ -150,7 +271,7 @@ class _SearchState extends State<Search> {
                       mainAxisSize: MainAxisSize.min,
                       crossAxisAlignment: CrossAxisAlignment.start,
                       mainAxisAlignment: MainAxisAlignment.center,
-                      children: searchResult.map((element) {
+                      children: searchSuggestion.map((element) {
                         return GestureDetector(
                           onTap: () {
                             controller.close();

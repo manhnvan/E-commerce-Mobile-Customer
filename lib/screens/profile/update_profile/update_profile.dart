@@ -25,9 +25,10 @@ class UpdateProfile extends StatefulWidget {
 class _UpdateProfileState extends State<UpdateProfile> {
   dynamic user, oldUser;
   var dio = new Dio();
-  final picker = ImagePicker();
 
   Future _getThumbnailAsset(type) async {
+
+    final picker = ImagePicker();
     final pickedFile = await picker.getImage(source: type ? ImageSource.camera : ImageSource.gallery,);
     if (!mounted) return;
     var formData = FormData.fromMap({
