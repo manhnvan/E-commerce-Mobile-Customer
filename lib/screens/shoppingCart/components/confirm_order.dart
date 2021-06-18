@@ -1,12 +1,14 @@
 import 'package:customer_app/abstracts/colors.dart';
 import 'package:customer_app/constant.dart';
 import 'package:customer_app/screens/shoppingCart/components/delivery_address.dart';
+import 'package:customer_app/screens/shoppingCart/components/testMomo.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:intl/intl.dart';
 import 'dart:math';
 import 'package:shared_preferences/shared_preferences.dart';
+
 
 class ConfirmOrder extends StatefulWidget {
   static String routeName = '/confirmOrder';
@@ -26,6 +28,7 @@ class _ConfirmOrderState extends State<ConfirmOrder> {
   var dio = new Dio();
   SharedPreferences prefs;
   String currentUserId;
+  String username;
 
   @override
   void initState() {
@@ -35,6 +38,7 @@ class _ConfirmOrderState extends State<ConfirmOrder> {
       prefs = value;
       setState(() {
         currentUserId = prefs.getString('customerId');
+        username = prefs.getString('username');
       });
       EasyLoading.show(status: 'loading...');
       dio
@@ -251,33 +255,18 @@ class _ConfirmOrderState extends State<ConfirmOrder> {
                     flex: 2,
                     child: GestureDetector(
                       onTap: (){
-                        var dataToSend = [];
-                        var listIdToDelete = [];
-                        items.forEach((e) {
-                          e["products"].forEach((p) {
-                            if(p["checked"] && (p["amount"] > 0)){
-                              listIdToDelete.add(p["product"]["_id"].toString());
-                              dataToSend.add({
-                                  "productId": p["product"]["_id"],
-                                  "sellerId": p["product"]["sellerId"]["_id"],
-                                  "amount": p["amount"]
-                                });
-                            }
-                          });
-                        });
-                        EasyLoading.show(status: 'loading...');
-                        dio.post('$api_url/cart/customer/$currentUserId/deleteAll', data: {
-                          'listProduct': listIdToDelete
-                        }). then((value) => {
-                          // widget.getData();
-                        });
-                        dio.post("$api_url/order/create", data: {
-                          "customer": currentUserId,
-                          "orderItems": dataToSend
-                        }).then((value) {
-                          EasyLoading.dismiss();
-                          Navigator.pushNamed(context, '/profile');
-                        });
+                        showModalBottomSheet(
+                            isScrollControlled: true,
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.only(
+                                    topLeft: Radius.circular(16),
+                                    topRight: Radius.circular(16))
+                            ),
+                            clipBehavior: Clip.antiAliasWithSaveLayer,
+                            context: context,
+                            builder: (BuildContext context){
+                              return Momo(username: username, currentUserId: currentUserId, items: items, totalFee: totalFee,);
+                            });
                       },
                       child: Container(
                           decoration: BoxDecoration(
