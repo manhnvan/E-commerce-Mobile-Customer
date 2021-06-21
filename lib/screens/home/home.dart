@@ -8,8 +8,12 @@ import 'package:customer_app/screens/home/components/new_products_section.dart';
 import 'package:customer_app/screens/home/components/recommend_section.dart';
 import 'package:customer_app/screens/product_details/product_detail.dart';
 import 'package:dio/dio.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 
+import '../../main.dart';
 import 'components/hero.dart';
 
 class Home extends StatefulWidget {
