@@ -66,12 +66,10 @@ class _SearchState extends State<Search> {
       String endpointUrl = "https://api.imagga.com/v2/tags";
 
       dio.post(endpointUrl, data: formData).then((value) {
-        print(value.data);
         var queryText = [];
         value.data["result"]["tags"].forEach((t) {
           queryText.add("${removeDiacritics(t["tag"]["vi"])}");
         });
-        print(queryText);
         dio.post('$api_url/product/imageQuery', data: {
           "query": queryText,
         }).then((value2) {
@@ -79,7 +77,6 @@ class _SearchState extends State<Search> {
             setState(() {
               searchResult = value2.data['docs'];
             });
-            print(value2.data);
             EasyLoading.dismiss();
           }
         });
@@ -127,7 +124,6 @@ class _SearchState extends State<Search> {
                               children: listTagSuggestion
                                   .map((list) => GestureDetector(
                                         onTap: () {
-                                          print(list);
                                           controller.query = list;
                                           setState(() {
                                             localQuery = list;
@@ -221,7 +217,6 @@ class _SearchState extends State<Search> {
                   localQuery = query;
                 });
                 dio.get("$api_url/product/textQuery?q=$query").then((value) {
-                  print(value.data);
                   setState(() {
                     searchResult = value.data["docs"];
                   });
@@ -239,7 +234,6 @@ class _SearchState extends State<Search> {
               width: isPortrait ? 600 : 500,
               debounceDelay: const Duration(milliseconds: 100),
               onQueryChanged: (query) {
-                print(query);
                 setState(() {
                   image = null;
                   localQuery = query;
