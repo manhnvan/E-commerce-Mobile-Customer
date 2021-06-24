@@ -3,6 +3,7 @@ import 'package:customer_app/abstracts/variables.dart';
 import 'package:customer_app/screens/RegisterScreen/RegisterScreen.dart';
 import 'package:customer_app/screens/home/home.dart';
 import 'package:dio/dio.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -19,6 +20,7 @@ class LoginScreen extends StatefulWidget {
 class _LoginScreenState extends State<LoginScreen> {
   final _phoneNumber = new TextEditingController();
   final _password = new TextEditingController();
+  String firebaseToken = "";
 
   SharedPreferences prefs;
 
@@ -26,6 +28,12 @@ class _LoginScreenState extends State<LoginScreen> {
   void initState() {
     SharedPreferences.getInstance().then((value) {
       prefs = value;
+    });
+    FirebaseMessaging.instance.getToken().then((value) {
+      print("Token $value");
+      setState(() {
+        firebaseToken = value;
+      });
     });
     super.initState();
   }
@@ -46,7 +54,8 @@ class _LoginScreenState extends State<LoginScreen> {
       EasyLoading.show(status: 'loading...');
       dio.post('$api_url/customer/login', data: {
         'phone': _phoneNumber.text,
-        'password': _password.text
+        'password': _password.text,
+        'firebaseToken': firebaseToken
       }).then((value) {
         EasyLoading.dismiss();
         if (value.data['success']) {
