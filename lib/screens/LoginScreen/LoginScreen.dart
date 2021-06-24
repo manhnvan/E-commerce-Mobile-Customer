@@ -67,6 +67,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 (Route<dynamic> route) => false,
           );
         } else {
+          EasyLoading.dismiss();
           showDialog(
               context: context,
               builder: (context) =>
@@ -76,6 +77,7 @@ class _LoginScreenState extends State<LoginScreen> {
         }
       }).catchError((e) {
         print(e);
+        EasyLoading.dismiss();
         showDialog(
             context: context,
             builder: (context) =>
@@ -84,6 +86,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 ));
       });
     }
+    
   }
 
   @override

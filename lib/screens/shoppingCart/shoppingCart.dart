@@ -48,6 +48,13 @@ class _ShoppingCartState extends State<ShoppingCart> {
     super.initState();
   }
 
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
+    EasyLoading.dismiss();
+  }
+
   void _update(List<dynamic> newItems) {
     setState(() {
       items = newItems;

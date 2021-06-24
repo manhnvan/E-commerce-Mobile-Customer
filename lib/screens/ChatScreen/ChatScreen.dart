@@ -2,6 +2,7 @@ import 'package:customer_app/components/bottom_navbar.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -28,6 +29,7 @@ class _ChatScreenState extends State<ChatScreen> {
       prefs = value;
       currentUserId = prefs.getString('customerId');
       print(currentUserId);
+      EasyLoading.show(status: 'loading...');
       dio.get('$chat_url/$currentUserId/').then((value) {
         print(value.data);
         if (value.data['success']) {
@@ -35,8 +37,18 @@ class _ChatScreenState extends State<ChatScreen> {
             chatboxes.addAll(value.data['chatboxes']);
           });
         }
+        EasyLoading.dismiss();
+      }).catchError((error) {
+        EasyLoading.dismiss();
       });
     });
+  }
+
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
+    EasyLoading.dismiss();
   }
 
   @override

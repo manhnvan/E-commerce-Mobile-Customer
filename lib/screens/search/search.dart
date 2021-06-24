@@ -46,6 +46,7 @@ class _SearchState extends State<Search> {
     final pickedFile = await ImagePicker().getImage(source: type ? ImageSource.camera : ImageSource.gallery);
     if (!mounted) return;
 
+
     if(pickedFile != null) {
       controller.query = "";
       setState(() {
@@ -81,6 +82,8 @@ class _SearchState extends State<Search> {
           }
         });
       });
+    } else {
+      EasyLoading.dismiss();
     }
   }
 
@@ -112,7 +115,8 @@ class _SearchState extends State<Search> {
                   gradient: color_gradient_primary,
                   borderRadius: BorderRadius.only(
                       topLeft: Radius.circular((15)),
-                      topRight: Radius.circular((15))),
+                      topRight: Radius.circular((15))
+                  ),
                 ),
                 child: SingleChildScrollView(
                   child: Column(

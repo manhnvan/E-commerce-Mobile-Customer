@@ -5,6 +5,7 @@ import 'package:customer_app/components/ImageSelector.dart';
 import 'package:customer_app/screens/LoginScreen/LoginScreen.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:image_picker/image_picker.dart';
 
 import '../../constant.dart';
@@ -112,6 +113,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 title: Text("Mật khẩu không trùng khớp"),
               ));
     } else {
+      EasyLoading.show(status: 'loading...');
       dio.post('$api_url/customer/create', data: {
         "username": _username.text,
         "phone": _phoneNumber.text,
@@ -129,7 +131,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     title: Text(value.data['msg']),
                   ));
         }
+        EasyLoading.dismiss();
       }).catchError((e) {
+        EasyLoading.dismiss();
         print(e);
       });
     }
