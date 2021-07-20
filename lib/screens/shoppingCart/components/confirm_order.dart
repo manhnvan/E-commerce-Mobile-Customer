@@ -29,38 +29,95 @@ class _ConfirmOrderState extends State<ConfirmOrder> {
   SharedPreferences prefs;
   String currentUserId;
   String username;
+  var userInfo;
 
   @override
   void initState() {
     // TODO: implement initState
-    Random random = new Random();
     SharedPreferences.getInstance().then((value) {
       prefs = value;
       setState(() {
         currentUserId = prefs.getString('customerId');
         username = prefs.getString('username');
       });
-      EasyLoading.show(status: 'loading...');
-      dio
-          .get('$api_url/cart/customer/$currentUserId/getCart')
-          .then((value) {
-        if (value.data['success']) {
-          setState(() {
-            items = value.data["data"]['items'];
-            shipping = (random.nextInt(1) + 15) * 1000;
-          });
-          items.forEach((item) {
-            item["products"].forEach((p) =>
-            {
-              totalFee += p["checked"] ? p["amount"] * p["product"]["price"] : 0
-            });
-          });
-          totalFee += shipping * items.length;
-          EasyLoading.dismiss();
-        }
-      });
+      initFunc();
     });
     super.initState();
+  }
+
+  void initFunc() async {
+    EasyLoading.show(status: 'loading...');
+    await Future.wait([getCart(), getUserInfo()]);
+
+    List<Future> listShippingFuture = [];
+    var index = 0;
+    items.forEach((i) {
+      listShippingFuture.add(calShipFee(index));
+      index += 1;
+    });
+    await Future.wait(listShippingFuture);
+    EasyLoading.dismiss();
+  }
+
+  Future<void> calShipFee(index) async {
+    var option = Options(
+        headers: {
+          "token": token_ghn,
+        }
+    );
+    var res = await dio.post("$ghn_url/shiip/public-api/v2/shipping-order/available-services", data: {
+      "from_district": int.parse(items[index]["district"]),
+      "to_district": int.parse(userInfo["district"]),
+      "shop_id": shopId_ghn
+    }, options: option);
+
+    dio.post("$ghn_url/shiip/public-api/v2/shipping-order/fee", data:{
+      "from_district_id": int.parse(items[index]["district"]),
+      "service_id": res.data["data"][0]["service_id"],
+      "service_type_id":null,
+      "to_district_id": int.parse(userInfo["district"]),
+      "to_ward_code": userInfo["ward"].toString(),
+      "height":50,
+      "length":20,
+      "weight":200,
+      "width":20,
+      "insurance_fee":0,
+      "coupon": null
+    }, options: option).then((value) {
+      var newTotal = totalFee + value.data["data"]["total"];
+      var newItems = items;
+      newItems[index]["shipping"] = value.data["data"]["total"];
+      setState(() {
+        totalFee = newTotal;
+        items = newItems;
+      });
+    });
+  }
+
+  Future<void> getCart() {
+    return dio.get('$api_url/cart/customer/$currentUserId/getCart').then((value) {
+      if (value.data['success']) {
+        setState(() {
+          items = value.data["data"]['items'].map((item) => {...item, "shipping": 0}).toList();
+        });
+        items.forEach((item) {
+          item["products"].forEach((p) =>
+          {
+            totalFee += p["checked"] ? p["amount"] * p["product"]["price"] : 0
+          });
+        });
+      }
+    });
+  }
+
+  Future<void> getUserInfo() {
+    return dio.get("$api_url/customer/$currentUserId/getInfo").then((value) {
+      if(this.mounted) {
+        setState(() {
+          userInfo = value.data;
+        });
+      }
+    });
   }
 
   @override
@@ -85,8 +142,9 @@ class _ConfirmOrderState extends State<ConfirmOrder> {
                     child: Column(
                         crossAxisAlignment: CrossAxisAlignment.stretch,
                       children: <Container>[
-                        Container(child: DeliveryAddress(currentUserId: currentUserId))
-                      ] + items.map((e) {
+                        Container(child: DeliveryAddress(Info: userInfo))
+                      ] +
+                      items.map((e) {
                         var listProduct = e['products'].where((p) => p["checked"] == true).toList();
                         return listProduct.length > 0 ? Container(
                             decoration: BoxDecoration(
@@ -103,7 +161,6 @@ class _ConfirmOrderState extends State<ConfirmOrder> {
                             children: <Widget>[
                               InkWell(
                                 onTap:(){
-
                                   print("go to store");
                                 },
                                 child: Row(
@@ -210,7 +267,7 @@ class _ConfirmOrderState extends State<ConfirmOrder> {
                                   ),
                                 child: Row(
                                   children: [
-                                    Text("Phí vận chuyển: ${NumberFormat.simpleCurrency(locale: 'vi_VN').format(shipping)}", style: Theme.of(context).textTheme.headline6.merge(TextStyle(fontSize: 18))),
+                                    Text("Phí vận chuyển: ${NumberFormat.simpleCurrency(locale: 'vi_VN').format(e["shipping"])}", style: Theme.of(context).textTheme.headline6.merge(TextStyle(fontSize: 18))),
                                   ],
                                 )
                               )

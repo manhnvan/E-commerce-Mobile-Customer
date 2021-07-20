@@ -3,6 +3,7 @@ import 'package:customer_app/abstracts/variables.dart';
 import 'package:customer_app/components/ImagePreviewer.dart';
 import 'package:customer_app/components/ImageSelector.dart';
 import 'package:customer_app/screens/LoginScreen/LoginScreen.dart';
+import 'package:customer_app/screens/profile/update_profile/ChangeAddress/DropdownBtn.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
@@ -22,9 +23,12 @@ class _RegisterScreenState extends State<RegisterScreen> {
   final _email = new TextEditingController();
   final _username = new TextEditingController();
   final _phoneNumber = new TextEditingController();
-  final _address = new TextEditingController();
   final _password = new TextEditingController();
   final _reenterPassword = new TextEditingController();
+
+  bool loading = true;
+  List<dynamic> listCity = [], listDistrict = [], listWard = [];
+  var city, district, ward;
 
   String thumbnail;
 
@@ -59,41 +63,14 @@ class _RegisterScreenState extends State<RegisterScreen> {
     });
   }
 
-  // Future<void> _getThumbnailAsset() async {
-  //   List<Asset> assets = await selectThumbnailImagesFromGallery();
-  //   final thumbnailImage =
-  //       await FlutterAbsolutePath.getAbsolutePath(assets[0].identifier);
-    // if (!mounted) return;
-    // print(thumbnailImage);
-    // var formData = FormData.fromMap({
-    //   'image': await MultipartFile.fromFile(thumbnailImage),
-    // });
-    // dio
-    //     .post('$imgur_url',
-    //         data: formData,
-    //         options: Options(headers: {
-    //           Headers.wwwAuthenticateHeader: 'Client-ID $clientId',
-    //           'Accept': "*/*"
-    //         }))
-    //     .then((value) {
-    //   if (value.data['success']) {
-    //     dynamic data = value.data['data'];
-    //     print(data['link']);
-    //     setState(() {
-    //       thumbnail = data['link'];
-    //     });
-    //   }
-    // }).catchError((e) {
-    //   print(e.toString());
-    // });
-  // }
-
   Future<void> register() async {
     if (_username.text == '' ||
         _phoneNumber.text == '' ||
-        _address.text == '' ||
         _password.text == '' ||
-        _reenterPassword.text == ''
+        _reenterPassword.text == '' ||
+        city == null ||
+        district == null ||
+        ward == null
     ) {
       showDialog(
           context: context,
@@ -114,12 +91,19 @@ class _RegisterScreenState extends State<RegisterScreen> {
               ));
     } else {
       EasyLoading.show(status: 'loading...');
+      var tWard = listWard.where((element) => element["WardCode"] == ward.toString()).toList()[0]["WardName"];
+      var tDistrict = listDistrict.where((element) => element["DistrictID"].toString() == district.toString()).toList()[0]["DistrictName"];
+      var tCity = listCity.where((element) => element["ProvinceID"].toString() == city.toString()).toList()[0]["ProvinceName"];
+
       dio.post('$api_url/customer/create', data: {
         "username": _username.text,
         "phone": _phoneNumber.text,
-        "address": _address.text,
+        "address": tWard + ", " + tDistrict + ", " + tCity,
         "password": _password.text,
-        "avatar": thumbnail
+        "avatar": thumbnail,
+        "city": city,
+        "district": district,
+        "ward": ward,
       }).then((value) {
         print(value.data);
         if (value.data['success']) {
@@ -137,6 +121,80 @@ class _RegisterScreenState extends State<RegisterScreen> {
         print(e);
       });
     }
+  }
+
+  Future getListCity() async {
+    Dio().get("$ghn_url/shiip/public-api/master-data/province", options: Options(
+        headers: {
+          "token": token_ghn,
+        }
+    )).then((val) {
+      setState(() {
+        listCity = val.data["data"];
+        loading = false;
+      });
+    });
+  }
+
+  Future getListDistrict(value) async {
+    Dio().post("$ghn_url/shiip/public-api/master-data/district", data: {
+      "province_id": value
+    }, options: Options(
+        headers: {
+          "token": token_ghn,
+        }
+    )).then((value) {
+      setState(() {
+        listDistrict = value.data["data"];
+        loading = false;
+      });
+    });
+  }
+
+  Future getListWard(value) async {
+    Dio().post("$ghn_url/shiip/public-api/master-data/ward", data: {
+      "district_id": value
+    }, options: Options(
+        headers: {
+          "token": token_ghn,
+        }
+    )).then((value) {
+      setState(() {
+        listWard = value.data["data"];
+        loading = false;
+      });
+    });
+  }
+
+  void handleChange(type, value) {
+    if (type == 1) {
+    getListDistrict(value);
+      setState(() {
+        city = value;
+        district = null;
+        ward = null;
+      });
+    }
+    else if (type == 2) {
+      getListWard(value);
+      setState(() {
+        district = value;
+        ward = null;
+      });
+    }
+    else{
+      setState(() {
+        ward = value;
+      });
+    }
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    EasyLoading.show(status: 'loading...');
+    getListCity().then((value) => EasyLoading.dismiss());
+    super.initState();
   }
 
   @override
@@ -230,27 +288,42 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 SizedBox(height: space_medium),
 
                 //Address field here~~~~
-                TextFormField(
-                    controller: _address,
-                    maxLines: 3,
-                    decoration: InputDecoration(
-                      hintText: 'Địa chỉ',
-                      labelText: "Địa chỉ",
-                      alignLabelWithHint: true,
-                      enabledBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(border_radius_big),
-                        borderSide:
-                            BorderSide(color: color_primary_darker, width: 1),
-                      ),
-                      focusedBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(border_radius_big),
-                        borderSide: BorderSide(
-                          color: color_secondary,
-                          width: 1.5,
-                        ),
-                      ),
-                    )),
+                //City
+                Container(
+                  padding: EdgeInsets.symmetric(vertical: 4, horizontal: 12),
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(border_radius_big),
+                    border: Border.all(color: color_primary_darker, width: 1),
+                  ),
+                  child: DropdownBtn(initValue: city, listItem: listCity, handleChange: handleChange, type: 1),
+                ),
 
+                SizedBox(height: space_medium),
+
+                //District
+                Container(
+                  padding: EdgeInsets.symmetric(vertical: 4, horizontal: 12),
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(border_radius_big),
+                    border: Border.all(color: color_primary_darker, width: 1),
+                  ),
+                  child: DropdownBtn(initValue: district, listItem: listDistrict, handleChange: handleChange, type: 2),
+                ),
+
+                SizedBox(height: space_medium),
+
+                //Ward
+                Container(
+                  padding: EdgeInsets.symmetric(vertical: 4, horizontal: 12),
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(border_radius_big),
+                    border: Border.all(color: color_primary_darker, width: 1),
+                  ),
+                  child: DropdownBtn(initValue: ward, listItem: listWard, handleChange: handleChange, type: 3),
+                ),
                 SizedBox(height: space_medium),
 
                 //Password field here~~~~
