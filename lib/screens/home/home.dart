@@ -36,6 +36,11 @@ class _MyHomePageState extends State<Home> {
   @override
   void initState() {
     // TODO: implement initState
+
+    // FirebaseMessaging.instance.getToken().then((value) {
+    //   print("Token: $value");
+    // });
+
     super.initState();
     fetchData();
     _scrollController.addListener(() {

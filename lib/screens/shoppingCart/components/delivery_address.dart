@@ -6,8 +6,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class DeliveryAddress extends StatefulWidget {
-  final String currentUserId;
-  const DeliveryAddress({Key key, this.currentUserId}) : super(key: key);
+  final dynamic Info;
+  const DeliveryAddress({Key key, this.Info}) : super(key: key);
 
   @override
   _DeliveryAddressState createState() => _DeliveryAddressState();
@@ -15,16 +15,11 @@ class DeliveryAddress extends StatefulWidget {
 
 class _DeliveryAddressState extends State<DeliveryAddress> {
   var userInfo;
-  var dio = new Dio();
   @override
   void initState() {
     // TODO: implement initState
-    dio.get("$api_url/customer/${widget.currentUserId}/getInfo").then((value) {
-      if(this.mounted) {
-        setState(() {
-          userInfo = value.data;
-        });
-      }
+    setState(() {
+      userInfo = widget.Info;
     });
     super.initState();
   }

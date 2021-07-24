@@ -3,6 +3,7 @@ import 'package:customer_app/abstracts/variables.dart';
 import 'package:customer_app/components/ImagePreviewer.dart';
 import 'package:customer_app/constant.dart';
 import 'package:customer_app/screens/LoginScreen/LoginScreen.dart';
+import 'package:customer_app/screens/profile/update_profile/ChangeAddress/change_address.dart';
 import 'package:customer_app/screens/profile/update_profile/ChangeAvatar/change_avatar.dart';
 import 'package:customer_app/screens/profile/update_profile/InlineEditText.dart';
 import 'package:customer_app/screens/profile/update_profile/ChangePassword/change_password.dart';
@@ -64,6 +65,13 @@ class _UpdateProfileState extends State<UpdateProfile> {
     });
     super.initState();
   }
+
+  void _updateUser(newUser) {
+    setState(() {
+      user = newUser;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -161,14 +169,79 @@ class _UpdateProfileState extends State<UpdateProfile> {
                           endIndent: 0,
                           color: Colors.black45
                         ),
-                        InlineEditText(title: "Địa chỉ", initValue: user["address"], onSubmit: (value){
-                          var newUser = {...user, "address": value};
-                          setState(() {
-                            user = newUser;
-                          });
-                        },)
+                        Padding(
+                          padding: const EdgeInsets.fromLTRB(12,10,12,10),
+                          child: Row(
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Text("Địa chỉ", style: Theme.of(context).textTheme.headline6.merge(TextStyle(fontSize: 16))),
+                                SizedBox(width: 30),
+                                // Expanded(
+                                //   child: Text(user["address"], style: Theme.of(context).textTheme.headline6.merge(TextStyle(fontSize: 16)), maxLines: 2,
+                                //       overflow: TextOverflow.ellipsis, softWrap: false),
+                                // ),
+                                Expanded(
+                                  child: SingleChildScrollView(
+                                    scrollDirection: Axis.horizontal,
+                                    child: Text(
+                                      user["address"],
+                                        style: Theme.of(context).textTheme.headline6.merge(TextStyle(fontSize: 16))
+                                    ),
+                                  ),
+                                )
+                              ]
+                          ),
+                        ),
                       ]
                     )
+                  ),
+                  Container(
+                    margin: EdgeInsets.only(bottom: 20 ),
+                    child: DecoratedBox(
+                      decoration: BoxDecoration(
+                          border: Border.all(color: Colors.white, width: 0.5),
+                          borderRadius: BorderRadius.only(
+                            bottomLeft: Radius.circular(16),
+                            topRight: Radius.circular(16)),
+                          gradient: color_gradient_glass,
+                      ),
+                      child: ElevatedButton(
+                        onPressed: () {
+                          showModalBottomSheet(
+                            isScrollControlled: true,
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.only(
+                                  topLeft: Radius.circular(16),
+                                  topRight: Radius.circular(16))
+                              ),
+                              clipBehavior: Clip.antiAliasWithSaveLayer,
+                              context: context,
+                              builder: (BuildContext context){
+                                return ChangeAddress(user: user, updateUser: _updateUser);
+                              });
+                        },
+                        style: ElevatedButton.styleFrom(
+                          padding: EdgeInsets.fromLTRB(12,10,12,10),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.only(
+                                  bottomLeft: Radius.circular(16),
+                                  topRight: Radius.circular(16)),
+                            ),
+                            elevation: 0,
+                            primary: Colors.transparent,
+                            onPrimary: Colors.black,
+                            shadowColor: Colors.transparent
+                        ),
+                        child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text("Thay đổi địa chỉ",
+                                  style: Theme.of(context).textTheme.headline6.merge(TextStyle(fontSize: 16))),
+                              Icon(Icons.chevron_right_rounded, size: 30, color: Colors.white)
+                            ]),
+                      ),
+                    ),
                   ),
                   Container(
                     margin: EdgeInsets.only(bottom: 20 ),
@@ -321,6 +394,9 @@ class _UpdateProfileState extends State<UpdateProfile> {
                                   "avatar": user["avatar"],
                                   "phone": user["phone"],
                                   "address": user["address"],
+                                  "city": user["city"],
+                                  "district": user["district"],
+                                  "ward": user["ward"],
                                 }).then((value) {
                                   EasyLoading.dismiss();
                                   if(value.data["success"]){
