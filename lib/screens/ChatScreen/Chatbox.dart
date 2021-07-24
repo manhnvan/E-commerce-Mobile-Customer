@@ -1,5 +1,11 @@
+import 'dart:async';
+
+import 'package:customer_app/abstracts/colors.dart';
+import 'package:customer_app/abstracts/variables.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:new_gradient_app_bar/new_gradient_app_bar.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:socket_io_client/socket_io_client.dart' as IO;
 
 import '../../constant.dart';
@@ -29,26 +35,37 @@ class _ChatBoxState extends State<ChatBox> {
   final _scrollController = ScrollController();
   String topic;
   String chatboxId;
+  SharedPreferences prefs;
+  String currentUserId;
+  dynamic personInChatbox;
 
-  String currentUserId = "608eb567489da0f52b6ec179";
-  
   @override
   void initState() {
     try {
+      topic = widget.topic;
+      chatboxId = widget.chatboxId;
+      SharedPreferences.getInstance().then((value) {
+        prefs = value;
+        currentUserId = prefs.getString('sellerId');
+        dio.get('$chat_url/participants/$chatboxId/$currentUserId').then((value) {
+          if (value.data['success']) {
+            setState(() {
+              personInChatbox = value.data['peopleInChatbox'];
+            });
+          }
+        });
+        dio.get('$chat_url/message/$chatboxId/0').then((value) {
+          if (value.data['success']) {
+            setState(() {
+              messages.addAll(value.data['messages']);
+            });
+            _scrollController.jumpTo(_scrollController.position.maxScrollExtent);
+            connectToChatServer();
+          }
+        });
+      });
+
       super.initState();
-      setState(() {
-        topic = widget.topic;
-        chatboxId = widget.chatboxId;
-      });
-      dio.get('$chat_url/message/$chatboxId/0').then((value) {
-        if (value.data['success']) {
-          setState(() {
-            messages.addAll(value.data['messages']);
-          });
-          _scrollController.jumpTo(_scrollController.position.maxScrollExtent);
-          connectToChatServer();
-        }
-      });
     } catch (e) {
       print(e.toString());
     }
@@ -95,74 +112,123 @@ class _ChatBoxState extends State<ChatBox> {
 
   @override
   Widget build(BuildContext context) {
+    Timer(
+      Duration(seconds: 0),
+        () => _scrollController.jumpTo(_scrollController.position.maxScrollExtent)
+    );
+
+    print(personInChatbox);
     return Scaffold(
-      backgroundColor: Color(0xFFF6F6F6),
-      appBar: AppBar(
-        title: Text(topic != null ? topic : ''),
-        leading: IconButton(
-          icon: Icon(Icons.arrow_back_ios), 
-          onPressed: () {
-            Navigator.pop(context);
-          }
+      appBar: NewGradientAppBar(
+        title: Row(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            personInChatbox != null ? Container(
+              width: MediaQuery.of(context).size.width * 0.11,
+              height: MediaQuery.of(context).size.width * 0.11,
+              margin: EdgeInsets.only(right: space_medium),
+              decoration: BoxDecoration(
+                  border: Border.all(width: 1.5, color: color_white),
+                  borderRadius:
+                      BorderRadius.all(Radius.circular(border_radius_huge)),
+                  image: DecorationImage(
+                      image: personInChatbox['avatar'] != null ? NetworkImage(personInChatbox['avatar'])
+                      : NetworkImage(
+                          'https://i0.wp.com/lucloi.vn/wp-content/uploads/2020/04/f45.jpg?fit=800%2C403&ssl=1'),
+                      fit: BoxFit.cover)),
+            ) : Container(),
+            personInChatbox != null ? Text(personInChatbox['username'], style: Theme.of(context).textTheme.bodyText1, maxLines: 1,
+              overflow: TextOverflow.ellipsis) : Container()
+          ],
         ),
+        // title: Text(topic != null ? topic : ''),
+        gradient: color_gradient_primary,
+        leading: IconButton(
+            icon: Icon(Icons.arrow_back_ios),
+            onPressed: () {
+              Navigator.pop(context);
+            }),
       ),
-      body: Column(
-        children: <Widget>[
-          Expanded(
-            child: ListView.builder(
-              controller: _scrollController,
-              itemCount: messages.length,
-              itemBuilder: (context, index) {
-                final message = messages[index];
-                if (message['from'] == currentUserId) {
-                  return RightMessage(message: message);
-                } else {
-                  return LeftMessage(message: message);
-                } 
-              },
-            ),
-          ),
-          Container(
-            padding: EdgeInsets.symmetric(horizontal: 8),
-            height: 70,
-            color: Colors.white,
-            child: Row(
-              children: [
-                IconButton(
-                  icon: Icon(Icons.image), 
-                  color: Color.fromRGBO(22, 160, 133, 0.7),
-                  onPressed: () {}
+      body: Container(
+        decoration: BoxDecoration(gradient: color_gradient_tertiary),
+        child: Column(
+          children: <Widget>[
+            Expanded(
+              child: Container(
+                padding: EdgeInsets.only(left: space_small, right: space_small),
+                child: ListView.builder(
+                  controller: _scrollController,
+                  itemCount: messages.length,
+                  itemBuilder: (context, index) {
+                    final message = messages[index];
+                    if (message['from'] == currentUserId) {
+                      return RightMessage(message: message);
+                    } else {
+                      return LeftMessage(message: message);
+                    }
+                  },
                 ),
-                Expanded(
-                  child: TextField(
-                    controller: _messageController,
-                    decoration: InputDecoration.collapsed(
-                      hintText: "Send a message ..."
+              ),
+            ),
+
+            //Chat sender here ^^
+            Container(
+              padding: EdgeInsets.symmetric(
+                  vertical: space_medium, horizontal: space_small),
+              width: MediaQuery.of(context).size.width,
+              height: space_huge * 2 + space_medium,
+              color: Colors.white,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  IconButton(
+                      icon: Icon(Icons.image_rounded),
+                      color: color_secondary,
+                      iconSize: space_huge,
+                      onPressed: () {}),
+                  Expanded(
+                    child: TextField(
+                      keyboardType: TextInputType.multiline,
+                      maxLines: null,
+                      cursorColor: color_secondary,
+                      cursorHeight: 18,
+                      cursorRadius: Radius.circular(border_radius_huge),
+                      cursorWidth: space_tiny - 2,
+                      style: Theme.of(context)
+                          .textTheme
+                          .bodyText1
+                          .copyWith(fontSize: 16),
+                      controller: _messageController,
+                      decoration: InputDecoration.collapsed(
+                          hintText: "Gửi tin nhắn đến khách hàng..."),
                     ),
                   ),
-                ),
-                IconButton(
-                  icon: Icon(Icons.send), 
-                  color: Color.fromRGBO(22, 160, 133, 0.7),
-                  onPressed: () {
-                    socket.emit(
-                      'sendMessage', 
-                      {
-                        'chatbox': chatboxId,
-                        'sender': 'Mạnh Nguyễn',
-                        'from': currentUserId,
-                        'content': _messageController.text,
-                        'images': []
-                      }
-                    );
-                    _scrollController.jumpTo(_scrollController.position.maxScrollExtent);
-                    _messageController.clear();
-                  }
-                ),
-              ],
-            ),
-          )
-        ],
+                  IconButton(
+                      icon: Icon(Icons.send_rounded),
+                      color: color_secondary,
+                      iconSize: space_huge,
+                      onPressed: () {
+                        if (_messageController.text.length == 0) {
+                          print('nothing to send');
+                        } else {
+                          socket.emit('sendMessage', {
+                            'chatbox': chatboxId,
+                            'sender': 'Mạnh Nguyễn',
+                            'from': currentUserId,
+                            'content': _messageController.text,
+                            'images': []
+                          });
+                        }
+                        _scrollController
+                            .jumpTo(_scrollController.position.maxScrollExtent);
+                        _messageController.clear();
+                      }),
+                ],
+              ),
+            )
+          ],
+        ),
       ),
     );
   }

@@ -31,3 +31,13 @@ const space_small = 8.0;
 const space_medium = 16.0;
 const space_big = 24.0;
 const space_huge = 32.0;
+const double nav_height = 80.0;
+
+const double icon_size = 30.0;
+
+const BorderRadius card_shape_secondary = BorderRadius.only(
+  topLeft: Radius.circular(border_radius_huge),
+  topRight: Radius.circular(border_radius_big),
+  bottomRight: Radius.circular(border_radius_small),
+  bottomLeft: Radius.circular(border_radius_huge),
+);
