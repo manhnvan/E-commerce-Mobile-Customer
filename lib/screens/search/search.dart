@@ -56,35 +56,53 @@ class _SearchState extends State<Search> {
       List<int> imageBytes = File(pickedFile.path).readAsBytesSync();
       String imageString = base64Encode(imageBytes);
 
-      var formData = FormData.fromMap({
-        'image_base64': imageString,
-        "language": "vi",
-        // "threshold": 50,
-        "limit": 5
-      });
-      dio.options.headers["authorization"] = "Basic YWNjXzhiMWQ1OTlmYmFjYWQwZDpjOTUzOTliOTUyNDYyNzBiYTFmNjU1ZTFlYTkzODFkZg==";
+      // var formData = FormData.fromMap({
+      //   'image_base64': imageString,
+      //   "language": "vi",
+      //   // "threshold": 50,
+      //   "limit": 5
+      // });
 
-      String endpointUrl = "https://api.imagga.com/v2/tags";
+      var formData = FormData.fromMap({
+        'image': await MultipartFile.fromFile(pickedFile.path),
+      });
+      // dio.options.headers["authorization"] = "Basic YWNjXzhiMWQ1OTlmYmFjYWQwZDpjOTUzOTliOTUyNDYyNzBiYTFmNjU1ZTFlYTkzODFkZg==";
+
+      // String endpointUrl = "https://api.imagga.com/v2/tags";
+      String endpointUrl = "http://192.168.0.107:6123/";
 
       dio.post(endpointUrl, data: formData).then((value) {
         var queryText = [];
-        value.data["result"]["tags"].forEach((t) {
-          queryText.add("${removeDiacritics(t["tag"]["vi"])}");
-        });
-        dio.post('$api_url/product/imageQuery', data: {
-          "query": queryText,
-        }).then((value2) {
-          if (value2.data['success']) {
-            setState(() {
-              searchResult = value2.data['docs'];
-            });
-            EasyLoading.dismiss();
-          }
-        });
+        // value.data["result"]["tags"].forEach((t) {
+        //   queryText.add("${removeDiacritics(t["tag"]["vi"])}");
+        // });
+        print(value.data);
+        if(value.data["label"].length != 0) {
+          value.data["label"].forEach((t) {
+            queryText.add(value.data["label"]);
+          });
+          dio.post('$api_url/product/imageQuery', data: {
+            "query": queryText,
+          }).then((value2) {
+            if (value2.data['success']) {
+              setState(() {
+                searchResult = value2.data['docs'];
+              });
+              EasyLoading.dismiss();
+            }
+          });
+        }
+        EasyLoading.dismiss();
       });
     } else {
       EasyLoading.dismiss();
     }
+  }
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
+    EasyLoading.dismiss();
   }
 
   @override
