@@ -56,8 +56,9 @@ class _ShoppingCartState extends State<ShoppingCart> {
   }
 
   void _update(List<dynamic> newItems) {
+    var _newItems = newItems.where((element) => element["products"].length != 0).toList();
     setState(() {
-      items = newItems;
+      items = _newItems;
     });
   }
 

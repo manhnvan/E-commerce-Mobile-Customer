@@ -69,6 +69,7 @@ class _ProductDetailState extends State<ProductDetail> {
   @override
   void dispose() {
     super.dispose();
+    EasyLoading.dismiss();
   }
 
   void addedToFav() {

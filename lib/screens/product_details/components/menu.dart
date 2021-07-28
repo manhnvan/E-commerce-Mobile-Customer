@@ -8,6 +8,7 @@ import 'package:customer_app/screens/ChatScreen/Chatbox.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:dio/dio.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 
 import '../../../constant.dart';
 
@@ -82,11 +83,13 @@ class Menu extends StatelessWidget {
                       width: MediaQuery.of(context).size.width * 0.25,
                       child: TextButton(
                           onPressed: () {
+                            EasyLoading.show(status: 'loading...');
                             dio.post('$api_url/cart/customer/$currentUserId/update/$productId', data: {
                               "type": 1
                             })
                                 .then((value) {
                               if (value.data['success']) {
+                                EasyLoading.dismiss();
                                 showDialog(
                                     barrierDismissible: false,
                                     barrierColor: Colors.transparent,

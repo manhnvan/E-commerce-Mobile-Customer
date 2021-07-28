@@ -137,8 +137,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
   }
 
   Future getListDistrict(value) async {
+    print(value);
     Dio().post("$ghn_url/shiip/public-api/master-data/district", data: {
-      "province_id": value
+      "province_id": int.parse(value)
     }, options: Options(
         headers: {
           "token": token_ghn,
@@ -153,7 +154,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
   Future getListWard(value) async {
     Dio().post("$ghn_url/shiip/public-api/master-data/ward", data: {
-      "district_id": value
+      "district_id": int.parse(value)
     }, options: Options(
         headers: {
           "token": token_ghn,

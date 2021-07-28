@@ -25,12 +25,11 @@ const List<String> listTagSuggestion = [
   'Thời trang',
   'Công nghệ',
   'Trang trí',
-  'Sức khoẻ & sắc đẹp',
   'Nhà cửa & đời sống',
   'Mẹ & bé',
   'Nhà sách Online',
   'Ô tô - Xe máy',
-  'Thể thao & du lịch',
+  'Đồ chơi',
 ];
 
 class _SearchState extends State<Search> {
@@ -98,6 +97,18 @@ class _SearchState extends State<Search> {
       EasyLoading.dismiss();
     }
   }
+
+  void searhText(query) {
+    EasyLoading.show(status: 'loading...');
+    print("called: $query");
+    dio.get("$api_url/product/textQuery?q=$query").then((value) {
+      print(value);
+      setState(() {
+        searchResult = value.data["docs"];
+      });
+      EasyLoading.dismiss();
+    });
+  }
   @override
   void dispose() {
     // TODO: implement dispose
@@ -150,6 +161,7 @@ class _SearchState extends State<Search> {
                                           setState(() {
                                             localQuery = list;
                                           });
+                                          searhText(list);
                                         },
                                         child: Container(
                                           margin: const EdgeInsets.symmetric(
@@ -238,11 +250,7 @@ class _SearchState extends State<Search> {
                 setState(() {
                   localQuery = query;
                 });
-                dio.get("$api_url/product/textQuery?q=$query").then((value) {
-                  setState(() {
-                    searchResult = value.data["docs"];
-                  });
-                });
+                searhText(query);
               },
               controller: controller,
               hint: 'Search...',
