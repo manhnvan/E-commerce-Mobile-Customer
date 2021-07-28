@@ -20,18 +20,17 @@ const color_gradient_dark = LinearGradient(
 
 //Here's the gradient
 const color_gradient_primary = LinearGradient(
-    begin: Alignment(-0.75, 0),
-    end: Alignment(1.5, 0),
-    colors: [const Color(0xFFB6F492) , const Color(0xFF338B93)]);
+    begin: Alignment(-1.2, -1.0),
+    end: Alignment(2.0, 0.0),
+    colors: <Color>[color_primary, color_secondary]);
 
 const color_gradient_secondary = LinearGradient(
     begin: Alignment(-1.0, -1.0),
     end: Alignment(1.0, 1.0),
     colors: <Color>[
       color_white,
-      color_white_opacity_strong,
-      color_primary_opacity_medium,
-      color_primary_opacity_strong
+      color_primary_darker,
+      color_secondary
     ]);
 
 const color_gradient_glass = LinearGradient(
