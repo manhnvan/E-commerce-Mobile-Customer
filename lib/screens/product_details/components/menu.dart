@@ -125,8 +125,10 @@ class Menu extends StatelessWidget {
                       ),
                       child: TextButton(
                           onPressed: () {
+                            EasyLoading.show(status: 'loading...');
                             dio.post('$api_url/cart/customer/$currentUserId/buynow/$productId')
                                 .then((value) {
+                              EasyLoading.dismiss();
                               Navigator.pushNamed(context, "/shoppingCart");
                             });
 

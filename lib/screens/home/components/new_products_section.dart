@@ -22,7 +22,10 @@ class NewProductsSection extends StatelessWidget {
           SizedBox(height: space_medium),
           SingleChildScrollView(
             child: Wrap(
-              children: productList != null ? productList.map((product) => ProductCard(
+              spacing: 20,
+              crossAxisAlignment: WrapCrossAlignment.center,
+              children: productList != null ?
+              productList.map((product) => ProductCard(
                     backgroundWhite: false,
                     // width: MediaQuery.of(context).size.width,
                     data: product

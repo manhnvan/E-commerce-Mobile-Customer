@@ -25,7 +25,7 @@ class GlassCard extends StatelessWidget {
       child: Container(
         margin: this.width == MediaQuery.of(context).size.width
             ? EdgeInsets.only(bottom: space_medium)
-            : EdgeInsets.only(right: space_medium),
+            : EdgeInsets.only(right: space_small, bottom: space_small),
         width: this.width == MediaQuery.of(context).size.width
             ? MediaQuery.of(context).size.width
             : MediaQuery.of(context).size.width * 0.4,
@@ -50,24 +50,5 @@ class GlassCard extends StatelessWidget {
         ),
       ),
     );
-    // return Card(
-    //   clipBehavior: Clip.antiAlias,
-    //   shape: RoundedRectangleBorder(
-    //       borderRadius: BorderRadius.only(
-    //           topLeft: Radius.circular(border_radius_small),
-    //           topRight: Radius.circular(border_radius_big),
-    //           bottomLeft: Radius.circular(border_radius_big),
-    //           bottomRight: Radius.circular(border_radius_small))),
-    //   child: GlassmorphicContainer(
-    //       padding: EdgeInsets.all(0),
-    //       width: 166,
-    //       height: 163,
-    //       borderRadius: 0,
-    //       linearGradient: color_gradient_glass,
-    //       blur: 20,
-    //       borderGradient: null,
-    //       border: null,
-    //       child: this.childWidget),
-    // );
   }
 }

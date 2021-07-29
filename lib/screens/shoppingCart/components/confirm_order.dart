@@ -113,6 +113,7 @@ class _ConfirmOrderState extends State<ConfirmOrder> {
   Future<void> getUserInfo() {
     return dio.get("$api_url/customer/$currentUserId/getInfo").then((value) {
       if(this.mounted) {
+        print(value.data);
         setState(() {
           userInfo = value.data;
         });

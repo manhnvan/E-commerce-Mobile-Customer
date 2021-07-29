@@ -37,6 +37,7 @@ class ProductCard extends StatelessWidget {
                 ),
               ),
               Container(
+                // color: Colors.w
                   padding: EdgeInsets.all(space_small),
                   width: this.width == MediaQuery.of(context).size.width
                       ? MediaQuery.of(context).size.width

@@ -34,6 +34,9 @@ class _RecommendSectionState extends State<RecommendSection> {
     print('rerendering');
     return Container(
       padding: EdgeInsets.fromLTRB(space_medium, space_big, 0, space_medium),
+      // color: Colors.white,
+      // margin: EdgeInsets.fromLTRB(0, space_medium, 0, space_small),
+      // padding: EdgeInsets.fromLTRB(space_medium, 12, 0, 8),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -42,7 +45,7 @@ class _RecommendSectionState extends State<RecommendSection> {
           SizedBox(height: space_medium),
           Container(
             width: 2000,
-            height: MediaQuery.of(context).size.height * 0.30,
+            height: MediaQuery.of(context).size.height * 0.31,
             child: ListView.builder(
                 physics: const AlwaysScrollableScrollPhysics(),
                 addAutomaticKeepAlives: false,

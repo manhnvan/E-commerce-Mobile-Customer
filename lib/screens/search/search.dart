@@ -25,9 +25,9 @@ const List<String> listTagSuggestion = [
   'Thời trang',
   'Công nghệ',
   'Trang trí',
-  'Nhà cửa & đời sống',
+  'Trang phục',
   'Mẹ & bé',
-  'Nhà sách Online',
+  'Đồ gia dụng',
   'Ô tô - Xe máy',
   'Đồ chơi',
 ];
@@ -35,6 +35,7 @@ const List<String> listTagSuggestion = [
 class _SearchState extends State<Search> {
   List<String> searchSuggestion = [];
   dynamic searchResult = [];
+  var loading = false;
   File image;
   String localQuery = '';
   var dio = new Dio();
@@ -68,7 +69,7 @@ class _SearchState extends State<Search> {
       // dio.options.headers["authorization"] = "Basic YWNjXzhiMWQ1OTlmYmFjYWQwZDpjOTUzOTliOTUyNDYyNzBiYTFmNjU1ZTFlYTkzODFkZg==";
 
       // String endpointUrl = "https://api.imagga.com/v2/tags";
-      String endpointUrl = "http://192.168.0.107:6123/";
+      String endpointUrl = "http://192.168.0.100:6123/";
 
       dio.post(endpointUrl, data: formData).then((value) {
         var queryText = [];
@@ -98,7 +99,11 @@ class _SearchState extends State<Search> {
     }
   }
 
-  void searhText(query) {
+  void searchText(query) {
+    setState(() {
+      loading = true;
+      searchResult = [];
+    });
     EasyLoading.show(status: 'loading...');
     print("called: $query");
     dio.get("$api_url/product/textQuery?q=$query").then((value) {
@@ -106,14 +111,17 @@ class _SearchState extends State<Search> {
       setState(() {
         searchResult = value.data["docs"];
       });
+      setState(() {
+        loading = false;
+      });
       EasyLoading.dismiss();
     });
   }
   @override
   void dispose() {
     // TODO: implement dispose
-    super.dispose();
     EasyLoading.dismiss();
+    super.dispose();
   }
 
   @override
@@ -161,7 +169,7 @@ class _SearchState extends State<Search> {
                                           setState(() {
                                             localQuery = list;
                                           });
-                                          searhText(list);
+                                          searchText(list);
                                         },
                                         child: Container(
                                           margin: const EdgeInsets.symmetric(
@@ -225,7 +233,10 @@ class _SearchState extends State<Search> {
                                     ? Column(
                                       crossAxisAlignment: CrossAxisAlignment.stretch,
                                       children: [
-                                        Text("Kết quả tìm kiếm ", style: Theme.of(context).textTheme.headline6),
+                                        Padding(
+                                          padding: const EdgeInsets.symmetric(horizontal: 2.0),
+                                          child: Text("Kết quả tìm kiếm ", style: Theme.of(context).textTheme.headline6),
+                                        ),
                                         SizedBox(height: 15),
                                         Wrap(
                                           crossAxisAlignment: WrapCrossAlignment.start,
@@ -233,8 +244,8 @@ class _SearchState extends State<Search> {
                                 ),
                                       ],
                                     ) : Container(
-                                  padding: EdgeInsets.symmetric(horizontal: 0),
-                                    child: Text("Không tìm thấy sản phẩm nào",style: Theme.of(context).textTheme.headline6)
+                                  padding: EdgeInsets.symmetric(horizontal: 5),
+                                    child: Text(loading? "Đang tìm kiếm..." : "Không tìm thấy sản phẩm nào",style: Theme.of(context).textTheme.headline6)
                                 ),
                               ]),
                           ),
@@ -250,7 +261,7 @@ class _SearchState extends State<Search> {
                 setState(() {
                   localQuery = query;
                 });
-                searhText(query);
+                searchText(query);
               },
               controller: controller,
               hint: 'Search...',
